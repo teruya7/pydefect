@@ -11,41 +11,41 @@ from typing import Dict, List, Optional, Union
 from pymatgen.core import Structure
 from pymatgen.io.vasp import Chgcar
 
-from pydefect.analyzer.calculation.calc_results import CalcResults
-from pydefect.analyzer.corrections.abstract_correction import Correction
-from pydefect.analyzer.corrections.no_correction import NoCorrection
-from pydefect.analyzer.defect_energy.defect_energy import DefectEnergyInfo
-from pydefect.analyzer.defect_energy.defect_energy_plotter import DefectEnergyMplPlotter
-from pydefect.analyzer.defect_energy.make_defect_energy_info import (
+from pydefect.analysis.calculation.calc_results import CalcResults
+from pydefect.analysis.corrections.abstract_correction import Correction
+from pydefect.analysis.corrections.no_correction import NoCorrection
+from pydefect.analysis.defect_energy.defect_energy import DefectEnergyInfo
+from pydefect.analysis.defect_energy.defect_energy_plotter import DefectEnergyMplPlotter
+from pydefect.analysis.defect_energy.make_defect_energy_info import (
     make_defect_energy_info as _make_defect_energy_info,
 )
-from pydefect.analyzer.defect_energy.make_defect_energy_summary import (
+from pydefect.analysis.defect_energy.make_defect_energy_summary import (
     make_defect_energy_summary as _make_defect_energy_summary,
 )
-from pydefect.analyzer.defect_structure.defect_structure_info import DefectStructureInfo
-from pydefect.analyzer.defect_structure.make_defect_structure_info import MakeDefectStructureInfo
-from pydefect.analyzer.defect_structure.make_defect_vesta_file import MakeDefectVestaFile
-from pydefect.analyzer.chemical_potential.chem_pot_diag import (
+from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
+from pydefect.analysis.defect_structure.make_defect_structure_info import MakeDefectStructureInfo
+from pydefect.analysis.defect_structure.make_defect_vesta_file import MakeDefectVestaFile
+from pydefect.analysis.chemical_potential.chem_pot_diag import (
     StandardEnergies,
     TargetVertices,
 )
-from pydefect.analyzer.unitcell.unitcell import Unitcell
+from pydefect.analysis.unitcell.unitcell import Unitcell
 from pydefect.defaults import defaults
-from pydefect.preparation.defect.defect_entry import DefectEntry
-from pydefect.preparation.defect.defect_entries_maker import DefectEntriesMaker
-from pydefect.preparation.defect.defect_set import DefectSet
-from pydefect.preparation.defect.defect_set_maker import DefectSetMaker
-from pydefect.preparation.interstitial.append_interstitial import (
+from pydefect.makers.defect.defect_entry import DefectEntry
+from pydefect.makers.defect.defect_entries_maker import DefectEntriesMaker
+from pydefect.makers.defect.defect_set import DefectSet
+from pydefect.makers.defect.defect_set_maker import DefectSetMaker
+from pydefect.makers.interstitial.append_interstitial import (
     append_interstitial as _append_interstitial,
 )
-from pydefect.preparation.interstitial.local_extrema import (
+from pydefect.makers.interstitial.local_extrema import (
     VolumetricDataAnalyzeParams,
     VolumetricDataLocalExtrema,
 )
-from pydefect.preparation.interstitial.make_local_extrema import (
+from pydefect.makers.interstitial.make_local_extrema import (
     make_local_extrema_from_volumetric_data,
 )
-from pydefect.preparation.supercell.supercell_info import SupercellInfo
+from pydefect.makers.supercell.supercell_info import SupercellInfo
 
 
 # --- Defect Set and Entry Creation ---

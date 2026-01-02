@@ -8,16 +8,16 @@ including extended FNV (eFNV) and GKFO corrections.
 
 from typing import List, Optional
 
-from pydefect.analyzer.calculation.calc_results import CalcResults
-from pydefect.analyzer.unitcell.unitcell import Unitcell
-from pydefect.analyzer.corrections.make_efnv_correction import (
+from pydefect.analysis.calculation.calc_results import CalcResults
+from pydefect.analysis.unitcell.unitcell import Unitcell
+from pydefect.analysis.corrections.make_efnv_correction import (
     make_efnv_correction as _make_efnv_correction,
 )
-from pydefect.analyzer.corrections.make_gkfo_correction import (
+from pydefect.analysis.corrections.make_gkfo_correction import (
     make_gkfo_correction as _make_gkfo_correction,
 )
-from pydefect.analyzer.corrections.efnv_correction import ExtendedFnvCorrection
-from pydefect.analyzer.corrections.gkfo_correction import GkfoCorrection
+from pydefect.analysis.corrections.efnv_correction import ExtendedFnvCorrection
+from pydefect.analysis.corrections.gkfo_correction import GkfoCorrection
 
 
 def make_efnv_correction(
