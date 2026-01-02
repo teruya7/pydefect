@@ -4,7 +4,7 @@
 
 from pymatgen.io.vasp import Vasprun, Procar, Outcar
 
-from pydefect.analysis.band_edge.make_band_edge_states import (
+from pydefect.analysis.band_edge.band_edge_states import (
     make_band_edge_states as _make_band_edge_states,
 )
 from pydefect.analysis.band_edge.perfect_state import (

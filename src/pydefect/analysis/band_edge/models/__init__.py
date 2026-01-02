@@ -5,8 +5,10 @@
 from pydefect.analysis.band_edge.models.orbital_info import (
     OrbitalInfo,
     BandEdgeOrbitalInfos,
-    BandEdgeEigenvalues,
     pretty_orbital,
+)
+from pydefect.analysis.band_edge.models.eigenvalues import (
+    BandEdgeEigenvalues,
 )
 from pydefect.analysis.band_edge.models.edge_info import (
     EdgeInfo,
