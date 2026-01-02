@@ -20,10 +20,8 @@ app = typer.Typer(
 )
 
 # Sub-apps for command groups
-vasp_app = typer.Typer(help="VASP-specific commands")
 util_app = typer.Typer(help="Utility commands")
 
-app.add_typer(vasp_app, name="vasp")
 app.add_typer(util_app, name="util")
 
 
@@ -49,11 +47,14 @@ def main(
 def typer_main():
     """Entry point for Typer CLI."""
     # Import commands here to avoid circular imports
-    from pydefect.cli import structure  # noqa: F401
-    from pydefect.cli import energies  # noqa: F401
+    # Domain-based CLI modules
+    from pydefect.cli import supercell  # noqa: F401
+    from pydefect.cli import unitcell  # noqa: F401
+    from pydefect.cli import defect  # noqa: F401
+    from pydefect.cli import chemical_potential  # noqa: F401
+    from pydefect.cli import band_edge  # noqa: F401
+    from pydefect.cli import calculation  # noqa: F401
     from pydefect.cli import corrections  # noqa: F401
-    from pydefect.cli import analysis  # noqa: F401
-    from pydefect.cli import vasp  # noqa: F401
     from pydefect.cli import util  # noqa: F401
     app()
 
