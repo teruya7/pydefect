@@ -10,14 +10,16 @@ from typing import List, Optional
 
 from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.unitcell.unitcell import Unitcell
-from pydefect.analysis.corrections.make_efnv_correction import (
-    make_efnv_correction as _make_efnv_correction,
+from pydefect.analysis.corrections.efnv import (
+    calculate_efnv_correction as _calculate_efnv_correction,
 )
-from pydefect.analysis.corrections.make_gkfo_correction import (
-    make_gkfo_correction as _make_gkfo_correction,
+from pydefect.analysis.corrections.gkfo import (
+    calculate_gkfo_correction as _calculate_gkfo_correction,
 )
-from pydefect.analysis.corrections.efnv_correction import ExtendedFnvCorrection
-from pydefect.analysis.corrections.gkfo_correction import GkfoCorrection
+from pydefect.analysis.corrections.models import (
+    ExtendedFnvCorrection,
+    GkfoCorrection,
+)
 
 
 def make_efnv_correction(
@@ -53,7 +55,7 @@ def make_efnv_correction(
         >>> print(f"Correction energy: {efnv.correction_energy} eV")
         >>> efnv.to_json_file()
     """
-    return _make_efnv_correction(
+    return _calculate_efnv_correction(
         charge=charge,
         calc_results=calc_results,
         perfect_calc_results=perfect_calc_results,
@@ -97,7 +99,7 @@ def make_gkfo_correction(
         ... )
         >>> gkfo.to_json_file()
     """
-    return _make_gkfo_correction(
+    return _calculate_gkfo_correction(
         initial_efnv_correction=initial_efnv_correction,
         initial_calc_results=initial_calc_results,
         final_calc_results=final_calc_results,

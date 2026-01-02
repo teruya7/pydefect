@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
+"""Site potential plotting functions."""
+
 from itertools import groupby, cycle
 from typing import Optional, List
 
 from matplotlib import pyplot as plt
-from pydefect.analysis.corrections.efnv_correction import \
-    ExtendedFnvCorrection, PotentialSite
-from pydefect.analysis.corrections.gkfo_correction import GkfoCorrection
+from pydefect.analysis.corrections.models import (
+    ExtendedFnvCorrection,
+    PotentialSite,
+    GkfoCorrection,
+)
 from pydefect.defaults import defaults
 from vise.util.matplotlib import float_to_int_formatter
 

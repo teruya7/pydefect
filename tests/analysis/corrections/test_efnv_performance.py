@@ -5,7 +5,7 @@ from monty.serialization import loadfn
 
 from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.unitcell.unitcell import Unitcell
-from pydefect.analysis.corrections.make_efnv_correction import \
+from pydefect.analysis.corrections.efnv import \
     make_efnv_correction
 from pydefect.makers.defect.defect_entry import DefectEntry
 

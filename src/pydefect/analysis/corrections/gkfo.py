@@ -1,29 +1,32 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
+"""GKFO correction calculation."""
 
 import numpy as np
 from vise.util.logger import get_logger
 
 from pydefect.analysis.calculation.models import CalcResults
-from pydefect.analysis.corrections.efnv_correction import \
-    ExtendedFnvCorrection, PotentialSite
+from pydefect.analysis.corrections.models import (
+    ExtendedFnvCorrection,
+    PotentialSite,
+    GkfoCorrection,
+)
 from pydefect.analysis.corrections.ewald import Ewald
-from pydefect.analysis.corrections.gkfo_correction import GkfoCorrection
 from pydefect.defaults import defaults
 
 
 logger = get_logger(__name__)
 
 
-def make_gkfo_correction(efnv_correction: ExtendedFnvCorrection,
-                         additional_charge: int,
-                         final_calc_results: CalcResults,
-                         initial_calc_results: CalcResults,
-                         diele_tensor: np.array,
-                         ion_clamped_diele_tensor: np.array,
-                         accuracy: float = defaults.ewald_accuracy,
-                         unit_conversion: float = 180.95128169876497
-                         ) -> GkfoCorrection:
+def calculate_gkfo_correction(efnv_correction: ExtendedFnvCorrection,
+                              additional_charge: int,
+                              final_calc_results: CalcResults,
+                              initial_calc_results: CalcResults,
+                              diele_tensor: np.array,
+                              ion_clamped_diele_tensor: np.array,
+                              accuracy: float = defaults.ewald_accuracy,
+                              unit_conversion: float = 180.95128169876497
+                              ) -> GkfoCorrection:
     """Create GKFO correction for optical transitions.
 
     Args:
@@ -40,7 +43,7 @@ def make_gkfo_correction(efnv_correction: ExtendedFnvCorrection,
         GkfoCorrection object.
 
     Example:
-        >>> gkfo = make_gkfo_correction(
+        >>> gkfo = calculate_gkfo_correction(
         ...     efnv_correction, 1, final_results, initial_results,
         ...     diele_tensor, ion_clamped_diele
         ... )
@@ -86,4 +89,5 @@ def make_gkfo_correction(efnv_correction: ExtendedFnvCorrection,
         ave_electronic_dielectric_tensor=np.trace(ion_clamped_diele_tensor) / 3)
 
 
-
+# Backward compatibility alias
+make_gkfo_correction = calculate_gkfo_correction

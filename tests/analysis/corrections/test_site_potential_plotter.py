@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pytest
 from monty.serialization import loadfn
-from pydefect.analysis.corrections.efnv_correction import \
+from pydefect.analysis.corrections.models import \
     ExtendedFnvCorrection, PotentialSite
-from pydefect.analysis.corrections.site_potential_plotter import \
+from pydefect.analysis.corrections.plotter import \
     SitePotentialMplPlotter
 
 try:

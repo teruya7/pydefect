@@ -5,7 +5,7 @@ from pydefect.analysis.defect_energy.defect_energy import DefectEnergy, DefectEn
 from pydefect.analysis.defect_energy.make_defect_energy_info import make_defect_energy_info, \
     num_atom_differences
 from pydefect.analysis.chemical_potential.models import StandardEnergies
-from pydefect.analysis.corrections.abstract_correction import Correction
+from pydefect.analysis.corrections.models import Correction
 from pydefect.makers.defect.defect_entry import DefectEntry
 from pymatgen.core import IStructure, Lattice
 

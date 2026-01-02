@@ -4,7 +4,7 @@
 
 import pytest
 from pydefect.analysis.corrections.no_correction import NoCorrection
-from pydefect.analysis.corrections.abstract_correction import Correction
+from pydefect.analysis.corrections.models import Correction
 
 
 class TestNoCorrection:

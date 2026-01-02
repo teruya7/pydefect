@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
+"""Extended FNV correction data classes."""
+
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
 import numpy as np
 from monty.json import MSONable
-from pydefect.analysis.corrections.abstract_correction import Correction
+from pydefect.analysis.corrections.models.abstract import Correction
 from tabulate import tabulate
 
 
@@ -92,6 +94,14 @@ class ExtendedFnvCorrection(Correction):
 
 @dataclass
 class PotentialSite(MSONable):
+    """Electrostatic potential at an atomic site.
+    
+    Attributes:
+        specie: Element symbol.
+        distance: Distance from defect center in Å.
+        potential: DFT potential difference (defect - perfect).
+        pc_potential: Point charge model potential.
+    """
     specie: str
     distance: float
     potential: float
@@ -99,4 +109,5 @@ class PotentialSite(MSONable):
 
     @property
     def diff_pot(self):
+        """Get difference between DFT and point charge potentials."""
         return self.potential - self.pc_potential

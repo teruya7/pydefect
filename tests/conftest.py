@@ -11,7 +11,7 @@ from pydefect.analysis.defect_energy.defect_energy import DefectEnergies, Defect
 from pydefect.analysis.defect_structure.defect_structure_comparator import SiteDiff
 from pydefect.analysis.defect_structure.defect_structure_info import Displacement, \
     DefectStructureInfo
-from pydefect.analysis.corrections.efnv_correction import PotentialSite, \
+from pydefect.analysis.corrections.models import PotentialSite, \
     ExtendedFnvCorrection
 from pydefect.makers.interstitial.local_extrema import VolumetricDataAnalyzeParams
 from pydefect.makers.supercell.supercell_info import Site, SupercellInfo, \

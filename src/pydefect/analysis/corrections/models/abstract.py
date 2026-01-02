@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
+"""Abstract base class for electrostatic corrections."""
 
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -42,13 +43,3 @@ class Correction(ABC, MSONable):
             Correction object.
         """
         return loadfn(filename)
-
-    # @property
-    # @abstractmethod
-    # def correction_energy(self) -> float:
-    #     pass
-
-    # @property
-    # @abstractmethod
-    # def correction_dict(self) -> Dict[str, float]:
-    #     pass

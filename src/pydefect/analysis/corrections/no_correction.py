@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2023 Kumagai group.
-from pydefect.analysis.corrections.abstract_correction import Correction
+from pydefect.analysis.corrections.models import Correction
 
 
 class NoCorrection(Correction):

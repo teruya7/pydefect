@@ -4,7 +4,7 @@
 
 import pytest
 from pathlib import Path
-from pydefect.analysis.corrections.abstract_correction import Correction
+from pydefect.analysis.corrections.models import Correction
 
 
 class ConcreteCorrection(Correction):

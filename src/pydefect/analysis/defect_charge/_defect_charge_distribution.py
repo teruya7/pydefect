@@ -4,7 +4,7 @@ from itertools import product
 from typing import List
 
 import numpy as np
-from pydefect.analysis.corrections.make_efnv_correction import calc_max_sphere_radius
+from pydefect.analysis.corrections.efnv import calculate_max_inscribed_radius as calc_max_sphere_radius
 from pymatgen.electronic_structure.core import Spin
 from pymatgen.io.vasp import Chgcar
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 
-from pydefect.analysis.corrections.abstract_correction import Correction
+from pydefect.analysis.corrections.models import Correction
 
-from pydefect.analysis.corrections.efnv_correction import \
+from pydefect.analysis.corrections.models import \
     PotentialSite
 from tests.helpers.assertion import assert_msonable
 

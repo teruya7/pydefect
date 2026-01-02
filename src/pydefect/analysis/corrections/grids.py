@@ -5,7 +5,7 @@ from itertools import product
 from typing import Tuple, List
 
 import numpy as np
-from pydefect.analysis.corrections.make_efnv_correction import calc_max_sphere_radius
+from pydefect.analysis.corrections.efnv import calculate_max_inscribed_radius as calc_max_sphere_radius
 from pymatgen.core import Lattice
 from pymatgen.io.vasp import Chgcar
 

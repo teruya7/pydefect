@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
+"""Extended FNV correction calculation."""
+
 from typing import Optional, Tuple
 
 import numpy as np
@@ -7,28 +9,30 @@ from numpy import dot, cross
 from numpy.linalg import norm
 
 from pydefect.analysis.calculation.models import CalcResults
-from pydefect.analysis.defect_structure.defect_structure_comparator import \
-    DefectStructureComparator
-from pydefect.analysis.corrections.efnv_correction import \
-    ExtendedFnvCorrection, PotentialSite
+from pydefect.analysis.defect_structure.defect_structure_comparator import (
+    DefectStructureComparator,
+)
+from pydefect.analysis.corrections.models import (
+    ExtendedFnvCorrection,
+    PotentialSite,
+)
 from pydefect.analysis.corrections.ewald import Ewald
 from pydefect.defaults import defaults
-from pydefect.error import SupercellError, \
-    NoCalculatedPotentialSiteError
+from pydefect.error import SupercellError, NoCalculatedPotentialSiteError
 
 
 Coords = Tuple[float, float, float]
 
 
-def make_efnv_correction(charge: float,
-                         calc_results: CalcResults,
-                         perfect_calc_results: CalcResults,
-                         dielectric_tensor: np.array,
-                         defect_coords: Optional[Coords] = None,
-                         accuracy: float = defaults.ewald_accuracy,
-                         defect_region_radius: float = None,
-                         calc_all_sites: bool = False,
-                         unit_conversion: float = 180.95128169876497):
+def calculate_efnv_correction(charge: float,
+                              calc_results: CalcResults,
+                              perfect_calc_results: CalcResults,
+                              dielectric_tensor: np.array,
+                              defect_coords: Optional[Coords] = None,
+                              accuracy: float = defaults.ewald_accuracy,
+                              defect_region_radius: float = None,
+                              calc_all_sites: bool = False,
+                              unit_conversion: float = 180.95128169876497):
     """Create Extended FNV correction for charged defect.
 
     Args:
@@ -46,7 +50,7 @@ def make_efnv_correction(charge: float,
         ExtendedFnvCorrection object.
 
     Example:
-        >>> correction = make_efnv_correction(
+        >>> correction = calculate_efnv_correction(
         ...     charge=2,
         ...     calc_results=defect_results,
         ...     perfect_calc_results=perfect_results,
@@ -54,14 +58,14 @@ def make_efnv_correction(charge: float,
         ... )
     """
     sites, rel_coords, defect_coords = \
-        make_sites(calc_results, perfect_calc_results, defect_coords)
+        create_potential_sites(calc_results, perfect_calc_results, defect_coords)
 
     lattice = calc_results.structure.lattice
     ewald = Ewald(lattice.matrix, dielectric_tensor, accuracy=accuracy)
     point_charge_correction = \
         0.0 if not charge else - ewald.lattice_energy * charge ** 2
     if defect_region_radius is None:
-        defect_region_radius = calc_max_sphere_radius(lattice.matrix)
+        defect_region_radius = calculate_max_inscribed_radius(lattice.matrix)
 
     has_calculated_sites = False
     for site, rel_coord in zip(sites, rel_coords):
@@ -86,7 +90,7 @@ def make_efnv_correction(charge: float,
         defect_coords=tuple(defect_coords))
 
 
-def make_sites(calc_results, perfect_calc_results, defect_coords):
+def create_potential_sites(calc_results, perfect_calc_results, defect_coords):
     """Create potential sites for EFNV correction.
 
     Args:
@@ -121,7 +125,7 @@ def make_sites(calc_results, perfect_calc_results, defect_coords):
     return sites, rel_coords, defect_coords
 
 
-def calc_max_sphere_radius(lattice_matrix) -> float:
+def calculate_max_inscribed_radius(lattice_matrix) -> float:
     """Calculate maximum radius of a sphere fitting inside the unit cell.
 
     Uses cross product formula: (a_i x a_j) . a_k / |a_i x a_j|
@@ -139,3 +143,9 @@ def calc_max_sphere_radius(lattice_matrix) -> float:
         normal_vector = lattice_matrix[axis]
         plane_distances[axis] = abs(dot(cross_product, normal_vector)) / norm(cross_product)
     return max(plane_distances) / 2.0
+
+
+# Backward compatibility aliases
+make_efnv_correction = calculate_efnv_correction
+make_sites = create_potential_sites
+calc_max_sphere_radius = calculate_max_inscribed_radius

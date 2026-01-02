@@ -12,7 +12,7 @@ from pymatgen.core import Structure
 from pymatgen.io.vasp import Chgcar
 
 from pydefect.analysis.calculation.models import CalcResults
-from pydefect.analysis.corrections.abstract_correction import Correction
+from pydefect.analysis.corrections.models import Correction
 from pydefect.analysis.corrections.no_correction import NoCorrection
 from pydefect.analysis.defect_energy.defect_energy import DefectEnergyInfo
 from pydefect.analysis.defect_energy.defect_energy_plotter import DefectEnergyMplPlotter

@@ -2,9 +2,9 @@
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 
 import pytest
-from pydefect.analysis.corrections.abstract_correction import Correction
-from pydefect.analysis.corrections.efnv_correction import PotentialSite
-from pydefect.analysis.corrections.gkfo_correction import GkfoCorrection
+from pydefect.analysis.corrections.models import Correction
+from pydefect.analysis.corrections.models import PotentialSite
+from pydefect.analysis.corrections.models import GkfoCorrection
 
 
 @pytest.fixture
