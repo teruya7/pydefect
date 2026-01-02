@@ -6,7 +6,7 @@ from typing import List, Optional
 from monty.json import MSONable
 from pydefect.preparation.interstitial.append_interstitial import append_interstitial
 from pydefect.formatting import pretty_coords
-from pydefect.preparation.structure_tools import Coordination
+from pydefect.structure_tools import Coordination
 from pymatgen.core import Structure
 from tabulate import tabulate
 from vise.util.mix_in import ToJsonFileMixIn

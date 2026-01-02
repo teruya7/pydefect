@@ -3,7 +3,7 @@
 
 import numpy as np
 
-from pydefect.preparation.structure_tools import Distances, Coordination
+from pydefect.structure_tools import Distances, Coordination
 from tests.helpers.assertion import assert_msonable
 
 
@@ -40,7 +40,7 @@ def test_shortest_distances(ortho_conventional):
 
 
 def test_coord_distances(mocker, ortho_conventional):
-    mock = mocker.patch("pydefect.preparation.structure_tools.defaults")
+    mock = mocker.patch("pydefect.structure_tools.defaults")
     mock.cutoff_distance_factor = 3.9051248 / 2.5 + 1e-5  # = 1.562
     distances = Distances(ortho_conventional, center_coord=[0.5, 0.5, 0.5])
 
