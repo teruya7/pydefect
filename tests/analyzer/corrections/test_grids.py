@@ -1,6 +1,6 @@
 import joblib
 import pytest
-from pydefect.analyzer.grids.grids import Grids
+from pydefect.analyzer.corrections.grids import Grids
 from pymatgen.core import Lattice, Structure
 import numpy as np
 from pymatgen.io.vasp import Chgcar

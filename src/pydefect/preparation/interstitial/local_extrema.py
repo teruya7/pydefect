@@ -5,7 +5,7 @@ from typing import List, Optional
 
 from monty.json import MSONable
 from pydefect.preparation.interstitial.append_interstitial import append_interstitial
-from pydefect.analyzer.band_edge.coords import pretty_coords
+from pydefect.formatting import pretty_coords
 from pydefect.preparation.structure_tools import Coordination
 from pymatgen.core import Structure
 from tabulate import tabulate

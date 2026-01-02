@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-from pydefect.analyzer.band_edge.coords import pretty_coords
+from pydefect.formatting import pretty_coords
 
 
 def test_pretty_coords():

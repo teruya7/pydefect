@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
+"""Formatting utilities for human-readable output."""
+
 from typing import List, Union
 
 from vise.util.typing import Coords
