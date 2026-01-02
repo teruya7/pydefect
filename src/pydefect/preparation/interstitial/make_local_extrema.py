@@ -10,7 +10,7 @@ from pandas import DataFrame
 from pydefect.analyzer.defect_structure.defect_structure_info import remove_dot
 from pydefect.preparation.interstitial.local_extrema import VolumetricDataLocalExtrema, \
     CoordInfo, VolumetricDataAnalyzeParams
-from pydefect.structure_tools import Distances
+from pydefect.utils.structure_tools import Distances
 from pymatgen.core import Element, Structure
 from pymatgen.io.vasp import VolumetricData, Chgcar
 from scipy.cluster.hierarchy import linkage, fcluster

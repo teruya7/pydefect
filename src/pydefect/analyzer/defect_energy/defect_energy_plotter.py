@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 from pydefect.analyzer.defect_energy.defect_energy import DefectEnergySummary
 from pydefect.analyzer.transition_levels.transition_levels import make_transition_levels
 from pydefect.defaults import defaults
-from pydefect.formatting import prettify_names
+from pydefect.utils.formatting import prettify_names
 from vise.util.matplotlib import float_to_int_formatter
 
 

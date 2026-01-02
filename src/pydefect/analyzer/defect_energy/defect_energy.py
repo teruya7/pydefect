@@ -6,7 +6,7 @@ from typing import List, Dict, Optional, Tuple
 import numpy as np
 from monty.json import MSONable
 from monty.serialization import loadfn
-from pydefect.formatting import prettify_names
+from pydefect.utils.formatting import prettify_names
 from scipy.spatial import HalfspaceIntersection
 from tabulate import tabulate
 from vise.util.logger import get_logger

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
 import pytest
-from pydefect.formatting import (defect_mpl_name, typical_defect_name,
+from pydefect.utils.formatting import (defect_mpl_name, typical_defect_name,
                                          prettify_names)
 
 

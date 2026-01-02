@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-from pydefect.formatting import pretty_coords
+from pydefect.utils.formatting import pretty_coords
 
 
 def test_pretty_coords():
