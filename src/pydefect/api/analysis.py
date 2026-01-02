@@ -18,8 +18,8 @@ from pydefect.analyzer.calculation.make_calc_summary import (
     make_calc_summary as _make_calc_summary,
 )
 from pydefect.analyzer.defect_energy.defect_energy_plotter import DefectEnergyMplPlotter
-from pydefect.input_maker.defect.defect_entry import DefectEntry
-from pydefect.input_maker.supercell.supercell_info import SupercellInfo
+from pydefect.preparation.defect.defect_entry import DefectEntry
+from pydefect.preparation.supercell.supercell_info import SupercellInfo
 from pymatgen.core import Structure
 
 

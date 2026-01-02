@@ -29,7 +29,7 @@ from pydefect.analyzer.chemical_potential.chem_pot_diag import (
 )
 from pydefect.analyzer.corrections.abstract_correction import Correction
 from pydefect.analyzer.corrections.no_correction import NoCorrection
-from pydefect.input_maker.defect.defect_entry import DefectEntry
+from pydefect.preparation.defect.defect_entry import DefectEntry
 
 
 def make_standard_and_relative_energies(

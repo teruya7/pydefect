@@ -10,16 +10,16 @@ from typing import List, Optional, Dict, Tuple, Union
 
 from pymatgen.core import Structure
 
-from pydefect.input_maker.supercell.supercell import Supercell
-from pydefect.input_maker.supercell.supercell_info import SupercellInfo
-from pydefect.input_maker.supercell.supercell_maker import SupercellMaker
-from pydefect.input_maker.supercell.manual_supercell_maker import (
+from pydefect.preparation.supercell.supercell import Supercell
+from pydefect.preparation.supercell.supercell_info import SupercellInfo
+from pydefect.preparation.supercell.supercell_maker import SupercellMaker
+from pydefect.preparation.supercell.manual_supercell_maker import (
     ManualSupercellMaker,
     make_sites_from_yaml_file,
 )
-from pydefect.input_maker.defect.defect_set import DefectSet
-from pydefect.input_maker.defect.defect_set_maker import DefectSetMaker
-from pydefect.input_maker.interstitial.append_interstitial import (
+from pydefect.preparation.defect.defect_set import DefectSet
+from pydefect.preparation.defect.defect_set_maker import DefectSetMaker
+from pydefect.preparation.interstitial.append_interstitial import (
     append_interstitial as _append_interstitial,
 )
 

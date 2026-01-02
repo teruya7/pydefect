@@ -5,7 +5,7 @@ from pydefect.analyzer.calculation.calc_summary import CalcSummary, SingleCalcSu
 from pydefect.analyzer.defect_structure.defect_structure_info import DefectStructureInfo
 from pydefect.analyzer.defect_energy.make_defect_energy_info import num_atom_differences
 from pydefect.defaults import defaults
-from pydefect.input_maker.defect.defect_entry import DefectEntry
+from pydefect.preparation.defect.defect_entry import DefectEntry
 
 
 def make_calc_summary(

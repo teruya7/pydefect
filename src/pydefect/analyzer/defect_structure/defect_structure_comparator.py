@@ -6,7 +6,7 @@ from typing import List, Tuple
 import numpy as np
 from monty.json import MSONable
 from pydefect.defaults import defaults
-from pydefect.input_maker.structure_tools import Distances
+from pydefect.preparation.structure_tools import Distances
 from pymatgen.core import IStructure, Structure
 from vise.util.typing import Coords
 
