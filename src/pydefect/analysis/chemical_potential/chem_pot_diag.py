@@ -135,7 +135,7 @@ class ChemPotDiagMaker:
                 impurity_chem_pots = {}
                 for i_element in self.impurity_elements:
                     i_chem_pot, i_phase = \
-                        self.relative_energies.impurity_chem_pot(
+                        self.relative_energies.calculate_impurity_chemical_potential(
                             i_element, host_chem_pots)
                     impurity_chem_pots[i_element] = i_chem_pot
                     impurity_phases.append(i_phase)

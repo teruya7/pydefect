@@ -5,12 +5,12 @@
 from pydefect.analysis.chemical_potential.models.composition_energies import (
     CompositionEnergy,
     CompositionEnergies,
-    CpdAbstractEnergies,
+    AbstractEnergyDict,
     StandardEnergies,
     RelativeEnergies,
     atomic_fractions,
-    comp_to_element_set,
-    target_element_chem_pot,
+    get_elements_from_composition,
+    calculate_element_chemical_potential,
     NoElementEnergyError,
 )
 from pydefect.analysis.chemical_potential.models.chem_pot_diag import (
@@ -24,12 +24,12 @@ from pydefect.analysis.chemical_potential.models.chem_pot_diag import (
 __all__ = [
     "CompositionEnergy",
     "CompositionEnergies",
-    "CpdAbstractEnergies",
+    "AbstractEnergyDict",
     "StandardEnergies",
     "RelativeEnergies",
     "atomic_fractions",
-    "comp_to_element_set",
-    "target_element_chem_pot",
+    "get_elements_from_composition",
+    "calculate_element_chemical_potential",
     "NoElementEnergyError",
     "TargetVertex",
     "TargetVertices",

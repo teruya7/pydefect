@@ -80,7 +80,7 @@ def make_standard_and_relative_energies(
         >>> std_energies.to_yaml_file()
         >>> rel_energies.to_yaml_file()
     """
-    std_energies, rel_energies = composition_energies.std_rel_energies
+    std_energies, rel_energies = composition_energies.standard_and_relative_energies
     return std_energies, rel_energies
 
 

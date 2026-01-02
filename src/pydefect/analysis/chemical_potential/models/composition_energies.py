@@ -67,7 +67,7 @@ class CompositionEnergies(ToYamlFileMixIn, dict):
         return sorted(result)
 
     @property
-    def std_rel_energies(self) -> Tuple["StandardEnergies", "RelativeEnergies"]:
+    def standard_and_relative_energies(self) -> Tuple["StandardEnergies", "RelativeEnergies"]:
         """Calculate standard and relative energies."""
         standard_energies = StandardEnergies()
         abs_energies_per_atom = {composition.reduced_formula: comp_energy.energy / composition.num_atoms
@@ -109,7 +109,7 @@ class CompositionEnergies(ToYamlFileMixIn, dict):
         return PhaseDiagram(entries=entries, elements=list(elements))
 
 
-class CpdAbstractEnergies(ToYamlFileMixIn, dict):
+class AbstractEnergyDict(ToYamlFileMixIn, dict):
     """Base class for energy dictionaries."""
 
     def to_yaml(self) -> str:
@@ -120,7 +120,7 @@ class CpdAbstractEnergies(ToYamlFileMixIn, dict):
         return cls(loadfn(filename or cls._yaml_filename()))
 
 
-class StandardEnergies(CpdAbstractEnergies):
+class StandardEnergies(AbstractEnergyDict):
     """Standard reference energies for elements."""
     pass
 
@@ -131,17 +131,17 @@ def atomic_fractions(comp: Union[Composition, str], elements: List[str]
     return [Composition(comp).fractional_composition[e] for e in elements]
 
 
-def comp_to_element_set(comp: Union[Composition, str]) -> Set[str]:
+def get_elements_from_composition(comp: Union[Composition, str]) -> Set[str]:
     """Convert composition to set of element symbols."""
     return {str(e) for e in Composition(comp).elements}
 
 
-def target_element_chem_pot(comp: Union[Composition, str],
+def calculate_element_chemical_potential(comp: Union[Composition, str],
                             energy_per_atom: float,
                             target_element: str,
                             other_elem_chem_pot: Dict[str, float]) -> float:
     """Calculate chemical potential of target element from composition."""
-    assert comp_to_element_set(comp) \
+    assert get_elements_from_composition(comp) \
            <= set(other_elem_chem_pot) | {target_element}
     other_element_val = 0.0
     for element, frac in Composition(comp).fractional_composition.items():
@@ -152,7 +152,7 @@ def target_element_chem_pot(comp: Union[Composition, str],
     return (energy_per_atom - other_element_val) / target_frac
 
 
-class RelativeEnergies(CpdAbstractEnergies):
+class RelativeEnergies(AbstractEnergyDict):
     """Formation energies relative to elemental references."""
 
     @property
@@ -170,7 +170,8 @@ class RelativeEnergies(CpdAbstractEnergies):
         return result
 
     @property
-    def unstable_comp_info(self):
+    def format_unstable_compounds(self):
+        """Format unstable compound information as a table."""
         result = []
         for comp, (decomp, e_above_hull) in self.unstable_compounds.items():
             decomp_list = " ".join([f"{d.composition} ({ratio:.3f})"
@@ -181,24 +182,25 @@ class RelativeEnergies(CpdAbstractEnergies):
 
     @property
     def all_element_set(self) -> Set[str]:
-        return set().union(*[comp_to_element_set(c) for c in self])
+        return set().union(*[get_elements_from_composition(c) for c in self])
 
     def host_composition_energies(self, elements: List[str]) -> Dict[str, float]:
         return {formula: energy for formula, energy in self.items()
-                if comp_to_element_set(formula).issubset(elements)}
+                if get_elements_from_composition(formula).issubset(elements)}
 
-    def comp_energies_with_element(self, element: str) -> Dict[str, float]:
+    def get_energies_containing_element(self, element: str) -> Dict[str, float]:
         return {formula: energy for formula, energy in self.items()
-                if element in comp_to_element_set(formula)}
+                if element in get_elements_from_composition(formula)}
 
-    def impurity_chem_pot(self, impurity_element: str,
+    def calculate_impurity_chemical_potential(self, impurity_element: str,
                           host_elements_chem_pot: Dict[str, float]
                           ) -> Tuple[float, str]:
+        """Calculate limiting chemical potential for an impurity element."""
         impurity_chem_pot = {impurity_element: 0.0}
-        comp_energies = self.comp_energies_with_element(impurity_element)
+        comp_energies = self.get_energies_containing_element(impurity_element)
 
         for formula, energy_per_atom in comp_energies.items():
-            impurity_chem_pot[formula] = target_element_chem_pot(
+            impurity_chem_pot[formula] = calculate_element_chemical_potential(
                 formula, energy_per_atom, impurity_element,
                 host_elements_chem_pot)
 

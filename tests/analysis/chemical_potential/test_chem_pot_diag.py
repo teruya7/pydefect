@@ -8,7 +8,7 @@ import pytest
 from pydefect.analysis.chemical_potential.models import ChemPotDiag, \
     CompositionEnergy, CompositionEnergies, StandardEnergies, \
     RelativeEnergies, TargetVertices, TargetVertex, \
-    target_element_chem_pot, change_element_sequence, UnstableTargetError
+    calculate_element_chemical_potential, change_element_sequence, UnstableTargetError
 from pydefect.analysis.chemical_potential.chem_pot_diag import ChemPotDiagMaker
 from pymatgen.analysis.phase_diagram import PDEntry
 from pymatgen.core import Composition, Element
@@ -54,15 +54,15 @@ def test_composition_energies_from_dict():
     actual = CompositionEnergies.from_dict({"Mg": -1.0})
     expected = CompositionEnergies({Composition("Mg"): CompositionEnergy(-1.0)})
     assert actual == expected
-    assert actual.std_rel_energies == ({'Mg': -1.0}, {"Mg": 0.0})
+    assert actual.standard_and_relative_energies == ({'Mg': -1.0}, {"Mg": 0.0})
 
 
 def test_composition_energies_elements(composition_energies):
     assert composition_energies.elements == ["Cl", "H", "O"]
 
 
-def test_composition_energies_std_rel_energies(composition_energies):
-    actual = composition_energies.std_rel_energies
+def test_composition_energies_standard_and_relative_energies(composition_energies):
+    actual = composition_energies.standard_and_relative_energies
     expected_ref = StandardEnergies({"H": 0.0, "O": 1.0, "Cl": 12.0})
     expected_rel = RelativeEnergies({"H": 0.0, "O": 0.0, "Cl": 0.0,
                                      'ClO': -5.0, 'ClO2': -3.666666666666667,
@@ -108,8 +108,8 @@ O: 2.0
                           compare_dict=False, compare_items=False)
 
 
-def test_target_element_chem_pot():
-    actual = target_element_chem_pot("MgO3",
+def test_calculate_element_chemical_potential():
+    actual = calculate_element_chemical_potential("MgO3",
                                      energy_per_atom=-10.0,
                                      target_element="Mg",
                                      other_elem_chem_pot={"O": -4.0})
@@ -144,7 +144,7 @@ def test_relative_energies_related_comp_energies(relative_energies):
 
 
 def test_relative_energies_comp_energies_w_element(relative_energies):
-    actual = relative_energies.comp_energies_with_element(element="Al")
+    actual = relative_energies.get_energies_containing_element(element="Al")
     expected = {"Al": 0.0, "MgAlO2": -1.0}
     assert actual == expected
 
@@ -159,7 +159,7 @@ def test_relative_energies_phase_diagram():
     expected = """composition      E above hull  decompose to (ratio)
 -------------  --------------  -------------------------
 Mg1 O3                   4.00  Mg1 O1 (0.500) O1 (0.500)"""
-    assert rel_energies.unstable_comp_info == expected
+    assert rel_energies.format_unstable_compounds == expected
 
 
 @pytest.fixture
