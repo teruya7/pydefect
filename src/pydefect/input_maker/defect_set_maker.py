@@ -3,7 +3,7 @@
 from itertools import product
 from typing import Dict, List
 
-from pydefect.database.database import oxidation_state, electronegativity
+from pydefect.data.elements.element_data import oxidation_state, electronegativity
 from pydefect.defaults import defaults
 from pydefect.input_maker.defect import SimpleDefect
 from pydefect.input_maker.defect_set import DefectSet, screen_defect_set

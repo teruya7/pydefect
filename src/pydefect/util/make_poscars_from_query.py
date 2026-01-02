@@ -5,7 +5,7 @@ from shutil import copyfile
 from typing import List, Union
 
 import yaml
-from pydefect.util.molecules.molecules import MOLECULE_DATA
+from pydefect.data.molecules.molecules import MOLECULE_DATA
 from pymatgen.core import Composition
 from vise.util.logger import get_logger
 

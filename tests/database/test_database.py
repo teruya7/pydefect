@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 
-from pydefect.database.database import electronegativity, oxidation_state
+from pydefect.data.elements.element_data import electronegativity, oxidation_state
 
 
 def test_electronegativity():

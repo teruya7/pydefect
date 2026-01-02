@@ -12,7 +12,7 @@ Characteristic data is retrieved from
 McQuarrie and Simon, Phys. Chem. A molecular approach.
 
 Example:
-    >>> from pydefect.util.molecules.molecules import MOLECULE_DATA
+    >>> from pydefect.data.molecules.molecules import MOLECULE_DATA
     >>> print(MOLECULE_DATA["O2"])
 """
 
