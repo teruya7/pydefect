@@ -9,3 +9,23 @@ class PydefectError(Exception):
         >>> raise PydefectError("Something went wrong")
     """
     pass
+
+
+class SupercellError(PydefectError):
+    """Error during supercell generation."""
+    pass
+
+
+class NotPrimitiveError(PydefectError):
+    """Input structure is not a primitive cell."""
+    pass
+
+
+class NoCalculatedPotentialSiteError(PydefectError):
+    """No calculated potential sites found for correction."""
+    pass
+
+
+class CpdNotSupportedError(Exception):
+    """Chemical potential diagram not supported for this system."""
+    pass

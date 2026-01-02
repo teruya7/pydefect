@@ -9,7 +9,7 @@ import yaml
 from monty.json import MSONable, MontyDecoder
 from pydefect.analyzer.defect_structure.defect_structure_comparator import \
     DefectStructureComparator
-from pydefect.util.coords import pretty_coords
+from pydefect.analyzer.band_edge.coords import pretty_coords
 from pymatgen.core import IStructure
 from vise.util.mix_in import ToJsonFileMixIn
 from vise.util.structure_symmetrizer import StructureSymmetrizer

@@ -6,7 +6,7 @@ from pydefect.defaults import defaults
 
 from pydefect.input_maker.supercell_info import Interstitial, SupercellInfo, \
     SimpleSite
-from pydefect.util.structure_tools import Coordination
+from pydefect.input_maker.structure_tools import Coordination
 from tests.helpers.assertion import assert_msonable, assert_json_roundtrip
 
 
@@ -33,7 +33,7 @@ def test_supercell_info_from_dict(supercell_info):
 
 
 def test_supercell_info_distances(mocker, supercell_info):
-    mock = mocker.patch("pydefect.util.structure_tools.defaults")
+    mock = mocker.patch("pydefect.input_maker.structure_tools.defaults")
     mock.dist_tol = defaults.dist_tol
     mock.cutoff_distance_factor = 1.7
     assert supercell_info.coords("H1") == \
@@ -45,7 +45,7 @@ def test_supercell_info_distances(mocker, supercell_info):
 
 
 def test_supercell_info_interstitials_distances(mocker, supercell_info):
-    mock = mocker.patch("pydefect.util.structure_tools.defaults")
+    mock = mocker.patch("pydefect.input_maker.structure_tools.defaults")
     mock.dist_tol = defaults.dist_tol
     mock.cutoff_distance_factor = 1.7
     actual = supercell_info.interstitial_coords(0)
@@ -57,7 +57,7 @@ def test_supercell_info_interstitials_distances(mocker, supercell_info):
 
 
 def test_supercell_info_str(mocker, supercell_info):
-    mock = mocker.patch("pydefect.util.structure_tools.defaults")
+    mock = mocker.patch("pydefect.input_maker.structure_tools.defaults")
     mock.dist_tol = defaults.dist_tol
     mock.cutoff_distance_factor = 1.7
     expected = """Space group: Fmmm

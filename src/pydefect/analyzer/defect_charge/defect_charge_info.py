@@ -7,7 +7,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from monty.json import MSONable
 from pydefect.defaults import defaults
-from pydefect.util.coords import pretty_coords
+from pydefect.analyzer.band_edge.coords import pretty_coords
 from pymatgen.electronic_structure.core import Spin
 from tabulate import tabulate
 from vise.util.mix_in import ToJsonFileMixIn

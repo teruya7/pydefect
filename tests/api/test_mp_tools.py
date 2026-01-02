@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pydefect.util.mp_tools import MpQuery, chemsys
+from pydefect.api.mp_tools import MpQuery, chemsys
 
 
 def test_mp_actual_query():

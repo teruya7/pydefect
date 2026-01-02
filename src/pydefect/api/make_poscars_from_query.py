@@ -23,7 +23,7 @@ def make_poscars_from_query(materials_query: List[Union[dict, "SummaryDoc"]],
         path: Directory to create structure files.
 
     Example:
-        >>> from pydefect.util.mp_tools import MpQuery
+        >>> from pydefect.api.mp_tools import MpQuery
         >>> query = MpQuery(["Mg", "O"]).materials
         >>> make_poscars_from_query(query, Path("./"))
     """

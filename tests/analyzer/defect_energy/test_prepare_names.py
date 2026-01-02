@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
 import pytest
-from pydefect.util.prepare_names import (defect_mpl_name, typical_defect_name,
+from pydefect.analyzer.defect_energy.naming import (defect_mpl_name, typical_defect_name,
                                          prettify_names)
 
 

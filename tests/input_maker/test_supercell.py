@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from pydefect.input_maker.supercell import (
     Supercell, Supercells, TetragonalSupercells, RhombohedralSupercells)
-from pydefect.util.error_classes import SupercellError
+from pydefect.error import SupercellError
 from pymatgen.core import Element
 
 

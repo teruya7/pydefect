@@ -8,7 +8,7 @@ from typing import List, Tuple
 
 import numpy as np
 from numpy.linalg import det
-from pydefect.util.error_classes import SupercellError
+from pydefect.error import SupercellError
 from pymatgen.core import IStructure
 
 

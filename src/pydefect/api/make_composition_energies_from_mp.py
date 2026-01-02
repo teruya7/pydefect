@@ -7,7 +7,7 @@ from typing import List, Optional, Dict
 from monty.serialization import loadfn
 from pydefect.analyzer.chemical_potential.chem_pot_diag import CompositionEnergy, \
     CompositionEnergies
-from pydefect.util.mp_tools import MpQuery
+from pydefect.api.mp_tools import MpQuery
 from pymatgen.core import Composition
 from pymatgen.entries.computed_entries import ComputedEntry
 from vise.atom_energies.atom_energy import mp_energies

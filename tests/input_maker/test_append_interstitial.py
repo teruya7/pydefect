@@ -5,7 +5,7 @@ from copy import deepcopy
 import pytest
 from pydefect.input_maker.append_interstitial import append_interstitial
 from pydefect.input_maker.supercell_info import Interstitial
-from pydefect.util.error_classes import NotPrimitiveError
+from pydefect.error import NotPrimitiveError
 from pymatgen.core import Structure, Lattice
 
 

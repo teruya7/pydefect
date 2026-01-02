@@ -9,7 +9,7 @@ from monty.json import MSONable
 from vise.util.logger import get_logger
 
 from pydefect.defaults import defaults
-from pydefect.util.coords import pretty_coords
+from pydefect.analyzer.band_edge.coords import pretty_coords
 from tabulate import tabulate
 from vise.util.mix_in import ToJsonFileMixIn
 from vise.util.typing import Coords, GenCoords

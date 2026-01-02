@@ -7,7 +7,7 @@ from monty.json import MSONable
 from pydefect.analyzer.defect_structure.defect_structure_comparator import \
     SiteDiff, SiteInfo
 from pydefect.defaults import defaults
-from pydefect.util.coords import pretty_coords
+from pydefect.analyzer.band_edge.coords import pretty_coords
 from pymatgen.core import Structure
 from pymatgen.symmetry.groups import SpaceGroup
 from tabulate import tabulate

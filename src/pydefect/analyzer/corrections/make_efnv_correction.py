@@ -13,7 +13,7 @@ from pydefect.analyzer.corrections.efnv_correction import \
     ExtendedFnvCorrection, PotentialSite
 from pydefect.analyzer.corrections.ewald import Ewald
 from pydefect.defaults import defaults
-from pydefect.util.error_classes import SupercellError, \
+from pydefect.error import SupercellError, \
     NoCalculatedPotentialSiteError
 
 

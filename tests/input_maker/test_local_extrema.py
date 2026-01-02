@@ -5,7 +5,7 @@ import pytest
 from pydefect.input_maker.local_extrema import VolumetricDataLocalExtrema, \
     CoordInfo
 from pydefect.input_maker.supercell_info import Interstitial, SupercellInfo
-from pydefect.util.structure_tools import Coordination
+from pydefect.input_maker.structure_tools import Coordination
 from pymatgen.core import Structure
 from tests.helpers.assertion import assert_json_roundtrip
 from vise.util.structure_symmetrizer import Site

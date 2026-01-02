@@ -6,7 +6,7 @@ from typing import List, Dict, Optional, Union
 from monty.json import MSONable
 from numpy.linalg import det
 from pydefect.data.elements.element_data import electronegativity, oxidation_state
-from pydefect.util.structure_tools import Distances
+from pydefect.input_maker.structure_tools import Distances
 from pymatgen.core import IStructure
 from vise.util.logger import get_logger
 from vise.util.mix_in import ToJsonFileMixIn

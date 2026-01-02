@@ -9,7 +9,7 @@ from pydefect.defaults import defaults
 from pydefect.input_maker.supercell import Supercell, TetragonalSupercells, \
     Supercells
 from pydefect.input_maker.supercell_info import SupercellInfo
-from pydefect.util.error_classes import NotPrimitiveError, SupercellError
+from pydefect.error import NotPrimitiveError, SupercellError
 from pymatgen.core import IStructure
 from vise.util.centering import Centering
 from vise.util.logger import get_logger
