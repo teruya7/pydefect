@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-from pydefect.analysis.calculation.calc_results import CalcResults
-from pydefect.analysis.calculation.calc_summary import SingleCalcSummary, CalcSummary
+from pydefect.analysis.calculation.models import CalcResults
+from pydefect.analysis.calculation.models import SingleCalcSummary, CalcSummary
 from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
-from pydefect.analysis.calculation.make_calc_summary import make_calc_summary
+from pydefect.analysis.calculation.calc_summary import make_calc_summary
 from pydefect.defaults import defaults
 from pydefect.makers.defect.defect_entry import DefectEntry
 from pymatgen.core import IStructure, Lattice

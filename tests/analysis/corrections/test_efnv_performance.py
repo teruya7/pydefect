@@ -3,7 +3,7 @@
 import pytest
 from monty.serialization import loadfn
 
-from pydefect.analysis.calculation.calc_results import CalcResults
+from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.unitcell.unitcell import Unitcell
 from pydefect.analysis.corrections.make_efnv_correction import \
     make_efnv_correction

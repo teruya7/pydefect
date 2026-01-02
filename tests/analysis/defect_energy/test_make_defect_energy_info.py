@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-from pydefect.analysis.calculation.calc_results import CalcResults
+from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.defect_energy.defect_energy import DefectEnergy, DefectEnergyInfo
 from pydefect.analysis.defect_energy.make_defect_energy_info import make_defect_energy_info, \
     num_atom_differences

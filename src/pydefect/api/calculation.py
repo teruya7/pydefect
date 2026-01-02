@@ -6,7 +6,7 @@ from typing import List
 
 from pymatgen.io.vasp import Vasprun, Outcar
 
-from pydefect.analysis.calculation.calc_results import CalcResults
+from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.calculation.make_calc_results import (
     make_calc_results_from_vasp as _make_calc_results,
 )

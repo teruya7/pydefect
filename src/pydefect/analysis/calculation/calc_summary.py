@@ -1,99 +1,59 @@
-# -*- coding: utf-8 -*-
-#  Copyright (c) 2020 Kumagai group.
-from dataclasses import dataclass
-from typing import Optional, Dict
+from typing import List, Tuple
 
-from monty.json import MSONable
-from pydefect.analysis.defect_structure.defect_structure_info import SymmRelation, DefectType
-from tabulate import tabulate
-from vise.util.mix_in import ToJsonFileMixIn
+from pydefect.analysis.calculation.models import CalcResults, CalcSummary, SingleCalcSummary
+from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
+from pydefect.analysis.defect_energy.make_defect_energy_info import num_atom_differences
+from pydefect.defaults import defaults
+from pydefect.makers.defect.defect_entry import DefectEntry
 
 
-@dataclass
-class SingleCalcSummary(MSONable):
-    """Summary of a single defect calculation.
+def make_calc_summary(
+        calc_set: List[Tuple[CalcResults, DefectEntry, DefectStructureInfo]],
+        p_calc_results: CalcResults) -> CalcSummary:
+    """Create CalcSummary from a set of defect calculations.
 
-    Records convergence status, structural changes, and electronic states.
+    Args:
+        calc_set: List of (CalcResults, DefectEntry, DefectStructureInfo) tuples.
+        p_calc_results: Perfect supercell calculation results.
 
-    Attributes:
-        charge: Charge state.
-        atom_io: Dict of element to atom count change.
-        electronic_conv: Whether SCF converged.
-        ionic_conv: Whether ionic relaxation converged.
-        is_energy_strange: Whether formation energy is anomalous.
-        same_config_from_init: Whether configuration matches initial.
-        defect_type: Type of defect (vacancy, interstitial, etc.).
-        symm_relation: Symmetry relation to initial structure.
-        donor_phs: Whether has donor perturbed host state.
-        acceptor_phs: Whether has acceptor perturbed host state.
+    Returns:
+        CalcSummary containing summaries for all defects.
 
     Example:
-        >>> summary = SingleCalcSummary(
-        ...     charge=2,
-        ...     atom_io={"O": -1},
-        ...     electronic_conv=True,
-        ...     ionic_conv=True
-        ... )
+        >>> summary = make_calc_summary(calc_set, perfect_results)
+        >>> summary.to_json_file()
     """
-    charge: int
-    atom_io: dict
-    electronic_conv: Optional[bool] = None
-    ionic_conv: Optional[bool] = None
-    is_energy_strange: Optional[bool] = None
-    same_config_from_init: Optional[bool] = None
-    defect_type: Optional[str] = None
-    symm_relation: Optional[str] = None
-    donor_phs: Optional[bool] = None
-    acceptor_phs: Optional[bool] = None
-    unoccupied_deep_state: Optional[bool] = None
-    occupied_deep_state: Optional[bool] = None
-    same_structure: Optional[str] = None
-
-    def same_atom_charge_io(self, other: "SingleCalcSummary"):
-        return self.charge == other.charge and self.atom_io == other.atom_io
-
-    @property
-    def is_converged(self):
-        return self.electronic_conv and self.ionic_conv
-
-    @property
-    def is_proper_result(self):
-        return self.is_converged is True and self.is_energy_strange is False
-
-    @property
-    def is_unusual(self):
-        return (self.symm_relation is SymmRelation.supergroup or
-                self.same_config_from_init is False)
-
-    @property
-    def config_list(self):
-        if self.is_proper_result:
-            result = [".", ".", "."]
-            if self.same_config_from_init in (False, None):
-                result.extend([str(self.same_config_from_init),
-                               str(self.defect_type),
-                               str(self.symm_relation)])
-            else:
-                result.extend([".", ".", "."])
-            return result
-        elif self.is_converged:
-            return [".", ".", self.is_energy_strange]
-        else:
-            return [self.electronic_conv, self.ionic_conv]
+    summaries = {}
+    for calc_results, entry, str_info in calc_set:
+        summaries[entry.full_name] = \
+            create_single_calc_summary(calc_results, entry, p_calc_results,
+                                       str_info)
+    return CalcSummary(single_summaries=summaries)
 
 
-@dataclass
-class CalcSummary(MSONable, ToJsonFileMixIn):
-    """Summary of all defect calculations.
+def create_single_calc_summary(calc_results, entry, p_calc_results, str_info):
+    """Create SingleCalcSummary for one defect calculation.
 
-    Attributes:
-        single_summaries: Dict of defect name to SingleCalcSummary.
+    Args:
+        calc_results: Defect calculation results.
+        entry: DefectEntry specification.
+        p_calc_results: Perfect supercell results.
+        str_info: DefectStructureInfo analysis.
+
+    Returns:
+        SingleCalcSummary with convergence and structural info.
     """
-    single_summaries: Dict[str, SingleCalcSummary]
+    atom_io = num_atom_differences(calc_results.structure,
+                                   p_calc_results.structure)
+    relative_energy = calc_results.energy - p_calc_results.energy
+    is_energy_strange = abs(relative_energy) > defaults.abs_strange_energy
+    return SingleCalcSummary(
+        charge=entry.charge,
+        atom_io=atom_io,
+        electronic_conv=calc_results.electronic_conv,
+        ionic_conv=calc_results.ionic_conv,
+        is_energy_strange=is_energy_strange,
+        same_config_from_init=str_info.same_config_from_init,
+        defect_type=str(str_info.defect_type),
+        symm_relation=str(str_info.symm_relation))
 
-    def __str__(self):
-        lines = [["name", "Ele. conv.", "Ionic conv.", "Is energy strange",
-                  "Same config.", "Defect type", "Symm. Relation"]]
-        for defect_name, calc_summary in self.single_summaries.items():
-            lines.append([defect_name] + calc_summary.config_list)
-        return tabulate(lines, stralign="center", tablefmt="pipe")

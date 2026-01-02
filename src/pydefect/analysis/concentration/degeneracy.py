@@ -7,7 +7,7 @@ from typing import Dict, MutableMapping
 from monty.json import MSONable
 from ruamel.yaml.scalarint import ScalarInt
 
-from pydefect.analysis.calculation.calc_results import CalcResults
+from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.defect_energy.defect_energy import DefectEnergyInfo
 from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
 from pymatgen.symmetry.groups import SpaceGroup

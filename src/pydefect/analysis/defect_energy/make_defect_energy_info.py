@@ -4,7 +4,7 @@ from collections import defaultdict
 from typing import Dict
 
 from pydefect.analysis.band_edge.models import BandEdgeStates
-from pydefect.analysis.calculation.calc_results import CalcResults
+from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.defect_energy.defect_energy import DefectEnergy, DefectEnergyInfo
 from pydefect.analysis.unitcell.unitcell import Unitcell
 from pydefect.analysis.chemical_potential.chem_pot_diag import StandardEnergies

@@ -6,7 +6,7 @@ import numpy as np
 from numpy import dot, cross
 from numpy.linalg import norm
 
-from pydefect.analysis.calculation.calc_results import CalcResults
+from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.defect_structure.defect_structure_comparator import \
     DefectStructureComparator
 from pydefect.analysis.corrections.efnv_correction import \

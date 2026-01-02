@@ -4,7 +4,7 @@
 import numpy as np
 from vise.util.logger import get_logger
 
-from pydefect.analysis.calculation.calc_results import CalcResults
+from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.corrections.efnv_correction import \
     ExtendedFnvCorrection, PotentialSite
 from pydefect.analysis.corrections.ewald import Ewald
