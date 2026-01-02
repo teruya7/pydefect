@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2023 Kumagai group.
-from pydefect.preparation.defect.complex_defect_set import ComplexDefectSet, \
+from pydefect.preparation.complex_defect.complex_defect_set import ComplexDefectSet, \
     ComplexDefect
 from pydefect.preparation.defect.defect_entries_maker import copy_to_structure, \
     to_istructure
