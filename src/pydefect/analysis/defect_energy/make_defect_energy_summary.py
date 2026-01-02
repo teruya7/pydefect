@@ -3,7 +3,7 @@
 from itertools import groupby
 from typing import List, Dict
 
-from pydefect.analysis.band_edge.band_edge_states import PerfectBandEdgeState
+from pydefect.analysis.band_edge.models import PerfectBandEdgeState
 from pydefect.analysis.defect_energy.defect_energy import DefectEnergyInfo, \
     DefectEnergySummary, DefectEnergies
 from pydefect.analysis.unitcell.unitcell import Unitcell

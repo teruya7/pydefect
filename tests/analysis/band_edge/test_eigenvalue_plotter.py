@@ -2,8 +2,8 @@
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 
 import pytest
-from pydefect.analysis.band_edge.band_edge_states import BandEdgeOrbitalInfos, OrbitalInfo
-from pydefect.analysis.band_edge.eigenvalue_plotter import EigenvalueMplPlotter
+from pydefect.analysis.band_edge.models import BandEdgeOrbitalInfos, OrbitalInfo
+from pydefect.analysis.band_edge.plotter import EigenvalueMplPlotter
 
 try:
     import psutil

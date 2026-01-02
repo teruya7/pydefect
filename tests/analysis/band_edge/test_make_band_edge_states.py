@@ -3,7 +3,7 @@
 from pathlib import Path
 
 import pytest
-from pydefect.analysis.band_edge.band_edge_states import EdgeInfo, BandEdgeOrbitalInfos, \
+from pydefect.analysis.band_edge.models import EdgeInfo, BandEdgeOrbitalInfos, \
     PerfectBandEdgeState, OrbitalInfo, BandEdgeStates, BandEdgeState, \
     LocalizedOrbital
 from pydefect.analysis.defect_charge.defect_charge_info import DefectChargeInfo

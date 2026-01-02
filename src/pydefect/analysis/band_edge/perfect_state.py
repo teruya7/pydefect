@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-from pydefect.analysis.band_edge.band_edge_states import PerfectBandEdgeState, EdgeInfo, \
+from pydefect.analysis.band_edge.models import PerfectBandEdgeState, EdgeInfo, \
     OrbitalInfo
-from pydefect.analysis.band_edge.make_band_edge_orbital_infos import \
+from pydefect.analysis.band_edge.orbital_infos import \
     calc_orbital_character
 from pymatgen.electronic_structure.core import Spin
 from vise.defaults import defaults as v_defaults

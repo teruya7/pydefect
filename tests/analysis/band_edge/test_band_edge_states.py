@@ -4,7 +4,7 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
-from pydefect.analysis.band_edge.band_edge_states import BandEdgeEigenvalues, \
+from pydefect.analysis.band_edge.models import BandEdgeEigenvalues, \
     BandEdgeStates, OrbitalInfo, BandEdgeOrbitalInfos, PerfectBandEdgeState, \
     EdgeInfo, BandEdgeState, LocalizedOrbital, pretty_orbital
 from pydefect.defaults import defaults

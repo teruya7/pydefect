@@ -5,7 +5,7 @@ from itertools import cycle
 from typing import Optional, List
 
 from matplotlib import pyplot as plt
-from pydefect.analysis.band_edge.band_edge_states import BandEdgeOrbitalInfos
+from pydefect.analysis.band_edge.models import BandEdgeOrbitalInfos
 from pydefect.defaults import defaults
 from vise.util.matplotlib import float_to_int_formatter
 

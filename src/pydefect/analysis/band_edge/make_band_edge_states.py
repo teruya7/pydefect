@@ -5,7 +5,7 @@ from itertools import zip_longest
 from typing import List, Tuple
 
 import numpy as np
-from pydefect.analysis.band_edge.band_edge_states import BandEdgeOrbitalInfos, \
+from pydefect.analysis.band_edge.models import BandEdgeOrbitalInfos, \
     PerfectBandEdgeState, BandEdgeStates, EdgeInfo, OrbitalInfo, \
     LocalizedOrbital, BandEdgeState
 from pydefect.analysis.defect_charge.defect_charge_info import DefectChargeInfo
