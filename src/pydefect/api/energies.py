@@ -6,9 +6,11 @@ This module provides functions for creating chemical potential diagrams
 and calculating defect formation energies.
 """
 
+from pathlib import Path
 from typing import List, Optional, Union
 
-from pymatgen.core import Composition
+from pymatgen.core import Composition, Structure
+from pymatgen.io.vasp import Outcar
 
 from pydefect.analyzer.calculation.calc_results import CalcResults
 from pydefect.analyzer.defect_energy.defect_energy import DefectEnergyInfo
@@ -20,6 +22,7 @@ from pydefect.analyzer.defect_energy.make_defect_energy_summary import (
 )
 from pydefect.analyzer.unitcell.unitcell import Unitcell
 from pydefect.analyzer.chemical_potential.chem_pot_diag import (
+    CompositionEnergy,
     CompositionEnergies,
     RelativeEnergies,
     StandardEnergies,
@@ -159,3 +162,48 @@ def make_defect_energy_summary(
     return _make_defect_energy_summary(
         energy_infos, target_vertices, unitcell, perfect_band_edge_state
     )
+
+
+def make_composition_energies(
+    directories: List[Path],
+    existing_composition_energies: Optional[CompositionEnergies] = None,
+) -> CompositionEnergies:
+    """Collect composition energies from multiple VASP calculations.
+
+    Args:
+        directories: List of directories containing VASP calculations.
+        existing_composition_energies: Optional existing CompositionEnergies
+            to update (lower energies will overwrite).
+
+    Returns:
+        CompositionEnergies object.
+
+    Example:
+        >>> from pydefect import api
+        >>> comp_energies = api.make_composition_energies(
+        ...     [Path("MgO"), Path("Mg"), Path("O2")]
+        ... )
+        >>> comp_energies.to_yaml_file()
+    """
+    from vise.defaults import defaults
+
+    if existing_composition_energies:
+        composition_energies = existing_composition_energies
+    else:
+        composition_energies = CompositionEnergies()
+
+    for _dir in directories:
+        outcar = Outcar(_dir / defaults.outcar)
+        composition = Structure.from_file(_dir / defaults.contcar).composition
+        energy = float(outcar.final_energy)
+        ce = CompositionEnergy(energy, str(_dir))
+
+        if composition in composition_energies:
+            original = composition_energies[composition]
+            if ce.energy > original.energy:
+                continue  # Skip if new energy is higher
+
+        composition_energies[composition] = ce
+
+    return composition_energies
+

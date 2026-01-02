@@ -11,12 +11,15 @@ from pydefect.api.structure import (
     make_defect_set,
     append_interstitial,
     pop_interstitial,
+    make_local_extrema,
+    make_defect_entries,
 )
 from pydefect.api.energies import (
     make_chem_pot_diag,
     make_standard_and_relative_energies,
     make_defect_energy_info,
     make_defect_energy_summary,
+    make_composition_energies,
 )
 from pydefect.api.corrections import (
     make_efnv_correction,
@@ -27,13 +30,8 @@ from pydefect.api.analysis import (
     make_band_edge_states,
     make_calc_summary,
     plot_defect_energy,
-)
-from pydefect.api.vasp import (
     make_unitcell_from_vasp,
     make_calc_results_from_vasp,
-    make_composition_energies,
-    make_local_extrema,
-    make_defect_entries,
     make_perfect_band_edge_state,
     make_band_edge_orbital_infos,
 )
@@ -48,11 +46,14 @@ __all__ = [
     "make_defect_set",
     "append_interstitial",
     "pop_interstitial",
+    "make_local_extrema",
+    "make_defect_entries",
     # energies
     "make_chem_pot_diag",
     "make_standard_and_relative_energies",
     "make_defect_energy_info",
     "make_defect_energy_summary",
+    "make_composition_energies",
     # corrections
     "make_efnv_correction",
     "make_gkfo_correction",
@@ -61,16 +62,11 @@ __all__ = [
     "make_band_edge_states",
     "make_calc_summary",
     "plot_defect_energy",
-    # vasp
     "make_unitcell_from_vasp",
     "make_calc_results_from_vasp",
-    "make_composition_energies",
-    "make_local_extrema",
-    "make_defect_entries",
     "make_perfect_band_edge_state",
     "make_band_edge_orbital_infos",
     # util
     "print_json",
     "make_defect_vesta_file",
 ]
-
