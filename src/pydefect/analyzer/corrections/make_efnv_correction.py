@@ -6,8 +6,8 @@ import numpy as np
 from numpy import dot, cross
 from numpy.linalg import norm
 
-from pydefect.analyzer.calc_results import CalcResults
-from pydefect.analyzer.defect_structure_comparator import \
+from pydefect.analyzer.calculation.calc_results import CalcResults
+from pydefect.analyzer.defect_structure.defect_structure_comparator import \
     DefectStructureComparator
 from pydefect.analyzer.corrections.efnv_correction import \
     ExtendedFnvCorrection, PotentialSite

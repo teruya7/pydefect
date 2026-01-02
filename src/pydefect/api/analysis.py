@@ -8,16 +8,16 @@ band edge states, and plotting defect energies.
 
 from typing import List, Optional
 
-from pydefect.analyzer.calc_results import CalcResults
-from pydefect.analyzer.defect_structure_info import DefectStructureInfo
-from pydefect.analyzer.make_defect_structure_info import MakeDefectStructureInfo
-from pydefect.analyzer.make_band_edge_states import (
+from pydefect.analyzer.calculation.calc_results import CalcResults
+from pydefect.analyzer.defect_structure.defect_structure_info import DefectStructureInfo
+from pydefect.analyzer.defect_structure.make_defect_structure_info import MakeDefectStructureInfo
+from pydefect.analyzer.band_edge.make_band_edge_states import (
     make_band_edge_states as _make_band_edge_states,
 )
-from pydefect.analyzer.make_calc_summary import (
+from pydefect.analyzer.calculation.make_calc_summary import (
     make_calc_summary as _make_calc_summary,
 )
-from pydefect.analyzer.defect_energy_plotter import DefectEnergyMplPlotter
+from pydefect.analyzer.defect_energy.defect_energy_plotter import DefectEnergyMplPlotter
 from pydefect.input_maker.defect_entry import DefectEntry
 from pydefect.input_maker.supercell_info import SupercellInfo
 from pymatgen.core import Structure

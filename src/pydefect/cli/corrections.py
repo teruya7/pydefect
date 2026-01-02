@@ -17,7 +17,7 @@ from vise.util.logger import get_logger
 
 from pydefect.cli.typer_app import app
 from pydefect import api
-from pydefect.analyzer.unitcell import Unitcell
+from pydefect.analyzer.unitcell.unitcell import Unitcell
 from pydefect.analyzer.corrections.site_potential_plotter import SitePotentialMplPlotter
 
 logger = get_logger(__name__)

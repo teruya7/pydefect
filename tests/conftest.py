@@ -6,10 +6,10 @@ from math import sqrt
 from pathlib import Path
 
 import pytest
-from pydefect.analyzer.defect_energy import DefectEnergies, DefectEnergy, \
+from pydefect.analyzer.defect_energy.defect_energy import DefectEnergies, DefectEnergy, \
     DefectEnergySummary
-from pydefect.analyzer.defect_structure_comparator import SiteDiff
-from pydefect.analyzer.defect_structure_info import Displacement, \
+from pydefect.analyzer.defect_structure.defect_structure_comparator import SiteDiff
+from pydefect.analyzer.defect_structure.defect_structure_info import Displacement, \
     DefectStructureInfo
 from pydefect.analyzer.corrections.efnv_correction import PotentialSite, \
     ExtendedFnvCorrection

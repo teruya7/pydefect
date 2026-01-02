@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import List, Optional, Dict
 
 from monty.serialization import loadfn
-from pydefect.analyzer.chem_pot_diag.chem_pot_diag import CompositionEnergy, \
+from pydefect.analyzer.chemical_potential.chem_pot_diag import CompositionEnergy, \
     CompositionEnergies
 from pydefect.util.mp_tools import MpQuery
 from pymatgen.core import Composition

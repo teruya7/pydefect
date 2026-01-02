@@ -10,16 +10,16 @@ from typing import List, Optional, Union
 
 from pymatgen.core import Composition
 
-from pydefect.analyzer.calc_results import CalcResults
-from pydefect.analyzer.defect_energy import DefectEnergyInfo
-from pydefect.analyzer.make_defect_energy_info import (
+from pydefect.analyzer.calculation.calc_results import CalcResults
+from pydefect.analyzer.defect_energy.defect_energy import DefectEnergyInfo
+from pydefect.analyzer.defect_energy.make_defect_energy_info import (
     make_defect_energy_info as _make_defect_energy_info,
 )
-from pydefect.analyzer.make_defect_energy_summary import (
+from pydefect.analyzer.defect_energy.make_defect_energy_summary import (
     make_defect_energy_summary as _make_defect_energy_summary,
 )
-from pydefect.analyzer.unitcell import Unitcell
-from pydefect.analyzer.chem_pot_diag.chem_pot_diag import (
+from pydefect.analyzer.unitcell.unitcell import Unitcell
+from pydefect.analyzer.chemical_potential.chem_pot_diag import (
     CompositionEnergies,
     RelativeEnergies,
     StandardEnergies,

@@ -18,9 +18,9 @@ from vise.util.logger import get_logger
 
 from pydefect.cli.typer_app import app
 from pydefect import api
-from pydefect.analyzer.unitcell import Unitcell
-from pydefect.analyzer.defect_energy import DefectEnergyInfo
-from pydefect.analyzer.chem_pot_diag.chem_pot_diag import (
+from pydefect.analyzer.unitcell.unitcell import Unitcell
+from pydefect.analyzer.defect_energy.defect_energy import DefectEnergyInfo
+from pydefect.analyzer.chemical_potential.chem_pot_diag import (
     CompositionEnergies, RelativeEnergies, StandardEnergies, TargetVertices
 )
 from pydefect.analyzer.corrections.no_correction import NoCorrection
@@ -105,8 +105,8 @@ def plot_cpd(
     ),
 ):
     """Plot chemical potential diagram as PDF."""
-    from pydefect.analyzer.chem_pot_diag.chem_pot_diag import change_element_sequence
-    from pydefect.analyzer.chem_pot_diag.cpd_plotter import (
+    from pydefect.analyzer.chemical_potential.chem_pot_diag import change_element_sequence
+    from pydefect.analyzer.chemical_potential.cpd_plotter import (
         ChemPotDiag2DMplPlotter, ChemPotDiag3DMplPlotter
     )
 

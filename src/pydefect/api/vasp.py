@@ -12,16 +12,16 @@ from typing import List, Optional, Union
 from pymatgen.core import Structure
 from pymatgen.io.vasp import Vasprun, Outcar, Procar, Chgcar
 
-from pydefect.analyzer.calc_results import CalcResults
-from pydefect.analyzer.unitcell import Unitcell
-from pydefect.analyzer.chem_pot_diag.chem_pot_diag import CompositionEnergy, CompositionEnergies
-from pydefect.analyzer.make_unitcell import make_unitcell_from_vasp as _make_unitcell
-from pydefect.analyzer.make_calc_results import make_calc_results_from_vasp as _make_calc_results
+from pydefect.analyzer.calculation.calc_results import CalcResults
+from pydefect.analyzer.unitcell.unitcell import Unitcell
+from pydefect.analyzer.chemical_potential.chem_pot_diag import CompositionEnergy, CompositionEnergies
+from pydefect.analyzer.unitcell.make_unitcell import make_unitcell_from_vasp as _make_unitcell
+from pydefect.analyzer.calculation.make_calc_results import make_calc_results_from_vasp as _make_calc_results
 from pydefect.input_maker.make_local_extrema import make_local_extrema_from_volumetric_data
-from pydefect.analyzer.make_perfect_band_edge_state import (
+from pydefect.analyzer.band_edge.make_perfect_band_edge_state import (
     make_perfect_band_edge_state_from_vasp as _make_perfect_band_edge_state,
 )
-from pydefect.analyzer.make_band_edge_orbital_infos import (
+from pydefect.analyzer.band_edge.make_band_edge_orbital_infos import (
     make_band_edge_orbital_infos as _make_band_edge_orbital_infos,
 )
 from pydefect.input_maker.defect_entries_maker import DefectEntriesMaker

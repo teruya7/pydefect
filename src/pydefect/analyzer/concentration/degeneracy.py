@@ -7,9 +7,9 @@ from typing import Dict, MutableMapping
 from monty.json import MSONable
 from ruamel.yaml.scalarint import ScalarInt
 
-from pydefect.analyzer.calc_results import CalcResults
-from pydefect.analyzer.defect_energy import DefectEnergyInfo
-from pydefect.analyzer.defect_structure_info import DefectStructureInfo
+from pydefect.analyzer.calculation.calc_results import CalcResults
+from pydefect.analyzer.defect_energy.defect_energy import DefectEnergyInfo
+from pydefect.analyzer.defect_structure.defect_structure_info import DefectStructureInfo
 from pymatgen.symmetry.groups import SpaceGroup
 from vise.util.mix_in import ToYamlFileMixIn
 from vise.util.structure_symmetrizer import num_symmetry_operation

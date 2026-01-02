@@ -74,7 +74,7 @@ def calc_results(
 ):
     """Create calc_results.json from VASP outputs."""
     from pydefect.cli.main_tools import parse_dirs
-    from pydefect.analyzer.make_calc_results import make_calc_results_from_vasp
+    from pydefect.analyzer.calculation.make_calc_results import make_calc_results_from_vasp
     from vise.defaults import defaults
 
     file_name = "calc_results.json"
@@ -136,8 +136,8 @@ def perfect_band_edge_state(
 ):
     """Create PerfectBandEdgeState from perfect supercell calculation."""
     from vise.defaults import defaults
-    from pydefect.analyzer.eigenvalue_plotter import EigenvalueMplPlotter
-    from pydefect.analyzer.make_band_edge_orbital_infos import make_band_edge_orbital_infos
+    from pydefect.analyzer.band_edge.eigenvalue_plotter import EigenvalueMplPlotter
+    from pydefect.analyzer.band_edge.make_band_edge_orbital_infos import make_band_edge_orbital_infos
 
     procar = Procar(dir_path / defaults.procar)
     vasprun = Vasprun(dir_path / defaults.vasprun, parse_potcar_file=False)
@@ -188,8 +188,8 @@ def band_edge_orbital_infos(
 ):
     """Create band edge orbital infos and eigenvalue plots for defects."""
     from pydefect.cli.main_tools import parse_dirs
-    from pydefect.analyzer.eigenvalue_plotter import EigenvalueMplPlotter
-    from pydefect.analyzer.make_band_edge_orbital_infos import make_band_edge_orbital_infos
+    from pydefect.analyzer.band_edge.eigenvalue_plotter import EigenvalueMplPlotter
+    from pydefect.analyzer.band_edge.make_band_edge_orbital_infos import make_band_edge_orbital_infos
     from vise.defaults import defaults
 
     p_state_obj = loadfn(str(p_state))

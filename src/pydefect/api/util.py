@@ -11,8 +11,8 @@ from typing import Optional
 
 from monty.serialization import loadfn
 
-from pydefect.analyzer.defect_structure_info import DefectStructureInfo
-from pydefect.analyzer.make_defect_vesta_file import MakeDefectVestaFile
+from pydefect.analyzer.defect_structure.defect_structure_info import DefectStructureInfo
+from pydefect.analyzer.defect_structure.make_defect_vesta_file import MakeDefectVestaFile
 from pydefect.defaults import defaults
 
 

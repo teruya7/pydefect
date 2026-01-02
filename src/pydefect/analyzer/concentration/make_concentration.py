@@ -12,7 +12,7 @@ from pydefect.analyzer.concentration.concentration import DefectConcentration, \
 from pydefect.analyzer.concentration.degeneracy import Degeneracies
 from pydefect.analyzer.concentration.distribution_function import \
     boltzmann_dist, fermi_dirac
-from pydefect.analyzer.defect_energy import ChargeEnergies, SingleChargeEnergies
+from pydefect.analyzer.defect_energy.defect_energy import ChargeEnergies, SingleChargeEnergies
 from tabulate import tabulate
 from vise.util.logger import get_logger
 from vise.util.mix_in import ToJsonFileMixIn

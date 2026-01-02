@@ -7,7 +7,7 @@ from typing import Tuple, Optional
 import numpy as np
 import yaml
 from monty.json import MSONable, MontyDecoder
-from pydefect.analyzer.defect_structure_comparator import \
+from pydefect.analyzer.defect_structure.defect_structure_comparator import \
     DefectStructureComparator
 from pydefect.util.coords import pretty_coords
 from pymatgen.core import IStructure

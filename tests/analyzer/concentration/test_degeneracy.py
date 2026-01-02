@@ -5,11 +5,11 @@ from pathlib import Path
 import pytest
 from ruamel.yaml.scalarint import ScalarInt
 
-from pydefect.analyzer.calc_results import CalcResults
+from pydefect.analyzer.calculation.calc_results import CalcResults
 from pydefect.analyzer.concentration.degeneracy import Degeneracies, Degeneracy, \
     MakeDegeneracy
-from pydefect.analyzer.defect_energy import DefectEnergyInfo
-from pydefect.analyzer.defect_structure_info import DefectStructureInfo
+from pydefect.analyzer.defect_energy.defect_energy import DefectEnergyInfo
+from pydefect.analyzer.defect_structure.defect_structure_info import DefectStructureInfo
 
 degeneracies = Degeneracies({"Va_O1": {0: Degeneracy(1, 1, "1", "1")}})
 
