@@ -227,7 +227,7 @@ def defect_energy_infos(
     ),
 ):
     """Calculate defect energy information for multiple directories."""
-    from pydefect.analysis.chemical_potential.chem_pot_diag import StandardEnergies
+    from pydefect.analysis.chemical_potential.models import StandardEnergies
     from pydefect.analysis.corrections.no_correction import NoCorrection
 
     # Load common files (CLI responsibility)
@@ -293,7 +293,7 @@ def defect_energy_summary(
     ),
 ):
     """Create defect energy summary from multiple defect calculations."""
-    from pydefect.analysis.chemical_potential.chem_pot_diag import TargetVertices
+    from pydefect.analysis.chemical_potential.models import TargetVertices
 
     # Load common files (CLI responsibility)
     unitcell_obj = loadfn(str(unitcell))

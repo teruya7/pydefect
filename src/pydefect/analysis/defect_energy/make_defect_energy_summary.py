@@ -7,7 +7,7 @@ from pydefect.analysis.band_edge.models import PerfectBandEdgeState
 from pydefect.analysis.defect_energy.defect_energy import DefectEnergyInfo, \
     DefectEnergySummary, DefectEnergies
 from pydefect.analysis.unitcell.unitcell import Unitcell
-from pydefect.analysis.chemical_potential.chem_pot_diag import TargetVertices
+from pydefect.analysis.chemical_potential.models import TargetVertices
 
 
 def make_defect_energy_summary(

@@ -5,10 +5,11 @@ from copy import copy
 
 import numpy as np
 import pytest
-from pydefect.analysis.chemical_potential.chem_pot_diag import ChemPotDiag, \
+from pydefect.analysis.chemical_potential.models import ChemPotDiag, \
     CompositionEnergy, CompositionEnergies, StandardEnergies, \
-    RelativeEnergies, ChemPotDiagMaker, TargetVertices, TargetVertex, \
+    RelativeEnergies, TargetVertices, TargetVertex, \
     target_element_chem_pot, change_element_sequence, UnstableTargetError
+from pydefect.analysis.chemical_potential.chem_pot_diag import ChemPotDiagMaker
 from pymatgen.analysis.phase_diagram import PDEntry
 from pymatgen.core import Composition, Element
 from tests.helpers.assertion import assert_yaml_roundtrip

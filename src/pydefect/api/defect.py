@@ -25,7 +25,7 @@ from pydefect.analysis.defect_energy.make_defect_energy_summary import (
 from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
 from pydefect.analysis.defect_structure.make_defect_structure_info import MakeDefectStructureInfo
 from pydefect.analysis.defect_structure.make_defect_vesta_file import MakeDefectVestaFile
-from pydefect.analysis.chemical_potential.chem_pot_diag import (
+from pydefect.analysis.chemical_potential.models import (
     StandardEnergies,
     TargetVertices,
 )

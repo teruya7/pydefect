@@ -2,9 +2,9 @@
 
 import numpy as np
 import pytest
-from pydefect.analysis.chemical_potential.chem_pot_diag import ChemPotDiag, \
+from pydefect.analysis.chemical_potential.models import ChemPotDiag, \
     TargetVertex
-from pydefect.analysis.chemical_potential.cpd_plotter import (
+from pydefect.analysis.chemical_potential.plotter import (
     ChemPotDiag2DMplPlotter, transpose, sort_coords,
     ChemPotDiag3DMplPlotter)
 

@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from vise.util.sort_coords import sort_coords
 
-from pydefect.analysis.chemical_potential.chem_pot_diag import ChemPotDiag
+from pydefect.analysis.chemical_potential.models import ChemPotDiag
 from vise.util.string import latexify
 
 

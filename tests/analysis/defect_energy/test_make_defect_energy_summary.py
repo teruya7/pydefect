@@ -5,7 +5,7 @@ from pydefect.analysis.defect_energy.defect_energy import DefectEnergyInfo, Defe
     DefectEnergySummary, DefectEnergies
 from pydefect.analysis.defect_energy.make_defect_energy_summary import \
     make_defect_energy_summary
-from pydefect.analysis.chemical_potential.chem_pot_diag import TargetVertices, TargetVertex
+from pydefect.analysis.chemical_potential.models import TargetVertices, TargetVertex
 
 
 def test_make_defect_energy_summary(mocker):

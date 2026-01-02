@@ -8,7 +8,7 @@ from typing import List, Optional
 from pymatgen.core import Composition, Structure
 from pymatgen.io.vasp import Outcar
 
-from pydefect.analysis.chemical_potential.chem_pot_diag import (
+from pydefect.analysis.chemical_potential.models import (
     CompositionEnergy,
     CompositionEnergies,
     RelativeEnergies,

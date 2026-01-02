@@ -11,7 +11,7 @@ from vise.util.logger import get_logger
 
 from pydefect.cli.typer_app import app
 from pydefect import api
-from pydefect.analysis.chemical_potential.chem_pot_diag import (
+from pydefect.analysis.chemical_potential.models import (
     CompositionEnergies, RelativeEnergies
 )
 
@@ -76,7 +76,7 @@ def plot_cpd(
     ),
 ):
     """Plot chemical potential diagram as PDF."""
-    from pydefect.analysis.chemical_potential.chem_pot_diag import (
+    from pydefect.analysis.chemical_potential.models import (
         ChemPotDiag, ChemPotDiagMplPlotter
     )
 
