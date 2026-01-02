@@ -1,8 +1,0 @@
-numpy
-monty
-pymatgen
-vise
-tabulate
-adjustText
-matplotlib-label-lines
-scikit-image

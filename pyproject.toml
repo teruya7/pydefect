@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pydefect"
+version = "0.9.11"
+description = "Integrated environment for first-principles point-defect calculations"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Yu Kumagai", email = "yuuukuma@gmail.com"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "monty",
+    "pymatgen",
+    "vise",
+    "tabulate",
+    "adjustText",
+    "matplotlib-label-lines",
+    "scikit-image",
+    "typer",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+    "pytest-mock",
+    "ruff",
+    "mypy",
+]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+
+[project.scripts]
+pydefect = "pydefect.cli.typer_app:typer_main"
+
+[project.urls]
+Homepage = "https://github.com/kumagai-group/pydefect"
+Documentation = "https://kumagai-group.github.io/pydefect/"
+Repository = "https://github.com/kumagai-group/pydefect"
+Issues = "https://github.com/kumagai-group/pydefect/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_ignores = true
+ignore_missing_imports = true
