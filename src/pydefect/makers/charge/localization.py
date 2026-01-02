@@ -1,18 +1,26 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-from typing import List, Optional
+"""Calculate charge localization from partial charge density files."""
+from typing import List
 
 import numpy as np
-from pydefect.analysis.defect_charge.defect_charge_info import DefectChargeInfo, \
-    AveChargeDensityDist
+from pydefect.analysis.localization.models import (
+    ChargeLocalizationInfo,
+    RadialChargeDist,
+)
 from pydefect.analysis.corrections.models import Grids
-from pydefect.analysis.corrections.efnv import calculate_max_inscribed_radius as calc_max_sphere_radius
+from pydefect.analysis.corrections.efnv import (
+    calculate_max_inscribed_radius as calc_max_sphere_radius,
+)
 from pymatgen.io.vasp import Chgcar
 from vise.analyzer.vasp.handle_volumetric_data import make_spin_charges
 
 
-def center_1d_periodic_quantity(grid_points: List[float]) -> int:
+def find_periodic_center(grid_points: List[float]) -> int:
     """Find center of periodic quantity by minimizing moment.
+
+    Uses moment minimization to locate the center of a periodic
+    distribution, handling wrap-around effects.
 
     Args:
         grid_points: 1D list of values on periodic grid.
@@ -22,7 +30,7 @@ def center_1d_periodic_quantity(grid_points: List[float]) -> int:
 
     Example:
         >>> data = [0.1, 0.5, 0.3, 0.1]
-        >>> center_idx = center_1d_periodic_quantity(data)
+        >>> center_idx = find_periodic_center(data)
     """
     num_grid_pts = len(grid_points)
     moments = []
@@ -47,7 +55,11 @@ def center_1d_periodic_quantity(grid_points: List[float]) -> int:
     return np.nanargmin(moments)
 
 
-def make_charge_dist(parchg: Chgcar, grids: Grids, distance_bins: np.ndarray):
+def calculate_radial_distribution(
+        parchg: Chgcar,
+        grids: Grids,
+        distance_bins: np.ndarray
+) -> List[RadialChargeDist]:
     """Calculate radial charge distribution from PARCHG.
 
     Args:
@@ -56,7 +68,7 @@ def make_charge_dist(parchg: Chgcar, grids: Grids, distance_bins: np.ndarray):
         distance_bins: Radial distance bins for averaging.
 
     Returns:
-        List of AveChargeDensityDist per spin.
+        List of RadialChargeDist per spin channel.
     """
     assert parchg.structure.lattice == grids.lattice
     assert parchg.dim == grids.dim
@@ -66,7 +78,7 @@ def make_charge_dist(parchg: Chgcar, grids: Grids, distance_bins: np.ndarray):
     dists = []
     defect_center_idxs = []
     for charge_data in spin_charges:
-        center = [center_1d_periodic_quantity(
+        center = [find_periodic_center(
             charge_data.get_average_along_axis(axis)) for axis in [0, 1, 2]]
         defect_center_idxs.append(np.array(center))
         data = charge_data.data["total"]
@@ -74,36 +86,60 @@ def make_charge_dist(parchg: Chgcar, grids: Grids, distance_bins: np.ndarray):
 
     result = []
     for center_idx, distribution in zip(defect_center_idxs, dists):
-        result.append(AveChargeDensityDist(tuple(center_idx / grids.dim), distribution))
+        result.append(RadialChargeDist(
+            tuple(center_idx / grids.dim), distribution))
 
     return result
 
 
-def make_defect_charge_info(parchgs: List[Chgcar],
-                            band_idxs: List[int],
-                            bin_interval: float,
-                            grids: Grids = None) -> DefectChargeInfo:
-    """Create DefectChargeInfo from partial charge files.
+def calculate_charge_localization(
+        parchgs: List[Chgcar],
+        band_indices: List[int],
+        bin_interval: float,
+        grids: Grids = None
+) -> ChargeLocalizationInfo:
+    """Calculate charge localization info from partial charge files.
+
+    Analyzes PARCHG files to determine how localized defect-induced
+    states are by examining radial charge density distributions.
 
     Args:
         parchgs: List of PARCHG files for each band.
-        band_idxs: Band indices corresponding to parchgs.
+        band_indices: Band indices corresponding to parchgs.
         bin_interval: Radial bin width (Å).
-        grids: Optional precomputed Grids.
+        grids: Optional precomputed Grids object.
 
     Returns:
-        DefectChargeInfo with charge distributions.
+        ChargeLocalizationInfo with charge distributions.
+
+    Example:
+        >>> from pymatgen.io.vasp import Chgcar
+        >>> parchgs = [Chgcar.from_file(f"PARCHG.{i}") for i in range(3)]
+        >>> info = calculate_charge_localization(parchgs, [10, 11, 12], 0.1)
     """
     if grids is None:
         grids = Grids.from_chgcar(parchgs[0])
 
     radius = calc_max_sphere_radius(parchgs[0].structure.lattice.matrix)
     num_bins = int(np.ceil(radius / bin_interval))
-    distance_bins = np.array([bin_interval * i for i in range(num_bins)] + [radius])
-    ave_charge_density = 1.0 / parchgs[0].structure.volume
-    charge_dists = []
+    distance_bins = np.array(
+        [bin_interval * i for i in range(num_bins)] + [radius])
+    uniform_density = 1.0 / parchgs[0].structure.volume
+    
+    radial_distributions = []
     for parchg in parchgs:
-        charge_dists.append(make_charge_dist(parchg, grids, distance_bins))
-    return DefectChargeInfo(distance_bins.tolist(), band_idxs, charge_dists,
-                            ave_charge_density)
+        radial_distributions.append(
+            calculate_radial_distribution(parchg, grids, distance_bins))
+    
+    return ChargeLocalizationInfo(
+        distance_bins.tolist(),
+        band_indices,
+        radial_distributions,
+        uniform_density,
+    )
 
+
+# Backward compatibility aliases
+center_1d_periodic_quantity = find_periodic_center
+make_charge_dist = calculate_radial_distribution
+make_defect_charge_info = calculate_charge_localization

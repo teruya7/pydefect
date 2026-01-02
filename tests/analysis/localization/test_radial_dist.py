@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-"""Tests for pydefect.analysis._defect_charge_distribution module."""
+"""Tests for pydefect.analysis.localization._radial_dist module."""
 
 import pytest
 import numpy as np
-from unittest.mock import MagicMock, PropertyMock
+from unittest.mock import MagicMock
 from pymatgen.electronic_structure.core import Spin
 from pymatgen.core import Lattice
 
@@ -14,12 +14,12 @@ class TestRadialDist:
 
     def test_module_import(self):
         """Test that the module can be imported."""
-        from pydefect.analysis.defect_charge._defect_charge_distribution import RadialDist
+        from pydefect.analysis.localization._radial_dist import RadialDist
         assert RadialDist is not None
 
     def test_init_stores_attributes(self):
         """Test that RadialDist __init__ stores expected attributes."""
-        from pydefect.analysis.defect_charge._defect_charge_distribution import RadialDist
+        from pydefect.analysis.localization._radial_dist import RadialDist
 
         # Create a mock Chgcar object
         mock_parchg = MagicMock()
@@ -39,7 +39,7 @@ class TestRadialDist:
 
     def test_radius_is_positive(self):
         """Test that radius is calculated and positive."""
-        from pydefect.analysis.defect_charge._defect_charge_distribution import RadialDist
+        from pydefect.analysis.localization._radial_dist import RadialDist
 
         mock_parchg = MagicMock()
         mock_parchg.dim = (4, 4, 4)
@@ -61,11 +61,11 @@ class TestRadialDist:
 
     def test_histogram_method_exists(self):
         """Test that histogram method exists on RadialDist."""
-        from pydefect.analysis.defect_charge._defect_charge_distribution import RadialDist
+        from pydefect.analysis.localization._radial_dist import RadialDist
         assert hasattr(RadialDist, 'histogram')
         assert callable(getattr(RadialDist, 'histogram'))
 
     def test_distances_data_property_exists(self):
         """Test that distances_data property exists."""
-        from pydefect.analysis.defect_charge._defect_charge_distribution import RadialDist
+        from pydefect.analysis.localization._radial_dist import RadialDist
         assert hasattr(RadialDist, 'distances_data')

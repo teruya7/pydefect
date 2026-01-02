@@ -6,7 +6,7 @@ import pytest
 from pydefect.analysis.band_edge.models import EdgeInfo, BandEdgeOrbitalInfos, \
     PerfectBandEdgeState, OrbitalInfo, BandEdgeStates, BandEdgeState, \
     LocalizedOrbital
-from pydefect.analysis.defect_charge.defect_charge_info import DefectChargeInfo
+from pydefect.analysis.localization import ChargeLocalizationInfo
 from pydefect.analysis.band_edge.band_edge_states import make_band_edge_states, \
     calculate_orbital_difference, count_electrons_in_cbm, count_holes_in_vbm
 
@@ -123,10 +123,10 @@ def test_make_band_edge_state(p_edge_state, orb_infos, band_edge_states):
     assert actual == band_edge_states
 
 
-def test_make_band_edge_state_w_defect_charge_info(p_edge_state, orb_infos, mocker):
-    defect_charge_info = mocker.Mock()
-    defect_charge_info.localized_orbitals.return_value = [[9]]
-    actual = make_band_edge_states(orb_infos, p_edge_state, defect_charge_info)
+def test_make_band_edge_state_w_charge_localization_info(p_edge_state, orb_infos, mocker):
+    charge_localization_info = mocker.Mock()
+    charge_localization_info.find_localized_orbitals.return_value = [[9]]
+    actual = make_band_edge_states(orb_infos, p_edge_state, charge_localization_info)
     expected = EdgeInfo(band_idx=8, kpt_coord=(0.0, 0.0, 0.0),
                         orbital_info=OrbitalInfo(
                             energy=-1.1, orbitals={"Mn": [0.5, 0.6, 0.0, 0.0],

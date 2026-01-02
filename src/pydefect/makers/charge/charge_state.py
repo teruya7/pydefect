@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-
+"""Calculate defect charge state from VASP input files."""
 from pymatgen.io.vasp.inputs import Poscar, Incar, Potcar
 from vise.util.logger import get_logger
 
 logger = get_logger(__name__)
 
 
-def get_defect_charge_state(poscar: Poscar, potcar: Potcar, incar: Incar):
-    """Get defect charge state from structure, potcar, and NELECT in INCAR.
+def calculate_charge_state(poscar: Poscar, potcar: Potcar, incar: Incar) -> int:
+    """Calculate defect charge state from structure, potcar, and NELECT.
 
-    Calculates the defect charge by comparing NELECT with the
-    neutral electron count from POTCAR.
+    Determines the defect charge by comparing NELECT with the
+    neutral electron count calculated from POTCAR.
 
     Args:
         poscar: Parsed POSCAR file.
@@ -25,7 +25,7 @@ def get_defect_charge_state(poscar: Poscar, potcar: Potcar, incar: Incar):
         ValueError: If POSCAR and POTCAR element order differs.
 
     Example:
-        >>> charge = get_defect_charge_state(poscar, potcar, incar)
+        >>> charge = calculate_charge_state(poscar, potcar, incar)
         >>> print(charge)
         2
     """
@@ -43,3 +43,5 @@ def get_defect_charge_state(poscar: Poscar, potcar: Potcar, incar: Incar):
     return - excess_num_electrons
 
 
+# Backward compatibility alias
+get_defect_charge_state = calculate_charge_state

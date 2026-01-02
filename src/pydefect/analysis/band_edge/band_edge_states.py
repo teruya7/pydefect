@@ -8,7 +8,7 @@ import numpy as np
 from pydefect.analysis.band_edge.models import BandEdgeOrbitalInfos, \
     PerfectBandEdgeState, BandEdgeStates, EdgeInfo, OrbitalInfo, \
     LocalizedOrbital, BandEdgeState
-from pydefect.analysis.defect_charge.defect_charge_info import DefectChargeInfo
+from pydefect.analysis.localization import ChargeLocalizationInfo
 from pydefect.defaults import defaults
 
 
@@ -124,7 +124,7 @@ def count_holes_in_vbm(orb_info_by_spin: List[List[OrbitalInfo]],
 
 def make_band_edge_states(orbital_infos: BandEdgeOrbitalInfos,
                           p_edge_state: PerfectBandEdgeState,
-                          defect_charge_info: DefectChargeInfo = None
+                          charge_localization_info: ChargeLocalizationInfo = None
                           ) -> BandEdgeStates:
     """Create BandEdgeStates by comparing orbital infos from perfect supercell.
 
@@ -133,7 +133,7 @@ def make_band_edge_states(orbital_infos: BandEdgeOrbitalInfos,
     Args:
         orbital_infos: BandEdgeOrbitalInfos from defect calculation.
         p_edge_state: PerfectBandEdgeState from perfect calculation.
-        defect_charge_info: Optional DefectChargeInfo for localization.
+        charge_localization_info: Optional ChargeLocalizationInfo for localization.
 
     Returns:
         BandEdgeStates object with VBM, CBM, and localized orbital info.
@@ -148,8 +148,8 @@ def make_band_edge_states(orbital_infos: BandEdgeOrbitalInfos,
 
     for spin_idx, orb_info_by_spin \
             in enumerate(orbital_infos.shifted_orbital_infos):
-        if defect_charge_info:
-            localized_orbs = defect_charge_info.localized_orbitals()[spin_idx]
+        if charge_localization_info:
+            localized_orbs = charge_localization_info.find_localized_orbitals()[spin_idx]
             localized_orbs = [i - lowest_idx for i in localized_orbs]
         else:
             localized_orbs = None
