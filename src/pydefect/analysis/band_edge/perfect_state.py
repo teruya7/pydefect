@@ -33,13 +33,11 @@ def make_perfect_band_edge_state_from_vasp(
     band_edge_prop = VaspBandEdgeProperties(vasprun, outcar,
                                             v_defaults.integer_criterion)
     orbital_data, structure = procar.data, vasprun.final_structure
-    vbm_info = get_edge_info(band_edge_prop.vbm_info, orbital_data, structure, vasprun)
-    cbm_info = get_edge_info(band_edge_prop.cbm_info, orbital_data, structure, vasprun)
+    vbm_info = create_edge_info_from_vasp(band_edge_prop.vbm_info, orbital_data, structure, vasprun)\n    cbm_info = create_edge_info_from_vasp(band_edge_prop.cbm_info, orbital_data, structure, vasprun)
     return PerfectBandEdgeState(vbm_info, cbm_info)
 
 
-def get_edge_info(edge_info, orbital_data, structure, vasprun) -> EdgeInfo:
-    """Create EdgeInfo from band edge properties.
+def create_edge_info_from_vasp(edge_info, orbital_data, structure, vasprun) -> EdgeInfo:\n    \"\"\"Create EdgeInfo from VASP band edge properties.
 
     Args:
         edge_info: Band edge info from VaspBandEdgeProperties.

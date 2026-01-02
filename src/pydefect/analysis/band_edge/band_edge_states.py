@@ -12,14 +12,14 @@ from pydefect.analysis.defect_charge.defect_charge_info import DefectChargeInfo
 from pydefect.defaults import defaults
 
 
-def get_similar_orb_idx(orbs: List[OrbitalInfo],
-                        edge_info: EdgeInfo,
-                        localized_orbs: List[int] = None,
-                        _reversed: bool = False) -> Tuple[int, float]:
+def find_similar_orbital_index(orbitals: List[OrbitalInfo],
+                               edge_info: EdgeInfo,
+                               localized_orbitals: List[int] = None,
+                               _reversed: bool = False) -> Tuple[int, float]:
     """Find orbital index similar to reference edge orbital.
 
     Args:
-        orbs: List of OrbitalInfo for each band.
+        orbitals: List of OrbitalInfo for each band.
         edge_info: Reference edge information.
         localized_orbs: Indices of localized orbitals to skip.
         _reversed: If True, search from high to low energy.
@@ -34,30 +34,30 @@ def get_similar_orb_idx(orbs: List[OrbitalInfo],
         >>> idx, diff = get_similar_orb_idx(orbitals, vbm_info)
     """
     if _reversed:
-        orbs = orbs[::-1]  # by band
+        orbitals = orbitals[::-1]  # by band
 
     de = defaults.similar_energy_criterion
 
-    if localized_orbs:
+    if localized_orbitals:
         if _reversed:
-            localized_orbs = [len(orbs) - idx for idx in localized_orbs]
+            localized_orbitals = [len(orbitals) - idx for idx in localized_orbitals]
 
         def is_passed(band_position):
-            return band_position <= max(localized_orbs) - 1
+            return band_position <= max(localized_orbitals) - 1
     else:
         def is_passed(band_position):
             return False
 
-    for band_position, orbital_info in enumerate(orbs):
+    for band_position, orbital_info in enumerate(orbitals):
         if is_passed(band_position):
             continue
 
         if ((_reversed is False and orbital_info.energy > edge_info.energy - de) or
                 (_reversed and orbital_info.energy - de < edge_info.energy)):
 
-            orb_diff = orbital_diff(orbital_info.orbitals, edge_info.orbitals)
+            orb_diff = calculate_orbital_difference(orbital_info.orbitals, edge_info.orbitals)
             if orb_diff < defaults.similar_orb_criterion:
-                orb_idx = len(orbs) - band_position - 1 if _reversed else band_position
+                orb_idx = len(orbitals) - band_position - 1 if _reversed else band_position
                 return orb_idx, orb_diff
     raise ValueError(f"Similar orbital to the edge are not found.\n"
                      f"Energy criterion: {defaults.similar_energy_criterion}\n"
@@ -65,10 +65,10 @@ def get_similar_orb_idx(orbs: List[OrbitalInfo],
                      f"Try to lower the criterion.")
 
 
-def get_localized_orbs(orb_info_by_spin: List[List[OrbitalInfo]],
-                       loc_band_index_range: List[int],
-                       lowest_band_idx: int,
-                       weights: List[float]):
+def extract_localized_orbitals(orb_info_by_spin: List[List[OrbitalInfo]],
+                               loc_band_index_range: List[int],
+                               lowest_band_idx: int,
+                               weights: List[float]):
     start = loc_band_index_range[0] - lowest_band_idx
     end = loc_band_index_range[1] + 1 - lowest_band_idx
     orbs_by_band_by_kpt = np.array(orb_info_by_spin)[:, start: end].T
@@ -101,9 +101,9 @@ def get_localized_orbs(orb_info_by_spin: List[List[OrbitalInfo]],
     return result
 
 
-def num_electron_in_cbm(orb_info_by_spin: List[List[OrbitalInfo]],
-                        cbm_idx: int,
-                        weights: List[float]):
+def count_electrons_in_cbm(orb_info_by_spin: List[List[OrbitalInfo]],
+                           cbm_idx: int,
+                           weights: List[float]):
     result = 0.0
     orbs_by_band_by_kpt = np.array(orb_info_by_spin)[:, cbm_idx:].T
     for orbs_by_kpt in orbs_by_band_by_kpt:
@@ -111,9 +111,9 @@ def num_electron_in_cbm(orb_info_by_spin: List[List[OrbitalInfo]],
     return result
 
 
-def num_hole_in_vbm(orb_info_by_spin: List[List[OrbitalInfo]],
-                    vbm_idx: int,
-                    weights: List[float]):
+def count_holes_in_vbm(orb_info_by_spin: List[List[OrbitalInfo]],
+                       vbm_idx: int,
+                       weights: List[float]):
     result = 0.0
     orbs_by_band_by_kpt = np.array(orb_info_by_spin)[:, :vbm_idx + 1].T
     for orbs_by_kpt in orbs_by_band_by_kpt:
@@ -154,31 +154,31 @@ def make_band_edge_states(orbital_infos: BandEdgeOrbitalInfos,
         else:
             localized_orbs = None
 
-        vbm_idx, vbm_diff = get_similar_orb_idx(orb_info_by_spin[vbm_k_idx],
-                                                p_vbm_info, localized_orbs,
-                                                _reversed=True)
+        vbm_idx, vbm_diff = find_similar_orbital_index(orb_info_by_spin[vbm_k_idx],
+                                                        p_vbm_info, localized_orbs,
+                                                        _reversed=True)
         vbm_info = EdgeInfo(band_idx=vbm_idx + lowest_idx,
                             kpt_coord=p_vbm_info.kpt_coord,
                             orbital_info=orb_info_by_spin[vbm_k_idx][vbm_idx])
 
-        cbm_idx, cbm_diff = get_similar_orb_idx(orb_info_by_spin[cbm_k_idx],
-                                                p_cbm_info, localized_orbs)
+        cbm_idx, cbm_diff = find_similar_orbital_index(orb_info_by_spin[cbm_k_idx],
+                                                        p_cbm_info, localized_orbs)
         cbm_info = EdgeInfo(band_idx=cbm_idx + lowest_idx,
                             kpt_coord=p_cbm_info.kpt_coord,
                             orbital_info=orb_info_by_spin[cbm_k_idx][cbm_idx])
 
         loc_idx_range = [vbm_info.band_idx + 1, cbm_info.band_idx - 1]
-        localized_orbs = get_localized_orbs(orb_info_by_spin,
-                                            loc_idx_range,
-                                            orbital_infos.lowest_band_index,
-                                            orbital_infos.kpt_weights)
+        localized_orbs = extract_localized_orbitals(orb_info_by_spin,
+                                                     loc_idx_range,
+                                                     orbital_infos.lowest_band_index,
+                                                     orbital_infos.kpt_weights)
 
-        vbm_hole = num_hole_in_vbm(orb_info_by_spin,
-                                   vbm_idx=vbm_idx,
-                                   weights=orbital_infos.kpt_weights)
-        cbm_electron = num_electron_in_cbm(orb_info_by_spin,
-                                           cbm_idx=cbm_idx,
-                                           weights=orbital_infos.kpt_weights)
+        vbm_hole = count_holes_in_vbm(orb_info_by_spin,
+                                       vbm_idx=vbm_idx,
+                                       weights=orbital_infos.kpt_weights)
+        cbm_electron = count_electrons_in_cbm(orb_info_by_spin,
+                                              cbm_idx=cbm_idx,
+                                              weights=orbital_infos.kpt_weights)
 
         states.append(BandEdgeState(vbm_info=vbm_info,
                                     cbm_info=cbm_info,
@@ -191,7 +191,7 @@ def make_band_edge_states(orbital_infos: BandEdgeOrbitalInfos,
     return BandEdgeStates(states=states)
 
 
-def orbital_diff(orbital_1: dict, orbital_2: dict) -> float:
+def calculate_orbital_difference(orbital_1: dict, orbital_2: dict) -> float:
     """Calculate difference between two orbital dictionaries."""
     element_set = set(list(orbital_1.keys()) + list(orbital_2.keys()))
     orb_1, orb_2 = defaultdict(list, orbital_1), defaultdict(list, orbital_2)

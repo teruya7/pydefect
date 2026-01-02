@@ -8,7 +8,7 @@ from pydefect.analysis.band_edge.models import EdgeInfo, BandEdgeOrbitalInfos, \
     LocalizedOrbital
 from pydefect.analysis.defect_charge.defect_charge_info import DefectChargeInfo
 from pydefect.analysis.band_edge.band_edge_states import make_band_edge_states, \
-    orbital_diff, num_electron_in_cbm, num_hole_in_vbm
+    calculate_orbital_difference, count_electrons_in_cbm, count_holes_in_vbm
 
 
 @pytest.fixture
@@ -48,7 +48,7 @@ def orb_infos():
                                 fermi_level=0.5)
 
 
-def test_num_electron_in_cbm(mocker):
+def test_count_electrons_in_cbm(mocker):
     mock1 = mocker.Mock()
     mock2 = mocker.Mock()
     mock3 = mocker.Mock()
@@ -58,16 +58,16 @@ def test_num_electron_in_cbm(mocker):
     mock3.occupation = 0.3
     mock4.occupation = 0.4
     orb_info_by_spin = [[mock1, mock2], [mock3, mock4]]  # k-idx, band-idx
-    actual = num_electron_in_cbm(orb_info_by_spin, cbm_idx=1, weights=[0.1, 0.9])
+    actual = count_electrons_in_cbm(orb_info_by_spin, cbm_idx=1, weights=[0.1, 0.9])
     expected = 0.1 * 0.2 + 0.9 * 0.4
     assert actual == pytest.approx(expected)
 
-    actual = num_electron_in_cbm(orb_info_by_spin, cbm_idx=0, weights=[0.1, 0.9])
+    actual = count_electrons_in_cbm(orb_info_by_spin, cbm_idx=0, weights=[0.1, 0.9])
     expected = 0.1 * (0.1 + 0.2) + 0.9 * (0.3 + 0.4)
     assert actual == pytest.approx(expected)
 
 
-def test_num_hole_in_vbm(mocker):
+def test_count_holes_in_vbm(mocker):
     mock1 = mocker.Mock()
     mock2 = mocker.Mock()
     mock3 = mocker.Mock()
@@ -77,11 +77,11 @@ def test_num_hole_in_vbm(mocker):
     mock3.occupation = 0.3
     mock4.occupation = 0.4
     orb_info_by_spin = [[mock1, mock2], [mock3, mock4]]  # k-idx, band-idx
-    actual = num_hole_in_vbm(orb_info_by_spin, vbm_idx=0, weights=[0.1, 0.9])
+    actual = count_holes_in_vbm(orb_info_by_spin, vbm_idx=0, weights=[0.1, 0.9])
     expected = 0.1 * (1 - 0.1) + 0.9 * (1 - 0.3)
     assert actual == pytest.approx(expected)
 
-    actual = num_hole_in_vbm(orb_info_by_spin, vbm_idx=1, weights=[0.1, 0.9])
+    actual = count_holes_in_vbm(orb_info_by_spin, vbm_idx=1, weights=[0.1, 0.9])
     expected = 0.1 * (2 - 0.1 - 0.2) + 0.9 * (2 - 0.3 - 0.4)
     assert actual == pytest.approx(expected)
 
@@ -144,13 +144,13 @@ def test_make_band_edge_state_wo_participation_ratio(
     assert actual == band_edge_states
 
 
-def test_orbital_diff():
+def test_calculate_orbital_difference():
     orb_1 = {"Mn": [0.1, 0.0, 0.0, 0.0]}
     orb_2 = {"Mn": [0.0, 0.1, 0.0, 0.0]}
-    assert orbital_diff(orb_1, orb_2) == 0.2
+    assert calculate_orbital_difference(orb_1, orb_2) == 0.2
 
     orb_1 = {"Mn": [0.1, 0.0, 0.0, 0.0]}
     orb_2 = {"O": [0.0, 0.1, 0.0, 0.0]}
-    assert orbital_diff(orb_1, orb_2) == 0.2
+    assert calculate_orbital_difference(orb_1, orb_2) == 0.2
 
 
