@@ -4,15 +4,15 @@ from matplotlib import pyplot as plt
 from monty.serialization import loadfn
 from pydefect.analysis.concentration.concentration import Concentration, \
     CarrierConcentration, ConcentrationByFermiLevel
-from pydefect.analysis.concentration.plot_concentration import plot_pn, \
-    DefectConcentrationMplPlotter, plot_multiple_pns
+from pydefect.analysis.concentration.plotter import plot_single_carrier_concentration, \
+    DefectConcentrationMplPlotter, plot_carrier_concentrations
 
 
 def test_plot_concentration():
     cc = [Concentration(x, CarrierConcentration(10**(-x), 10**x), [])
           for x in range(1, 10)]
     c = ConcentrationByFermiLevel(300, cc)
-    plot_multiple_pns([c], [-4, 5], energy_ranges=[1, 7])
+    plot_carrier_concentrations([c], [-4, 5], energy_ranges=[1, 7])
 
     plt.show()
 

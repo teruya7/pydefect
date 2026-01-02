@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2023 Kumagai group.
+"""Concentration plotting functions."""
+
 from collections import defaultdict
 from typing import List
 
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
-from pydefect.analysis.concentration.concentration import \
-    ConcentrationByFermiLevel
+from pydefect.analysis.concentration.models import ConcentrationByFermiLevel
 from vise.util.matplotlib import float_to_int_formatter
 
 
-def plot_multiple_pns(ccs: List[ConcentrationByFermiLevel],
+def plot_carrier_concentrations(ccs: List[ConcentrationByFermiLevel],
                       concentration_ranges: List[float] = None,
                       energy_ranges: List[float] = None):
     """Plot multiple carrier concentration curves.
@@ -27,7 +28,7 @@ def plot_multiple_pns(ccs: List[ConcentrationByFermiLevel],
     from matplotlib import pyplot as plt
     ax = plt.gca()
     for cc, style in zip(ccs, ["-", "-.", "--", ":"]):
-        plot_pn(cc, ax, style)
+        plot_single_carrier_concentration(cc, ax, style)
 
     if concentration_ranges:
         ax.set_ylim([10 ** i for i in concentration_ranges])
@@ -40,7 +41,7 @@ def plot_multiple_pns(ccs: List[ConcentrationByFermiLevel],
     plt.legend()
 
 
-def plot_pn(cc: ConcentrationByFermiLevel, ax: Axes, style: str = "-"):
+def plot_single_carrier_concentration(cc: ConcentrationByFermiLevel, ax: Axes, style: str = "-"):
     """Plot p and n carrier concentrations vs Fermi level.
 
     Args:

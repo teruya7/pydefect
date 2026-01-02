@@ -1,235 +1,233 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2023 Kumagai group.
+"""Concentration calculation functions."""
+
+from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
-from typing import List, Optional, Dict
+from typing import List, Dict, Optional
 
 import numpy as np
-from monty.json import MSONable
-from tabulate import tabulate
-from vise.util.mix_in import ToJsonFileMixIn
+
+from pydefect.analysis.concentration.models import (
+    DefectConcentration,
+    CarrierConcentration,
+    Concentration,
+    ConcentrationByFermiLevel,
+    TotalDos,
+    Degeneracies,
+)
+from pydefect.analysis.concentration.distribution_function import (
+    boltzmann_dist,
+    fermi_dirac,
+)
+from pydefect.analysis.defect_energy.defect_energy import (
+    ChargeEnergies,
+    SingleChargeEnergies,
+)
+from vise.util.logger import get_logger
 
 
-@dataclass
-class CarrierConcentration(MSONable):
-    """Free carrier concentration in the material.
-
-    Represents hole and electron concentrations per unit cell.
-
-    Attributes:
-        p: Hole concentration per cell.
-        n: Electron concentration per cell.
-
-    Example:
-        >>> carriers = CarrierConcentration(p=1e15, n=1e10)
-        >>> print(carriers.net_charge)
-        9.99999...e+14
-    """
-    p: float
-    n: float
-
-    def __str__(self):
-        """Return formatted carrier concentrations."""
-        return f"p: {self.p:.2e}, n: {self.n:.2e}"
-
-    @property
-    def net_charge(self):
-        """Get net charge (p - n)."""
-        return self.p - self.n
-
-    @property
-    def abs_charge(self):
-        """Get total carrier density (p + n)."""
-        return self.p + self.n
+logger = get_logger(__name__)
 
 
-@dataclass
-class DefectConcentration(MSONable):
-    """Defect concentration for a single defect type.
+class CarrierConcentrationCalculator:
+    """Calculate carrier concentrations from DOS.
 
-    Stores concentrations for each charge state of a defect.
+    Computes hole and electron concentrations at different
+    Fermi levels using the total density of states.
 
     Attributes:
-        name: Defect name (e.g., "Va_O1").
-        charges: List of charge states.
-        concentrations: Concentration for each charge state per cell.
-
-    Example:
-        >>> dc = DefectConcentration(
-        ...     name="Va_O1",
-        ...     charges=[2, 1, 0],
-        ...     concentrations=[1e15, 1e12, 1e10]
-        ... )
-        >>> print(dc.total_concentration)
-        1.001e+15
+        T: Temperature (K).
+        vb_dos: Valence band DOS.
+        cb_dos: Conduction band DOS.
     """
-    name: str
-    charges: List[int]
-    concentrations: List[float]
+    def __init__(self, total_dos: TotalDos, T: float):
+        """Initialize carrier concentration calculator.
 
-    @property
-    def str_header(self):
-        """Get column headers with charge states."""
-        return [f"{self.name}_{c}" for c in self.charges]
-
-    @property
-    def str_list(self):
-        """Get concentrations as list for tabulation."""
-        return self.concentrations
-
-    def __str__(self):
-        """Return formatted table of concentrations."""
-        return tabulate([self.str_list], headers=self.str_header, floatfmt=".2e")
-
-    @property
-    def net_charge(self):
-        """Calculate net charge from charge states and concentrations."""
-        return sum(charge * conc for charge, conc in zip(self.charges, self.concentrations))
-
-    @property
-    def abs_charge(self):
-        """Calculate absolute charge from charge states and concentrations."""
-        return sum(abs(charge * conc)
-                   for charge, conc in zip(self.charges, self.concentrations))
-
-    @property
-    def total_concentration(self):
-        """Get sum of all charge state concentrations."""
-        return sum(self.concentrations)
-
-
-@dataclass
-class Concentration(MSONable):
-    """Complete concentration data at a given Fermi level.
-
-    Contains carrier and defect concentrations for thermodynamic analysis.
-
-    Attributes:
-        Ef: Fermi level (eV from VBM).
-        carrier: Free carrier concentrations.
-        defects: List of defect concentrations.
-
-    Example:
-        >>> conc = Concentration.from_json_file("concentration.json")
-        >>> print(conc.net_charge)
-    """
-    Ef: float
-    carrier: CarrierConcentration
-    defects: List[DefectConcentration]
-
-    @property
-    def pinning_levels(self) -> List[float]:
-        result = [float("-inf"), float("inf")]
-        for d in self.defects:
-            lower, upper = d.pinning_levels
-            result = [max([result[0], lower]), min([result[1], upper])]
-        return result
-
-    @property
-    def str_header(self):
-        result = ["Ef", "p", "n"]
-        for d in self.defects:
-            result.extend(d.str_header)
-        result.extend(["net charge", "net ratio"])
-        return result
-
-    @property
-    def str_list(self):
-        result = [self.Ef, self.carrier.p, self.carrier.n]
-        for defect in self.defects:
-            result.extend(defect.str_list)
-        result.extend([self.net_charge, self.net_abs_ratio])
-        return result
-
-    def __str__(self):
-        str_list = [self.str_list]
-        floatfmt = [".3f"] + [".1e"] * (len(str_list[0]) - 1)
-        return tabulate(str_list, headers=self.str_header, floatfmt=floatfmt)
-
-    @property
-    def net_charge(self):
-        total_defect_charge = sum(d.net_charge for d in self.defects)
-        return self.carrier.net_charge + total_defect_charge
-
-    @property
-    def abs_charge(self):
-        defect_abs_charge = sum(d.abs_charge for d in self.defects)
-        return self.carrier.abs_charge + defect_abs_charge
-
-    @property
-    def net_abs_ratio(self):
-        return abs(self.net_charge) / self.abs_charge
-
-
-@dataclass
-class ConcentrationByFermiLevel(MSONable, ToJsonFileMixIn):
-    """Concentration per cell"""
-    T: float
-    concentrations: List[Concentration]  # /cm3
-    # Ex: pinning_levels[specie_name] = [float("-inf"), 1.0]
-    # The VBM is set to zero.
-    pinning_levels: Dict[str, List[Optional[float]]] = None
-    equilibrium_concentration: Optional[Concentration] = None
-    T_before_quench: float = None
-
-    def __post_init__(self):
-        self.concentrations.sort(key=lambda x: x.Ef)
-
-    @property
-    def pinning_level(self):
-        if self.pinning_levels:
-            lower = max(i[0] for i in self.pinning_levels.values())
-            upper = min(i[1] for i in self.pinning_levels.values())
-            return [lower, upper]
-
-    def __str__(self):
-        result = [f"T: {self.T}"]
-
-        table = []
-        if self.pinning_levels:
-            for name, levels in self.pinning_levels.items():
-                table.append([name, levels[0], levels[1]])
-            result.append("Pinning levels:")
-            result.append(tabulate(table, floatfmt=".3f"))
-
-        table = []
-        for c in self.concentrations:
-            table.append(c.str_list)
-        floatfmt = [".3f"] + [".1e"] * (len(c.str_list) - 1)
-        result.append(tabulate(table, c.str_header, floatfmt=floatfmt))
-        result.append("-"*50)
-        if self.equilibrium_concentration:
-            result.append("Equilibrium concentration")
-            result.append(self.equilibrium_concentration.__str__())
-        return "\n".join(result)
-
-    @property
-    def most_neutral_concentration(self) -> Concentration:
-        return min(self.concentrations, key=lambda x: abs(x.net_charge))
-
-    def next_Ef_to_neutral_concentration(
-            self, n_Ef: int = 10) -> Optional[List[float]]:
+        Args:
+            total_dos: TotalDos object with DOS data.
+            T: Temperature in Kelvin.
         """
-        Return multiple concentrations that are closest to a charge neutral
-        condition along the negative and positive net charges.
+        self._fermi_level = total_dos.fermi_level
+        self._tdos = np.array(total_dos.dos)
+        self._abs_energies = np.array(total_dos.energies)
+        self._V = total_dos.volume / 10**24  # in cm^3
+        self._vbm = total_dos.vbm
+        self.T = T
+        self._make_vb_dos()
+        self._make_cb_dos()
 
-        n_Ef (int): Number of the sampled Fermi level in between end points.
+    def _make_vb_dos(self):
+        energy_range = self._abs_energies < self._fermi_level
+        energies = np.array(self._abs_energies)[energy_range]
+        doses = self._tdos[energy_range].tolist()
+        self.vb_dos = VBDos((energies - self._vbm).tolist(), doses)
 
-        :return:
-            List of the Fermi level (float)
-        """
+    def _make_cb_dos(self):
+        energy_range = self._abs_energies > self._fermi_level
+        energies = np.array(self._abs_energies)[energy_range]
+        doses = self._tdos[energy_range].tolist()
+        self.cb_dos = CBDos((energies - self._vbm).tolist(), doses)
+
+    def carrier_concentration(self, Ef):
+        p = float(self.vb_dos.carrier_concentration(Ef, self.T) / self._V)
+        n = float(self.cb_dos.carrier_concentration(Ef, self.T) / self._V)
+        return CarrierConcentration(p, n)
+
+    def _concentration(self, Ef):
+        return Concentration(Ef, self.carrier_concentration(Ef), [])
+
+    def make_concentrations_by_fermi_level(self, Efs: List[float],
+                                           ) -> ConcentrationByFermiLevel:
+        concentrations = [self._concentration(Ef) for Ef in Efs]
+        return ConcentrationByFermiLevel(self.T, concentrations, None)
+
+
+class ConcentrationCalculator:
+    """Calculate defect and carrier concentrations."""
+    
+    def __init__(self,
+                 total_dos: TotalDos,
+                 charge_energies: ChargeEnergies,
+                 degeneracies: Degeneracies,
+                 T: float,
+                 fixed_defect_concentrations: Dict[str, float] = None):
+
+        self._tdos = np.array(total_dos.dos)
+        self._abs_energies = np.array(total_dos.energies)
+        self._V = total_dos.volume / 10**24  # in cm^3
+        self.fixed_con = fixed_defect_concentrations
+
+        self.carrier_calculator = CarrierConcentrationCalculator(total_dos, T)
+
+        self.T = T
+        self.charge_energies = charge_energies
+        self._degeneracies = degeneracies
+
+    def _make_defect_concentration(self,
+                                   name: str,
+                                   Ef: float,
+                                   single_energies: SingleChargeEnergies):
+        """Calculate defect concentration at given Fermi level."""
+        charges, concentrations = [], []
+        for (charge, energy) in single_energies.charge_energies_at_ef(Ef):
+            charges.append(charge)
+            deg = self._degeneracies[name][charge].degeneracy
+            concentrations.append(float(boltzmann_dist(energy, self.T) * deg / self._V))
+
+        concentrations = self._redistribute(concentrations, name)
+        return DefectConcentration(name, charges, concentrations)
+
+    def _calc_pinning(self, single_energies):
+        pin_level = single_energies.pinning_level(float("-inf"), float("inf"))
         try:
-            c_minus = min([c for c in self.concentrations if c.net_charge > 0],
-                          key=lambda x: x.net_charge)
-            c_plus = min([c for c in self.concentrations if c.net_charge <= 0],
-                         key=lambda x: abs(x.net_charge))
-        except ValueError:
-            return None
+            lower = pin_level[0][0]
+        except TypeError:
+            lower = float("-inf")
+        try:
+            upper = pin_level[1][0]
+        except TypeError:
+            upper = float("inf")
+        return [lower, upper]
 
-        return np.linspace(
-            c_minus.Ef, c_plus.Ef, n_Ef + 2, endpoint=True).tolist()
+    def _redistribute(self, concentrations, name):
+        if self.fixed_con:
+            return redistribute_concentration(
+                concentrations, self.fixed_con[name])
+        return concentrations
 
-    # def check_end_point(self, c_minus, c_plus):
-    #     end_points = [self.concentrations[0], self.concentrations[-1]]
-    #     return c_minus in end_points or c_plus in end_points
+    def _make_all_concentration(self, Ef: float):
+        carrier = self.carrier_calculator.carrier_concentration(Ef)
+
+        defects = []
+        for name, single in self.charge_energies.charge_energies_dict.items():
+            concentration = self._make_defect_concentration(name, Ef, single)
+            defects.append(concentration)
+
+        return Concentration(Ef, carrier, defects)
+
+    def make_concentrations_by_fermi_level(self, Efs: List[float],
+                                           ) -> ConcentrationByFermiLevel:
+        concentrations = [self._make_all_concentration(Ef) for Ef in Efs]
+        pinning_levels = self.charge_energies.pinning_levels
+        return ConcentrationByFermiLevel(self.T,
+                                         concentrations,
+                                         pinning_levels)
 
 
+def redistribute_concentration(
+        concentrations: List[float], total: float) -> List[float]:
+    factor = total / np.sum(concentrations)
+    return (np.array(concentrations) * factor).tolist()
+
+
+def equilibrium_concentration(make_cc: ConcentrationCalculator,
+                              e_min: float,
+                              e_max: float,
+                              n: int = 10,
+                              n_iter: int = 10,
+                              net_abs_ratio: float = 1.0e-5
+                              ) -> Optional[Concentration]:
+    """Find equilibrium concentration at charge-neutral Fermi level."""
+    Efs = np.linspace(e_min, e_max, n + 1).tolist()
+
+    for iteration in range(n_iter):
+        logger.info(f"Calc equilibrium concentration: iteration {iteration}")
+        cons_Ef = make_cc.make_concentrations_by_fermi_level(Efs)
+
+        if cons_Ef.most_neutral_concentration.net_abs_ratio < net_abs_ratio:
+            logger.info(f"Equilibrium concentration is found.")
+            return cons_Ef.most_neutral_concentration
+
+        Efs = cons_Ef.next_Ef_to_neutral_concentration(n)
+
+        if Efs is None:
+            logger.warning(f"Charge balance is out of {e_min}--{e_max}.")
+            return
+
+    logger.warning("No convergence is obtained.")
+
+
+@dataclass
+class Dos(metaclass=ABCMeta):
+    """Base class for density of states."""
+    energies: List[float]
+    doses: List[float]
+
+    def carrier_concentration(self, Ef, T) -> float:
+        result = 0.0
+        for E, dos in zip(self.energies, self.doses):
+            result += self.interval * dos * self._fermi_dirac(Ef, E, T)
+        return result
+
+    @staticmethod
+    @abstractmethod
+    def _fermi_dirac(Ef, E, T):
+        pass
+
+    @property
+    def interval(self) -> float:
+        return self.energies[1] - self.energies[0]
+
+
+class VBDos(Dos):
+    """Valence band density of states."""
+    carrier_type = "p"
+
+    @staticmethod
+    def _fermi_dirac(Ef, E, T):
+        return fermi_dirac(Ef - E, T)
+
+
+class CBDos(Dos):
+    """Conduction band density of states."""
+    carrier_type = "n"
+
+    @staticmethod
+    def _fermi_dirac(Ef, E, T):
+        return fermi_dirac(E - Ef, T)
+
+
+# Backward compatibility aliases
+MakeCarrierConcentrations = CarrierConcentrationCalculator
+MakeConcentrations = ConcentrationCalculator
