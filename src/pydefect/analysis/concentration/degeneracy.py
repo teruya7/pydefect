@@ -6,7 +6,7 @@ from collections import defaultdict
 
 from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.concentration.models import Degeneracy, Degeneracies
-from pydefect.analysis.defect_energy.defect_energy import DefectEnergyInfo
+from pydefect.analysis.defect_formation_energy.models import FormationEnergyInfo
 from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
 from pymatgen.symmetry.groups import SpaceGroup
 from vise.util.structure_symmetrizer import num_symmetry_operation
@@ -35,7 +35,7 @@ class DegeneracyCalculator:
         self._deg_dict = defaultdict(dict)
 
     def add_degeneracy(self,
-                       energy_info: DefectEnergyInfo,
+                       energy_info: FormationEnergyInfo,
                        calc_results: CalcResults,
                        structure_info: DefectStructureInfo):
         """Add degeneracy for a defect charge state."""

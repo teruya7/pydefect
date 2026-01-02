@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
 from pydefect.analysis.calculation.models import CalcResults
-from pydefect.analysis.defect_energy.defect_energy import DefectEnergy, DefectEnergyInfo
-from pydefect.analysis.defect_energy.make_defect_energy_info import make_defect_energy_info, \
-    num_atom_differences
+from pydefect.analysis.defect_formation_energy.models import (
+    DefectFormationEnergy, FormationEnergyInfo,
+)
+from pydefect.analysis.defect_formation_energy.defect_formation_energy import (
+    calculate_formation_energy_info, calculate_composition_change,
+)
 from pydefect.analysis.chemical_potential.models import StandardEnergies
 from pydefect.analysis.corrections.models import Correction
 from pydefect.makers.defect.defect_entry import DefectEntry
@@ -33,17 +36,17 @@ def test_make_defect_energy_info(mocker):
     unitcell = mocker.Mock()
     unitcell.vbm = 100.0
 
-    actual = make_defect_energy_info(defect_entry, calc_results, correction,
-                                     p_calc_results, standard_energies, unitcell)
-    energy = DefectEnergy(formation_energy=10.0 - 1.0 + 10 - 100.0,
-                          energy_corrections={"a": 10.0},
-                          is_shallow=None)
-    expected = DefectEnergyInfo(name="Va_Mg1", charge=-1,
-                                atom_io={"Mg": -1}, defect_energy=energy)
+    actual = calculate_formation_energy_info(defect_entry, calc_results, correction,
+                                             p_calc_results, standard_energies, unitcell)
+    energy = DefectFormationEnergy(formation_energy=10.0 - 1.0 + 10 - 100.0,
+                                   energy_corrections={"a": 10.0},
+                                   is_shallow=None)
+    expected = FormationEnergyInfo(name="Va_Mg1", charge=-1,
+                                   atom_io={"Mg": -1}, formation_energy=energy)
     assert actual == expected
 
 
 def test_num_atom_diff():
     s1 = IStructure(Lattice.cubic(1), ["H", "He"], [[0] * 3] * 2)
     s2 = IStructure(Lattice.cubic(1), ["H", "Li"], [[0] * 3] * 2)
-    assert num_atom_differences(s1, s2) == {"He": 1, "Li": -1}
+    assert calculate_composition_change(s1, s2) == {"He": 1, "Li": -1}

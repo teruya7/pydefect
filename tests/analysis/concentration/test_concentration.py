@@ -11,7 +11,7 @@ from pydefect.analysis.concentration.distribution_function import fermi_dirac
 from pydefect.analysis.concentration.concentration import \
     MakeConcentrations, VBDos, CBDos, TotalDos, \
     redistribute_concentration
-from pydefect.analysis.defect_energy.defect_energy import ChargeEnergies, SingleChargeEnergies
+from pydefect.analysis.defect_formation_energy.models import ChargeEnergies, SingleChargeEnergies
 from tests.helpers.assertion import assert_msonable
 
 vb_dos = VBDos(energies=[-1.0, 0.0], doses=[1.0, 1.0])

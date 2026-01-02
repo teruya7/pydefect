@@ -13,8 +13,8 @@ from pydefect.analysis.chemical_potential.models import (
     CompositionEnergies,
     RelativeEnergies,
     ChemPotDiag,
-    ChemPotDiagMaker,
 )
+from pydefect.analysis.chemical_potential.chem_pot_diag import ChemPotDiagMaker
 
 
 def make_composition_energies(

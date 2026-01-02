@@ -33,11 +33,13 @@ def make_perfect_band_edge_state_from_vasp(
     band_edge_prop = VaspBandEdgeProperties(vasprun, outcar,
                                             v_defaults.integer_criterion)
     orbital_data, structure = procar.data, vasprun.final_structure
-    vbm_info = create_edge_info_from_vasp(band_edge_prop.vbm_info, orbital_data, structure, vasprun)\n    cbm_info = create_edge_info_from_vasp(band_edge_prop.cbm_info, orbital_data, structure, vasprun)
+    vbm_info = create_edge_info_from_vasp(band_edge_prop.vbm_info, orbital_data, structure, vasprun)
+    cbm_info = create_edge_info_from_vasp(band_edge_prop.cbm_info, orbital_data, structure, vasprun)
     return PerfectBandEdgeState(vbm_info, cbm_info)
 
 
-def create_edge_info_from_vasp(edge_info, orbital_data, structure, vasprun) -> EdgeInfo:\n    \"\"\"Create EdgeInfo from VASP band edge properties.
+def create_edge_info_from_vasp(edge_info, orbital_data, structure, vasprun) -> EdgeInfo:
+    """Create EdgeInfo from VASP band edge properties.
 
     Args:
         edge_info: Band edge info from VaspBandEdgeProperties.
@@ -53,5 +55,3 @@ def create_edge_info_from_vasp(edge_info, orbital_data, structure, vasprun) -> E
     energy, occupation = vasprun.eigenvalues[Spin.up][edge_info.kpoint_index, edge_info.band_index, :]
     orb_info = OrbitalInfo(energy=energy, occupation=occupation, orbitals=orbitals)
     return EdgeInfo(edge_info.band_index, tuple(edge_info.kpoint_coords), orb_info)
-
-

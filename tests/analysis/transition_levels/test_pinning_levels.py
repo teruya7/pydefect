@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2022 Kumagai group.
-from pydefect.analysis.defect_energy.defect_energy import DefectEnergySummary, DefectEnergies, \
+from pydefect.analysis.defect_formation_energy.models import DefectEnergySummary, DefectEnergies, \
     DefectEnergy
 from pydefect.analysis.transition_levels.pinning_levels import pinning_levels_from_charge_energies
 

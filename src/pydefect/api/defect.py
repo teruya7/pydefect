@@ -14,13 +14,11 @@ from pymatgen.io.vasp import Chgcar
 from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.corrections.models import Correction
 from pydefect.analysis.corrections.models import NoCorrection
-from pydefect.analysis.defect_energy.defect_energy import DefectEnergyInfo
-from pydefect.analysis.defect_energy.defect_energy_plotter import DefectEnergyMplPlotter
-from pydefect.analysis.defect_energy.make_defect_energy_info import (
-    make_defect_energy_info as _make_defect_energy_info,
-)
-from pydefect.analysis.defect_energy.make_defect_energy_summary import (
-    make_defect_energy_summary as _make_defect_energy_summary,
+from pydefect.analysis.defect_formation_energy.models import FormationEnergyInfo
+from pydefect.analysis.defect_formation_energy.plotter import FormationEnergyMplPlotter
+from pydefect.analysis.defect_formation_energy.defect_formation_energy import (
+    calculate_formation_energy_info as _make_defect_energy_info,
+    calculate_formation_energy_summary as _make_defect_energy_summary,
 )
 from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
 from pydefect.analysis.defect_structure.make_defect_structure_info import MakeDefectStructureInfo
@@ -300,7 +298,7 @@ def make_defect_energy_info(
     unitcell: Unitcell,
     correction: Optional[Correction] = None,
     band_edge_states=None,
-) -> DefectEnergyInfo:
+) -> FormationEnergyInfo:
     """Calculate defect energy information.
 
     Args:
@@ -339,7 +337,7 @@ def make_defect_energy_info(
 
 
 def make_defect_energy_summary(
-    energy_infos: List[DefectEnergyInfo],
+    energy_infos: List[FormationEnergyInfo],
     target_vertices: TargetVertices,
     unitcell: Unitcell,
     perfect_band_edge_state=None,

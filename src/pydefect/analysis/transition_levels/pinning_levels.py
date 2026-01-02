@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2022 Kumagai group.
-from pydefect.analysis.defect_energy.defect_energy import ChargeEnergies
+from pydefect.analysis.defect_formation_energy.models import FermiLevelDependentEnergies
 from tabulate import tabulate
 
 
-def pinning_levels_from_charge_energies(charge_energies: ChargeEnergies) -> str:
+def pinning_levels_from_charge_energies(charge_energies: FermiLevelDependentEnergies) -> str:
     """Generate formatted table of pinning levels for all defects.
 
     Args:

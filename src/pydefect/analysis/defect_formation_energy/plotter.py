@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
+"""Formation energy plotting utilities."""
 from itertools import cycle
 from typing import List, Optional, Tuple
 
 from adjustText import adjust_text
 from labellines import labelLines
 from matplotlib import pyplot as plt
-from pydefect.analysis.defect_energy.defect_energy import DefectEnergySummary
+from pydefect.analysis.defect_formation_energy.models import FormationEnergySummary
 from pydefect.analysis.transition_levels.transition_levels import make_transition_levels
 from pydefect.defaults import defaults
-from pydefect.utils.formatting import prettify_names
 from vise.util.matplotlib import float_to_int_formatter
 
 
-class DefectEnergiesMplSettings:
-    """Matplotlib settings for defect energy plots.
+class PlotSettings:
+    """Matplotlib settings for formation energy plots.
 
     Configures colors, line widths, and font sizes for visualization.
 
@@ -31,7 +31,7 @@ class DefectEnergiesMplSettings:
         vline: Dict of vertical line style settings.
 
     Example:
-        >>> settings = DefectEnergiesMplSettings(
+        >>> settings = PlotSettings(
         ...     line_width=2.0,
         ...     title_font_size=18
         ... )
@@ -50,7 +50,7 @@ class DefectEnergiesMplSettings:
                  label_font_size: Optional[int] = 15,
                  defect_name_size: Optional[int] = 12,
                  charge_size: Optional[int] = 12):
-        """Initialize DefectEnergiesMplSettings.
+        """Initialize PlotSettings.
 
         Args:
             colors: List of colors for defects. Uses defaults if None.
@@ -83,23 +83,17 @@ class DefectEnergiesMplSettings:
                       "alpha": vline_alpha}
 
 
-class DefectEnergyPlotter:
+class FormationEnergyPlotterBase:
     """Base class for defect formation energy plots.
 
     Prepares data for plotting defect energies vs Fermi level.
 
     Attributes:
-        charge_energies: ChargeEnergies for plotting.
+        charge_energies: FermiLevelDependentEnergies for plotting.
         with_corrections: Whether corrections are applied.
-
-    Example:
-        >>> plotter = DefectEnergyMplPlotter(
-        ...     defect_energy_summary=summary,
-        ...     chem_pot_label="A"
-        ... )
     """
     def __init__(self,
-                 defect_energy_summary: DefectEnergySummary,
+                 formation_energy_summary: FormationEnergySummary,
                  chem_pot_label: str,
                  allow_shallow: bool,
                  with_corrections: bool,
@@ -110,10 +104,10 @@ class DefectEnergyPlotter:
                  x_unit: Optional[str] = "eV",
                  y_unit: Optional[str] = "eV",
                  **plot_settings):
-        """Initialize defect energy plotter.
+        """Initialize formation energy plotter.
 
         Args:
-            defect_energy_summary: DefectEnergySummary object.
+            formation_energy_summary: FormationEnergySummary object.
             chem_pot_label: Label for chemical potential vertex.
             allow_shallow: If True, include shallow defects.
             with_corrections: If True, apply energy corrections.
@@ -125,39 +119,38 @@ class DefectEnergyPlotter:
             y_unit: Unit label for y-axis.
             **plot_settings: Additional matplotlib settings.
         """
-        self._title = defect_energy_summary.latexified_title
-        self._supercell_vbm = defect_energy_summary.supercell_vbm
-        self._supercell_cbm = defect_energy_summary.supercell_cbm
-        self._x_range = x_range or (0, defect_energy_summary.cbm)
-        defect_energy_summary.e_min = self._x_range[0]
-        defect_energy_summary.e_max = self._x_range[1]
+        self._title = formation_energy_summary.latexified_title
+        self._supercell_vbm = formation_energy_summary.supercell_vbm
+        self._supercell_cbm = formation_energy_summary.supercell_cbm
+        self._x_range = x_range or (0, formation_energy_summary.cbm)
+        formation_energy_summary.e_min = self._x_range[0]
+        formation_energy_summary.e_max = self._x_range[1]
 
-        charge_energies = defect_energy_summary.charge_energies(
+        fermi_level_energies = formation_energy_summary.get_fermi_level_energies(
             chem_pot_label, allow_shallow, with_corrections, self._x_range)
-        tls = make_transition_levels(charge_energies.cross_point_dicts,
-                                     defect_energy_summary.cbm,
+        tls = make_transition_levels(fermi_level_energies.cross_point_dicts,
+                                     formation_energy_summary.cbm,
                                      self._supercell_vbm,
                                      self._supercell_cbm)
         tls.to_json_file()
 
-        # charge_energies needs to be run again to change name to mpl style.
-        # Need refactoring in the future.
-        charge_energies = defect_energy_summary.charge_energies(
+        # Run again to change name to mpl style.
+        fermi_level_energies = formation_energy_summary.get_fermi_level_energies(
             chem_pot_label, allow_shallow, with_corrections, self._x_range,
             name_style)
-        self.charge_energies = charge_energies
+        self.charge_energies = fermi_level_energies
         self.with_corrections = with_corrections
-        self._cross_points = charge_energies.cross_point_dicts
-        self._e_min_max_energies_dict = charge_energies.e_min_max_energies_dict
-        self._y_range = y_range or charge_energies.energy_range(space=0.2)
+        self._cross_points = fermi_level_energies.cross_point_dicts
+        self._e_min_max_energies_dict = fermi_level_energies.e_min_max_energies_dict
+        self._y_range = y_range or fermi_level_energies.energy_range(space=0.2)
         self._vline_threshold = vline_threshold
         self._x_unit = x_unit
         self._y_unit = y_unit
-        self._defect_energies \
-            = defect_energy_summary.screened_defect_energies(allow_shallow)
+        self._formation_energies = \
+            formation_energy_summary.filter_shallow_defects(allow_shallow)
 
 
-class DefectEnergyMplPlotter(DefectEnergyPlotter):
+class FormationEnergyMplPlotter(FormationEnergyPlotterBase):
     """Matplotlib plotter for defect formation energies.
 
     Creates publication-quality defect energy diagrams.
@@ -166,14 +159,14 @@ class DefectEnergyMplPlotter(DefectEnergyPlotter):
         plt: Matplotlib pyplot module.
 
     Example:
-        >>> plotter = DefectEnergyMplPlotter(
-        ...     defect_energy_summary=summary,
+        >>> plotter = FormationEnergyMplPlotter(
+        ...     formation_energy_summary=summary,
         ...     chem_pot_label="A",
         ...     allow_shallow=False,
         ...     with_corrections=True
         ... )
         >>> plotter.construct_plot()
-        >>> plotter.plt.savefig("defect_energy.pdf")
+        >>> plotter.plt.savefig("formation_energy.pdf")
     """
     def __init__(self,
                  label_line: bool = True,
@@ -186,11 +179,10 @@ class DefectEnergyMplPlotter(DefectEnergyPlotter):
             label_line: If True, add labels on lines.
             add_charges: If True, show charge states.
             add_thin_lines: If True, add thin background lines.
-            **kwargs: Arguments passed to DefectEnergyPlotter.
+            **kwargs: Arguments passed to FormationEnergyPlotterBase.
         """
         super().__init__(name_style="mpl", **kwargs)
-        self._mpl_defaults = \
-            kwargs.get("mpl_defaults", DefectEnergiesMplSettings())
+        self._mpl_defaults = kwargs.get("mpl_defaults", PlotSettings())
         self._label_line = label_line
         self._add_charges = add_charges
         self._add_thin_lines = add_thin_lines
@@ -198,6 +190,7 @@ class DefectEnergyMplPlotter(DefectEnergyPlotter):
         self._texts = []
 
     def construct_plot(self):
+        """Construct the complete formation energy plot."""
         self._add_energies()
         self._add_band_edges()
         self._set_x_range()
@@ -274,3 +267,33 @@ class DefectEnergyMplPlotter(DefectEnergyPlotter):
             plt.text(self._supercell_cbm, self._y_range[1], 'supercell',
                      size=8, ha='center', va='center', rotation='vertical',
                      backgroundcolor='white')
+
+
+# Backward compatibility aliases
+DefectEnergiesMplSettings = PlotSettings
+
+
+class DefectEnergyPlotter(FormationEnergyPlotterBase):
+    """Backward compatible alias for FormationEnergyPlotterBase."""
+
+    def __init__(self, defect_energy_summary=None, formation_energy_summary=None, **kwargs):
+        summary = formation_energy_summary if formation_energy_summary is not None else defect_energy_summary
+        super().__init__(formation_energy_summary=summary, **kwargs)
+
+
+class DefectEnergyMplPlotter(FormationEnergyMplPlotter):
+    """Backward compatible alias for FormationEnergyMplPlotter."""
+
+    def __init__(self, defect_energy_summary=None, formation_energy_summary=None, **kwargs):
+        summary = formation_energy_summary if formation_energy_summary is not None else defect_energy_summary
+        if 'name_style' not in kwargs:
+            kwargs['name_style'] = 'mpl'
+        # Call FormationEnergyPlotterBase.__init__ directly to avoid name_style duplication
+        FormationEnergyPlotterBase.__init__(self, formation_energy_summary=summary, **kwargs)
+        self._mpl_defaults = kwargs.get("mpl_defaults", PlotSettings())
+        self._label_line = kwargs.get("label_line", True)
+        self._add_charges = kwargs.get("add_charges", True)
+        self._add_thin_lines = kwargs.get("add_thin_lines", True)
+        self.plt = plt
+        self._texts = []
+

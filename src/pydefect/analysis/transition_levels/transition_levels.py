@@ -5,7 +5,7 @@ from itertools import zip_longest
 from typing import Dict, List
 
 from monty.json import MSONable
-from pydefect.analysis.defect_energy.defect_energy import CrossPoints
+from pydefect.analysis.defect_formation_energy.models import CrossPoints
 from tabulate import tabulate
 from vise.util.mix_in import ToJsonFileMixIn
 

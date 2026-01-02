@@ -6,8 +6,11 @@ from math import sqrt
 from pathlib import Path
 
 import pytest
-from pydefect.analysis.defect_energy.defect_energy import DefectEnergies, DefectEnergy, \
-    DefectEnergySummary
+from pydefect.analysis.defect_formation_energy.models import (
+    FormationEnergyCollection, DefectFormationEnergy, FormationEnergySummary,
+    # Backward compatibility aliases
+    DefectEnergies, DefectEnergy, DefectEnergySummary,
+)
 from pydefect.analysis.defect_structure.defect_structure_comparator import SiteDiff
 from pydefect.analysis.defect_structure.defect_structure_info import Displacement, \
     DefectStructureInfo

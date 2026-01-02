@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 from pydefect.analysis.calculation.models import CalcResults, CalcSummary, SingleCalcSummary
 from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
-from pydefect.analysis.defect_energy.make_defect_energy_info import num_atom_differences
+from pydefect.analysis.defect_formation_energy.defect_formation_energy import calculate_composition_change
 from pydefect.defaults import defaults
 from pydefect.makers.defect.defect_entry import DefectEntry
 
@@ -43,7 +43,7 @@ def create_single_calc_summary(calc_results, entry, p_calc_results, str_info):
     Returns:
         SingleCalcSummary with convergence and structural info.
     """
-    atom_io = num_atom_differences(calc_results.structure,
+    atom_io = calculate_composition_change(calc_results.structure,
                                    p_calc_results.structure)
     relative_energy = calc_results.energy - p_calc_results.energy
     is_energy_strange = abs(relative_energy) > defaults.abs_strange_energy
