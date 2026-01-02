@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
-from pydefect.input_maker.defect import SimpleDefect
-from pydefect.input_maker.defect_set_maker import DefectSetMaker
+from pydefect.input_maker.defect.defect import SimpleDefect
+from pydefect.input_maker.defect.defect_set_maker import DefectSetMaker
 
 
 def test_defect_set_maker(supercell_info):

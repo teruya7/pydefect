@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2023 Kumagai group.
 import pytest
-from pydefect.input_maker.complex_defect_entries_make import \
+from pydefect.input_maker.defect.complex_defect_entries_make import \
     ComplexDefectEntriesMaker
-from pydefect.input_maker.complex_defect_set import ComplexDefectSet, \
+from pydefect.input_maker.defect.complex_defect_set import ComplexDefectSet, \
     ComplexDefect
-from pydefect.input_maker.defect_entry import DefectEntry
-from pydefect.input_maker.supercell_info import Interstitial, SupercellInfo
+from pydefect.input_maker.defect.defect_entry import DefectEntry
+from pydefect.input_maker.supercell.supercell_info import Interstitial, SupercellInfo
 from pymatgen.core import Lattice, IStructure
 from vise.util.structure_symmetrizer import Site
 

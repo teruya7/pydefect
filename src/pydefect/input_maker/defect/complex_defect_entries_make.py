@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2023 Kumagai group.
-from pydefect.input_maker.complex_defect_set import ComplexDefectSet, \
+from pydefect.input_maker.defect.complex_defect_set import ComplexDefectSet, \
     ComplexDefect
-from pydefect.input_maker.defect_entries_maker import copy_to_structure, \
+from pydefect.input_maker.defect.defect_entries_maker import copy_to_structure, \
     to_istructure
-from pydefect.input_maker.defect_entry import DefectEntry
-from pydefect.input_maker.supercell_info import SupercellInfo
+from pydefect.input_maker.defect.defect_entry import DefectEntry
+from pydefect.input_maker.supercell.supercell_info import SupercellInfo
 from pymatgen.core import Element
 
 

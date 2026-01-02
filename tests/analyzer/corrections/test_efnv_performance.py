@@ -7,7 +7,7 @@ from pydefect.analyzer.calculation.calc_results import CalcResults
 from pydefect.analyzer.unitcell.unitcell import Unitcell
 from pydefect.analyzer.corrections.make_efnv_correction import \
     make_efnv_correction
-from pydefect.input_maker.defect_entry import DefectEntry
+from pydefect.input_maker.defect.defect_entry import DefectEntry
 
 
 @pytest.mark.skip()

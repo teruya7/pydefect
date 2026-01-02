@@ -4,13 +4,13 @@ import numpy as np
 import pytest
 
 from pydefect.defaults import defaults
-from pydefect.input_maker.defect import SimpleDefect
-from pydefect.input_maker.defect_entries_maker import (
+from pydefect.input_maker.defect.defect import SimpleDefect
+from pydefect.input_maker.defect.defect_entries_maker import (
     DefectEntriesMaker, copy_to_structure, to_istructure, add_atom_to_structure,
     perturb_structure, random_3d_vector)
-from pydefect.input_maker.defect_entry import DefectEntry, PerturbedSite
-from pydefect.input_maker.defect_set import DefectSet
-from pydefect.input_maker.supercell_info import SupercellInfo, Site, \
+from pydefect.input_maker.defect.defect_entry import DefectEntry, PerturbedSite
+from pydefect.input_maker.defect.defect_set import DefectSet
+from pydefect.input_maker.supercell.supercell_info import SupercellInfo, Site, \
     Interstitial
 from tests.helpers.assertion import assert_dataclass_almost_equal
 
@@ -30,7 +30,7 @@ def cubic_supercell_info(cubic_supercell):
 
 
 def test_defect_entries_maker(cubic_supercell_info, cubic_supercell, mocker):
-    mock = mocker.patch("pydefect.input_maker.defect_entries_maker.defaults")
+    mock = mocker.patch("pydefect.input_maker.defect.defect_entries_maker.defaults")
     mock.displace_distance = 0.0
     defect_set = DefectSet(defects={SimpleDefect(None, "H1", [1]),
                                     SimpleDefect("Ne", "He1", [0])})
@@ -60,7 +60,7 @@ def test_defect_entries_maker(cubic_supercell_info, cubic_supercell, mocker):
 
 
 def test_defect_entries_maker_insert_host_atoms(cubic_supercell_info, mocker):
-    mock = mocker.patch("pydefect.input_maker.defect_entries_maker.defaults")
+    mock = mocker.patch("pydefect.input_maker.defect.defect_entries_maker.defaults")
     mock.displace_distance = 0.0
 
     defect_set = DefectSet(defects={SimpleDefect("He", "H1", [0]),
@@ -77,7 +77,7 @@ def test_defect_entries_maker_insert_host_atoms(cubic_supercell_info, mocker):
 
 
 def test_defect_entries_interstitials(cubic_supercell_info, mocker):
-    mock = mocker.patch("pydefect.input_maker.defect_entries_maker.defaults")
+    mock = mocker.patch("pydefect.input_maker.defect.defect_entries_maker.defaults")
     mock.displace_distance = 0.0
 
     defect_set = DefectSet(defects={SimpleDefect("H", "i1", [0])})
@@ -109,7 +109,7 @@ def test_add_atom_to_structure(ortho_conventional):
 
 def test_perturbed_structure(ortho_conventional, mocker):
     mock = mocker.patch(
-        "pydefect.input_maker.defect_entries_maker.random_3d_vector")
+        "pydefect.input_maker.defect.defect_entries_maker.random_3d_vector")
     mock.return_value = ([0.0, 0.0, 0.35], 1.0)
     structure = copy_to_structure(ortho_conventional)
     actual = perturb_structure(structure,

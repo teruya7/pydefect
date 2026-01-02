@@ -4,9 +4,9 @@
 import pytest
 from tests.helpers.assertion import assert_msonable
 
-from pydefect.input_maker.defect_set import DefectSet, screen_defect_set
-from pydefect.input_maker.defect_set_maker import charge_set
-from pydefect.input_maker.defect import SimpleDefect, Defect
+from pydefect.input_maker.defect.defect_set import DefectSet, screen_defect_set
+from pydefect.input_maker.defect.defect_set_maker import charge_set
+from pydefect.input_maker.defect.defect import SimpleDefect, Defect
 
 
 simple_defects = {SimpleDefect(None, "O1", [1]), SimpleDefect("N", "O1", [0, 1])}

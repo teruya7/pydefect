@@ -4,10 +4,10 @@ from typing import List, Tuple, Optional
 
 import numpy as np
 from pydefect.defaults import defaults
-from pydefect.input_maker.defect import SimpleDefect
-from pydefect.input_maker.defect_entry import DefectEntry, PerturbedSite
-from pydefect.input_maker.defect_set import DefectSet
-from pydefect.input_maker.supercell_info import SupercellInfo
+from pydefect.input_maker.defect.defect import SimpleDefect
+from pydefect.input_maker.defect.defect_entry import DefectEntry, PerturbedSite
+from pydefect.input_maker.defect.defect_set import DefectSet
+from pydefect.input_maker.supercell.supercell_info import SupercellInfo
 from pymatgen.core import Structure, IStructure
 from pymatgen.core.structure import PeriodicNeighbor
 from vise.util.structure_symmetrizer import StructureSymmetrizer
@@ -25,8 +25,8 @@ class DefectEntriesMaker:
         defect_entries: Set of generated DefectEntry objects.
 
     Example:
-        >>> from pydefect.input_maker.supercell_info import SupercellInfo
-        >>> from pydefect.input_maker.defect_set import DefectSet
+        >>> from pydefect.input_maker.supercell.supercell_info import SupercellInfo
+        >>> from pydefect.input_maker.defect.defect_set import DefectSet
         >>> info = SupercellInfo.from_json_file("supercell_info.json")
         >>> defects = DefectSet.from_yaml("defect_in.yaml")
         >>> maker = DefectEntriesMaker(info, defects)

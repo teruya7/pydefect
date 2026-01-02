@@ -2,7 +2,7 @@
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 import numpy as np
 import pytest
-from pydefect.input_maker.supercell_maker import SupercellMaker
+from pydefect.input_maker.supercell.supercell_maker import SupercellMaker
 from pydefect.error import NotPrimitiveError
 from pymatgen.core import Lattice, Structure
 from tests.helpers.assertion import assert_structure_almost_same

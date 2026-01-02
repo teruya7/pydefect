@@ -6,8 +6,8 @@ from typing import List, Dict
 import yaml
 from numpy.linalg import det
 from pydefect.defaults import defaults
-from pydefect.input_maker.supercell import Supercell, Supercells
-from pydefect.input_maker.supercell_info import SupercellInfo, SimpleSite, \
+from pydefect.input_maker.supercell.supercell import Supercell, Supercells
+from pydefect.input_maker.supercell.supercell_info import SupercellInfo, SimpleSite, \
     stripe_numbers
 from pymatgen.core import IStructure, Structure
 from vise.util.logger import get_logger

@@ -4,7 +4,7 @@ from typing import List, Union
 
 import numpy as np
 from numpy.linalg import inv
-from pydefect.input_maker.supercell_info import SupercellInfo, Interstitial
+from pydefect.input_maker.supercell.supercell_info import SupercellInfo, Interstitial
 from pydefect.error import NotPrimitiveError
 from pymatgen.core import Structure, Element, IStructure
 from vise.util.structure_symmetrizer import StructureSymmetrizer

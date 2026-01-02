@@ -3,10 +3,10 @@
 from pathlib import Path
 
 import pytest
-from pydefect.input_maker.manual_supercell_maker import ManualSupercellMaker, \
+from pydefect.input_maker.supercell.manual_supercell_maker import ManualSupercellMaker, \
     make_sites_from_yaml_file, IncorrectSiteYamlFileError, \
     check_site_structure_consistency
-from pydefect.input_maker.supercell_info import SimpleSite, SupercellInfo
+from pydefect.input_maker.supercell.supercell_info import SimpleSite, SupercellInfo
 
 
 def test_create_supercell(simple_cubic_2x1x1, simple_cubic_2x2x2):

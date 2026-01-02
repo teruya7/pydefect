@@ -9,7 +9,7 @@ from pydefect.analyzer.defect_energy.defect_energy import DefectEnergy, DefectEn
 from pydefect.analyzer.unitcell.unitcell import Unitcell
 from pydefect.analyzer.chemical_potential.chem_pot_diag import StandardEnergies
 from pydefect.analyzer.corrections.abstract_correction import Correction
-from pydefect.input_maker.defect_entry import DefectEntry
+from pydefect.input_maker.defect.defect_entry import DefectEntry
 from pymatgen.core import IStructure
 
 

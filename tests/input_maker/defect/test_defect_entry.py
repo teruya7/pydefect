@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-from pydefect.input_maker.defect_entry import DefectEntry, make_defect_entry, \
+from pydefect.input_maker.defect.defect_entry import DefectEntry, make_defect_entry, \
     PerturbedSite
 from pymatgen.core import Lattice, IStructure
 

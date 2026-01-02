@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 
-from pydefect.input_maker.defect import (
+from pydefect.input_maker.defect.defect import (
     Defect, SimpleDefect, screen_simple_defect)
 from tests.helpers.assertion import assert_msonable
 

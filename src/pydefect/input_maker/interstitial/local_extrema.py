@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 from monty.json import MSONable
-from pydefect.input_maker.append_interstitial import append_interstitial
+from pydefect.input_maker.interstitial.append_interstitial import append_interstitial
 from pydefect.analyzer.band_edge.coords import pretty_coords
 from pydefect.input_maker.structure_tools import Coordination
 from pymatgen.core import Structure

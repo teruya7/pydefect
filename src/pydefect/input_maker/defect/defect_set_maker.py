@@ -5,9 +5,9 @@ from typing import Dict, List
 
 from pydefect.data.elements.element_data import oxidation_state, electronegativity
 from pydefect.defaults import defaults
-from pydefect.input_maker.defect import SimpleDefect
-from pydefect.input_maker.defect_set import DefectSet, screen_defect_set
-from pydefect.input_maker.supercell_info import SupercellInfo
+from pydefect.input_maker.defect.defect import SimpleDefect
+from pydefect.input_maker.defect.defect_set import DefectSet, screen_defect_set
+from pydefect.input_maker.supercell.supercell_info import SupercellInfo
 
 
 class DefectSetMaker:
@@ -19,7 +19,7 @@ class DefectSetMaker:
         defect_set: Generated DefectSet.
 
     Example:
-        >>> from pydefect.input_maker.supercell_info import SupercellInfo
+        >>> from pydefect.input_maker.supercell.supercell_info import SupercellInfo
         >>> supercell_info = SupercellInfo.from_json_file()
         >>> maker = DefectSetMaker(supercell_info, dopants=["Al"])
         >>> maker.defect_set.to_yaml()

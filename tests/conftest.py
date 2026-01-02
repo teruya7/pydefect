@@ -13,8 +13,8 @@ from pydefect.analyzer.defect_structure.defect_structure_info import Displacemen
     DefectStructureInfo
 from pydefect.analyzer.corrections.efnv_correction import PotentialSite, \
     ExtendedFnvCorrection
-from pydefect.input_maker.local_extrema import VolumetricDataAnalyzeParams
-from pydefect.input_maker.supercell_info import Site, SupercellInfo, \
+from pydefect.input_maker.interstitial.local_extrema import VolumetricDataAnalyzeParams
+from pydefect.input_maker.supercell.supercell_info import Site, SupercellInfo, \
     Interstitial
 from pymatgen.core import Lattice, IStructure, Structure
 
