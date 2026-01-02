@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pydefect.api.external.mp_tools import MpQuery, chemsys
+from pydefect.api.materials_project import MpQuery, chemsys
 
 
 def test_mp_actual_query():
