@@ -8,10 +8,14 @@ from pydefect.analysis.corrections.models.efnv import (
     PotentialSite,
 )
 from pydefect.analysis.corrections.models.gkfo import GkfoCorrection
+from pydefect.analysis.corrections.models.grids import Grids
+from pydefect.analysis.corrections.models.no_correction import NoCorrection
 
 __all__ = [
     "Correction",
     "ExtendedFnvCorrection",
     "PotentialSite",
     "GkfoCorrection",
+    "Grids",
+    "NoCorrection",
 ]

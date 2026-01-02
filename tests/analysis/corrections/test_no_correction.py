@@ -3,7 +3,7 @@
 """Tests for pydefect.analysis.corrections.no_correction module."""
 
 import pytest
-from pydefect.analysis.corrections.no_correction import NoCorrection
+from pydefect.analysis.corrections.models import NoCorrection
 from pydefect.analysis.corrections.models import Correction
 
 

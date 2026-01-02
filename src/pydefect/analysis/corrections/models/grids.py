@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
+"""Grid data for spherical averaging."""
+
 from dataclasses import dataclass
 from itertools import product
 from typing import Tuple, List
 
 import numpy as np
-from pydefect.analysis.corrections.efnv import calculate_max_inscribed_radius as calc_max_sphere_radius
+from pydefect.analysis.corrections.efnv import calculate_max_inscribed_radius
 from pymatgen.core import Lattice
 from pymatgen.io.vasp import Chgcar
 
@@ -81,7 +83,7 @@ class Grids:
                        data: np.ndarray,
                        center: List[int],
                        distance_bins: np.ndarray):
-        assert distance_bins[-1] <= calc_max_sphere_radius(self.lattice.matrix)
+        assert distance_bins[-1] <= calculate_max_inscribed_radius(self.lattice.matrix)
         shifted_dist = self.shifted_distance_data(center)
         _sum, _ = np.histogram(shifted_dist, distance_bins, weights=data)
         counts, _ = np.histogram(shifted_dist, distance_bins)

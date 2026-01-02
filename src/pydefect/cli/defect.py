@@ -228,7 +228,7 @@ def defect_energy_infos(
 ):
     """Calculate defect energy information for multiple directories."""
     from pydefect.analysis.chemical_potential.models import StandardEnergies
-    from pydefect.analysis.corrections.no_correction import NoCorrection
+    from pydefect.analysis.corrections.models import NoCorrection
 
     # Load common files (CLI responsibility)
     unitcell_obj = loadfn(str(unitcell))
