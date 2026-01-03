@@ -324,3 +324,221 @@ def make_total_dos(
     total_dos.to_json_file()
     typer.echo("Created total_dos.json")
 
+
+# --- Concentration commands ---
+
+@util_app.command(name="carrier_concentrations", help="Calculate carrier concentrations.")
+def calc_carrier_concentrations(
+    total_dos: Path = typer.Option(
+        "total_dos.json", "-t", "--total_dos",
+        help="Path to total_dos.json."
+    ),
+    temperature: float = typer.Option(
+        300.0, "-T", "--temperature",
+        help="Temperature in K."
+    ),
+):
+    """Calculate carrier concentrations vs Fermi level."""
+    import numpy as np
+    from pydefect.analysis.concentration.make_concentration import MakeCarrierConcentrations
+
+    tdos = loadfn(str(total_dos))
+    make_concentrations = MakeCarrierConcentrations(tdos, temperature)
+    e_max = tdos.cbm - tdos.vbm
+    Efs = np.linspace(0, e_max, 100, True).tolist()
+    con_by_Ef = make_concentrations.make_concentrations_by_fermi_level(Efs)
+
+    filename = f"con_by_Ef_only_pn_{int(temperature)}K.json"
+    con_by_Ef.to_json_file(filename)
+    typer.echo(f"Created {filename}")
+
+
+@util_app.command(name="defect_concentrations", help="Calculate defect concentrations.")
+def calc_defect_concentrations(
+    defect_energy_summary: Path = typer.Option(
+        "defect_energy_summary.json", "-d", "--defect_energy_summary",
+        help="Path to defect_energy_summary.json."
+    ),
+    total_dos: Path = typer.Option(
+        "total_dos.json", "-t", "--total_dos",
+        help="Path to total_dos.json."
+    ),
+    degeneracies: Path = typer.Option(
+        "degeneracies.yaml", "--degeneracies",
+        help="Path to degeneracies.yaml."
+    ),
+    label: str = typer.Option(
+        ..., "-l", "--label",
+        help="Chemical potential label."
+    ),
+    temperature: float = typer.Option(
+        300.0, "-T", "--temperature",
+        help="Temperature in K."
+    ),
+    with_corrections: bool = typer.Option(
+        True, "--with_corrections/--no_corrections",
+        help="Include corrections."
+    ),
+    allow_shallow: bool = typer.Option(
+        False, "--allow_shallow",
+        help="Allow shallow defects."
+    ),
+    con_by_Ef: Optional[Path] = typer.Option(
+        None, "--con_by_Ef",
+        help="Previous concentration for quenching."
+    ),
+    net_abs_ratio: float = typer.Option(
+        1e-4, "--net_abs_ratio",
+        help="Net charge abs ratio for equilibrium."
+    ),
+):
+    """Calculate defect concentrations vs Fermi level."""
+    import numpy as np
+    from pydefect.analysis.concentration.make_concentration import (
+        MakeConcentrations, equilibrium_concentration
+    )
+
+    des = loadfn(str(defect_energy_summary))
+    tdos = loadfn(str(total_dos))
+    degs = loadfn(str(degeneracies))
+
+    e_min, e_max = 0., des.cbm
+    charge_energies = des.charge_energies(
+        label, allow_shallow, with_corrections, [e_min, e_max], name_style=False
+    )
+
+    fixed_defect_con = None
+    if con_by_Ef:
+        prev_con = loadfn(str(con_by_Ef))
+        fixed_defect_con = {
+            d.name: d.total_concentration
+            for d in prev_con.equilibrium_concentration.defects
+        }
+
+    make_concentrations = MakeConcentrations(
+        tdos, charge_energies, degs, temperature, fixed_defect_con
+    )
+    Efs = np.linspace(e_min, e_max, 100, True).tolist()
+    result = make_concentrations.make_concentrations_by_fermi_level(Efs)
+    result.equilibrium_concentration = equilibrium_concentration(
+        make_concentrations, Efs[0], Efs[-1], net_abs_ratio=net_abs_ratio
+    )
+
+    filename = f"con_by_Ef_{label}_{int(temperature)}K.json"
+    print(result)
+    result.to_json_file(filename)
+    typer.echo(f"Created {filename}")
+
+
+@util_app.command(name="plot_carrier", help="Plot carrier concentrations.")
+def plot_carrier_concentrations(
+    con_by_Ef: Path = typer.Option(
+        ..., "-c", "--con_by_Ef",
+        help="Path to con_by_Ef.json."
+    ),
+):
+    """Plot carrier concentrations vs Fermi level."""
+    from pydefect.analysis.concentration.plot_concentration import plot_multiple_pns
+
+    con = loadfn(str(con_by_Ef))
+    plt = plot_multiple_pns([con])
+    plt.savefig("carrier_concentration.pdf")
+    typer.echo("Created carrier_concentration.pdf")
+
+
+@util_app.command(name="plot_defect", help="Plot defect concentrations.")
+def plot_defect_concentrations(
+    con_by_Ef: Path = typer.Option(
+        ..., "-c", "--con_by_Ef",
+        help="Path to con_by_Ef.json."
+    ),
+):
+    """Plot defect concentrations vs Fermi level."""
+    from pydefect.analysis.concentration.plot_concentration import DefectConcentrationMplPlotter
+
+    con = loadfn(str(con_by_Ef))
+    plotter = DefectConcentrationMplPlotter(con)
+    plotter.construct_plot()
+    plotter.plt.savefig("defect_concentration.pdf")
+    typer.echo("Created defect_concentration.pdf")
+
+
+@util_app.command(name="parchg_dir", help="Create PARCHG directory for band decomposition.")
+def parchg_dir(
+    dir: Path = typer.Option(
+        ".", "-d", "--dir",
+        help="Directory with WAVECAR."
+    ),
+    ibands: Optional[List[int]] = typer.Option(
+        None, "-i", "--ibands",
+        help="Band indices (1-based)."
+    ),
+):
+    """Create PARCHG directory for partial charge analysis."""
+    import os
+    from pathlib import Path as P
+    from vise.input_set.incar import ViseIncar
+    from vise.util.file_transfer import FileLink
+
+    os.chdir(str(dir))
+    if not P("WAVECAR").is_file():
+        raise FileNotFoundError("WAVECAR does not exist.")
+
+    calc_results = loadfn("calc_results.json")
+    calc_results.show_convergence_warning()
+
+    incar = ViseIncar.from_file("INCAR")
+    if ibands:
+        iband = list(ibands)
+    else:
+        band_edge_states = loadfn("band_edge_states.json")
+        iband = [i + 1 for i in band_edge_states.band_indices_from_vbm_to_cbm]
+
+    incar.update({"LPARD": True, "LSEPB": True, "KPAR": 1, "IBAND": iband})
+
+    parchg = P("parchg")
+    parchg.mkdir(exist_ok=True)
+    os.chdir("parchg")
+    incar.write_file("INCAR")
+    FileLink(P("../WAVECAR")).transfer(P.cwd())
+    FileLink(P("../POSCAR")).transfer(P.cwd())
+    FileLink(P("../POTCAR")).transfer(P.cwd())
+    FileLink(P("../KPOINTS")).transfer(P.cwd())
+    os.chdir("..")
+    typer.echo("Created parchg/ directory")
+
+
+@util_app.command(name="defect_charge_info", help="Calculate defect charge info from PARCHG.")
+def calc_defect_charge_info(
+    parchgs: List[Path] = typer.Option(
+        ..., "-p", "--parchgs",
+        help="PARCHG files."
+    ),
+    grids: Path = typer.Option(
+        "grids.json", "-g", "--grids",
+        help="Path to grids.json."
+    ),
+    bin_interval: float = typer.Option(
+        0.1, "-b", "--bin_interval",
+        help="Bin interval in Angstrom."
+    ),
+):
+    """Calculate defect charge distribution from PARCHG files."""
+    from pymatgen.io.vasp import Chgcar
+    from pydefect.analysis.localization.make_defect_charge_info import make_defect_charge_info
+    import matplotlib.pyplot as plt
+
+    grids_obj = loadfn(str(grids))
+
+    band_idxs = [int(str(p).split(".")[-2]) - 1 for p in parchgs]
+    parchg_objs = [Chgcar.from_file(str(p)) for p in parchgs]
+
+    defect_charge_info = make_defect_charge_info(
+        parchg_objs, band_idxs, bin_interval, grids_obj
+    )
+    defect_charge_info.to_json_file()
+    fig = defect_charge_info.show_dist()
+    fig.savefig("dist.pdf")
+    typer.echo("Created defect_charge_info.json and dist.pdf")
+
+
