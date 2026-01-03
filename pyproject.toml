@@ -48,6 +48,7 @@ docs = [
 
 [project.scripts]
 pydefect = "pydefect.cli.typer_app:typer_main"
+pydefect_vasp = "pydefect.cli.vasp_app:vasp_main"
 
 [project.urls]
 Homepage = "https://github.com/kumagai-group/pydefect"
