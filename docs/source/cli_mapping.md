@@ -32,7 +32,7 @@
 | `u` | `unitcell` | `unitcell` | ✅ |
 | `mp` | `make_poscars` | `mp` | ✅ |
 | `mce` | `make_composition_energies` | `mce` | ✅ |
-| `le` | `local_extrema` | (未実装) | ❌ 追加必要 |
+| `le` | `local_extrema` | `local_extrema` | ✅ |
 | `de` | `defect_entries` | `defect_entries` | ✅ |
 | `cr` | `calc_results` | `calc_results` | ✅ |
 | `pbes` | `perfect_band_edge_state` | `perfect_band_edge_state` | ✅ |
@@ -45,12 +45,12 @@
 | 旧 (alias) | 旧 (full name) | 新 pydefect | 状態 |
 |-----------|----------------|-------------|------|
 | `cefm` | `composition_energies_from_mp` | `mce` | ✅ 統合 |
-| `u` | `show_u_values` | (未実装) | ❌ |
-| `pl` | `show_pinning_levels` | (未実装) | ❌ |
-| `ai` | `add_interstitials_from_local_extrema` | (未実装) | ❌ |
-| `dvf` | `defect_vesta_file` | (未実装) | ❌ |
-| `gkfo` | `gkfo` | (未実装) | ❌ |
-| `md` | `make_degeneracies` | (未実装) | ❌ |
+| `u` | `show_u_values` | `util u_values` | ✅ |
+| `pl` | `show_pinning_levels` | `util pinning_levels` | ✅ |
+| `ai` | `add_interstitials_from_local_extrema` | `util add_interstitials` | ✅ |
+| `dvf` | `defect_vesta_file` | `util defect_vesta` | ✅ |
+| `gkfo` | `gkfo` | `gkfo` | ✅ |
+| `md` | `make_degeneracies` | `util degeneracies` | ✅ |
 | `ccc` | `calc_carrier_concentrations` | (未実装) | ❌ |
 | `cdc` | `calc_defect_concentrations` | (未実装) | ❌ |
 | `pcc` | `plot_carrier_concentrations` | (未実装) | ❌ |
@@ -63,13 +63,13 @@
 
 | 旧 (alias) | 旧 (full name) | 新 pydefect | 状態 |
 |-----------|----------------|-------------|------|
-| `ccs` | `calc_charge_state` | (未実装) | ❌ |
+| `ccs` | `calc_charge_state` | `util charge_state` | ✅ |
 | `de` | `make_defect_entry` | `defect_entries` | ✅ 統合 |
 | `pd` | `parchg_dir` | (未実装) | ❌ |
-| `rdp` | `refine_defect_poscar` | (未実装) | ❌ |
-| `cg` | `calc_grids` | (未実装) | ❌ |
+| `rdp` | `refine_defect_poscar` | `util refine_poscar` | ✅ |
+| `cg` | `calc_grids` | `util grids` | ✅ |
 | `cdc` | `calc_defect_charge_info` | (未実装) | ❌ |
-| `mtd` | `make_total_dos` | (未実装) | ❌ |
+| `mtd` | `make_total_dos` | `util total_dos` | ✅ |
 
 ---
 
@@ -77,7 +77,7 @@
 
 | 旧コマンド | 新 pydefect | 状態 |
 |-----------|-------------|------|
-| `pydefect_print <file>` | `pydefect util print_json` | ✅ |
+| `pydefect_print <file>` | `pydefect util print` | ✅ |
 
 ---
 
@@ -87,22 +87,23 @@
 |---------------|---------------|------|
 | `pydefect` | `pydefect` | ✅ |
 | `pydefect_vasp` | `pydefect` | ✅ 統合 |
-| `pydefect_util` | `pydefect util` | ⚠️ 一部のみ |
-| `pydefect_vasp_util` | `pydefect util` | ⚠️ 一部のみ |
-| `pydefect_print` | `pydefect util print_json` | ✅ |
+| `pydefect_util` | `pydefect util` | ✅ 大部分実装 |
+| `pydefect_vasp_util` | `pydefect util` | ✅ 大部分実装 |
+| `pydefect_print` | `pydefect util print` | ✅ |
 
 ---
 
-## 現在の pydefect コマンド一覧 (22コマンド)
+## 現在の pydefect コマンド一覧 (26コマンド + 10 utilサブコマンド)
 
 ```
 $ pydefect --help
 
-Commands:
+Main Commands (26):
   # Supercell / Structure
   supercell                        Make supercell
   append_interstitial              Add interstitial site
   pop_interstitial                 Remove interstitial site
+  local_extrema                    Find interstitial sites from volumetric data
   
   # Defect Preparation
   defect_set                       Create defect_in.yaml
@@ -110,7 +111,7 @@ Commands:
   
   # Chemical Potential
   mp                               Get MP competing phases
-  mce                              Make composition energies
+  mce                              Make composition energies from MP
   standard_and_relative_energies   Calculate energies
   cpd_and_vertices                 Make chem pot diagram
   plot_cpd                         Plot diagram
@@ -133,7 +134,36 @@ Commands:
   
   # Corrections
   efnv                             EFNV correction
+  gkfo                             GKFO correction
   
   # Utility
   util                             Utility subcommands
+
+$ pydefect util --help
+
+Utility Subcommands (10):
+  print               Print JSON/YAML files
+  defect_vesta        Create VESTA files
+  u_values            Show U values
+  pinning_levels      Show pinning levels
+  add_interstitials   Add interstitials from local extrema
+  degeneracies        Make degeneracies
+  charge_state        Calculate charge state
+  refine_poscar       Refine defect POSCAR
+  grids               Calculate grids
+  total_dos           Make total DOS
 ```
+
+---
+
+## 未実装コマンド (5つ)
+
+濃度計算関連のコマンドは複雑な依存関係があり、将来の実装予定：
+
+- `calc_carrier_concentrations` (ccc)
+- `calc_defect_concentrations` (cdc) 
+- `plot_carrier_concentrations` (pcc)
+- `plot_defect_concentrations` (pdc)
+- `calc_ccd_correction` (cccdc)
+- `parchg_dir` (pd)
+- `calc_defect_charge_info`
