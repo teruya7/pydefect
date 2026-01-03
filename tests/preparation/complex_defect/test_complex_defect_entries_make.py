@@ -6,7 +6,7 @@ from pydefect.preparation.defect.complex_entry_generator import \
 from pydefect.preparation.defect.models.complex import ComplexDefectSet, \
     ComplexDefect
 from pydefect.preparation.defect.models.entry import DefectEntry
-from pydefect.preparation.supercell.supercell_info import Interstitial, SupercellInfo
+from pydefect.preparation.supercell.models.supercell_info import Interstitial, SupercellInfo
 from pymatgen.core import Lattice, IStructure
 from vise.util.structure_symmetrizer import Site
 

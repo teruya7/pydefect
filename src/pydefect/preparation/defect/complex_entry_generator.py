@@ -5,7 +5,7 @@ from pydefect.preparation.defect.models.complex import ComplexDefectSet, \
 from pydefect.preparation.defect.entry_generator import copy_to_structure, \
     to_istructure
 from pydefect.preparation.defect.models.entry import DefectEntry
-from pydefect.preparation.supercell.supercell_info import SupercellInfo
+from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
 from pymatgen.core import Element
 
 

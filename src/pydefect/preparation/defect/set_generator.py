@@ -7,7 +7,7 @@ from pydefect.data.elements.element_data import oxidation_state, electronegativi
 from pydefect.defaults import defaults
 from pydefect.preparation.defect.models.defect import SimpleDefect
 from pydefect.preparation.defect.models.defect_set import DefectSet, filter_defect_set
-from pydefect.preparation.supercell.supercell_info import SupercellInfo
+from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
 
 
 class DefectSetGenerator:
@@ -19,7 +19,7 @@ class DefectSetGenerator:
         defect_set: Generated DefectSet.
 
     Example:
-        >>> from pydefect.preparation.supercell.supercell_info import SupercellInfo
+        >>> from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
         >>> supercell_info = SupercellInfo.from_json_file()
         >>> maker = DefectSetGenerator(supercell_info, dopants=["Al"])
         >>> maker.defect_set.to_yaml()

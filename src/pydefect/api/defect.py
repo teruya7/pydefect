@@ -33,17 +33,17 @@ from pydefect.preparation.defect.models.entry import DefectEntry
 from pydefect.preparation.defect.entry_generator import DefectEntryGenerator
 from pydefect.preparation.defect.models.defect_set import DefectSet
 from pydefect.preparation.defect.set_generator import DefectSetGenerator
-from pydefect.preparation.interstitial.append_interstitial import (
+from pydefect.preparation.supercell.append_interstitial import (
     append_interstitial as _append_interstitial,
 )
-from pydefect.preparation.interstitial.local_extrema import (
+from pydefect.preparation.supercell.models.interstitial import (
     VolumetricDataAnalyzeParams,
     VolumetricDataLocalExtrema,
 )
-from pydefect.preparation.interstitial.make_local_extrema import (
+from pydefect.preparation.supercell.interstitial_finder import (
     make_local_extrema_from_volumetric_data,
 )
-from pydefect.preparation.supercell.supercell_info import SupercellInfo
+from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
 
 
 # --- Defect Set and Entry Creation ---

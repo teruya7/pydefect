@@ -4,7 +4,7 @@
 import pytest
 from pydefect.defaults import defaults
 
-from pydefect.preparation.supercell.supercell_info import Interstitial, SupercellInfo, \
+from pydefect.preparation.supercell.models.supercell_info import Interstitial, SupercellInfo, \
     SimpleSite
 from pydefect.utils.structure_tools import Coordination
 from tests.helpers.assertion import assert_msonable, assert_json_roundtrip

@@ -2,9 +2,9 @@
 #  Copyright (c) 2020 Kumagai group.
 
 import pytest
-from pydefect.preparation.interstitial.local_extrema import VolumetricDataLocalExtrema, \
+from pydefect.preparation.supercell.models.interstitial import VolumetricDataLocalExtrema, \
     CoordInfo
-from pydefect.preparation.supercell.supercell_info import Interstitial, SupercellInfo
+from pydefect.preparation.supercell.models.supercell_info import Interstitial, SupercellInfo
 from pydefect.utils.structure_tools import Coordination
 from pymatgen.core import Structure
 from tests.helpers.assertion import assert_json_roundtrip

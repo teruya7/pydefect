@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from pydefect.analysis.structure.models import remove_dot
-from pydefect.preparation.interstitial.local_extrema import VolumetricDataLocalExtrema, \
+from pydefect.preparation.supercell.models.interstitial import VolumetricDataLocalExtrema, \
     CoordInfo, VolumetricDataAnalyzeParams
 from pydefect.utils.structure_tools import Distances
 from pymatgen.core import Element, Structure

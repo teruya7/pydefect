@@ -7,7 +7,7 @@ from pydefect.defaults import defaults
 from pydefect.preparation.defect.models.defect import SimpleDefect
 from pydefect.preparation.defect.models.entry import DefectEntry, PerturbedSite
 from pydefect.preparation.defect.models.defect_set import DefectSet
-from pydefect.preparation.supercell.supercell_info import SupercellInfo
+from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
 from pymatgen.core import Structure, IStructure
 from pymatgen.core.structure import PeriodicNeighbor
 from vise.util.structure_symmetrizer import StructureSymmetrizer
@@ -25,7 +25,7 @@ class DefectEntryGenerator:
         defect_entries: Set of generated DefectEntry objects.
 
     Example:
-        >>> from pydefect.preparation.supercell.supercell_info import SupercellInfo
+        >>> from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
         >>> from pydefect.preparation.defect.models.defect_set import DefectSet
         >>> info = SupercellInfo.from_json_file("supercell_info.json")
         >>> defects = DefectSet.from_yaml("defect_in.yaml")

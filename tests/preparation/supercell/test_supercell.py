@@ -2,7 +2,7 @@
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 import numpy as np
 import pytest
-from pydefect.preparation.supercell.supercell import (
+from pydefect.preparation.supercell.models.supercell import (
     Supercell, Supercells, TetragonalSupercells, RhombohedralSupercells)
 from pydefect.error import SupercellError
 from pymatgen.core import Element

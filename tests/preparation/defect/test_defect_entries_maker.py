@@ -10,7 +10,7 @@ from pydefect.preparation.defect.entry_generator import (
     perturb_structure, random_3d_vector)
 from pydefect.preparation.defect.models.entry import DefectEntry, PerturbedSite
 from pydefect.preparation.defect.models.defect_set import DefectSet
-from pydefect.preparation.supercell.supercell_info import SupercellInfo, Site, \
+from pydefect.preparation.supercell.models.supercell_info import SupercellInfo, Site, \
     Interstitial
 from tests.helpers.assertion import assert_dataclass_almost_equal
 
