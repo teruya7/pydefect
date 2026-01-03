@@ -1,27 +1,27 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 """Data models for defect formation energy analysis."""
-from pydefect.analysis.formation_energy.models.defect_formation_energy import (
-    DefectFormationEnergy,
+from pydefect.analysis.formation_energy.models.energy import (
+    FormationEnergy,
     # Backward compatibility
     DefectEnergy,
 )
-from pydefect.analysis.formation_energy.models.formation_energy_info import (
+from pydefect.analysis.formation_energy.models.info import (
     FormationEnergyInfo,
     # Backward compatibility
     DefectEnergyInfo,
 )
-from pydefect.analysis.formation_energy.models.formation_energy_collection import (
+from pydefect.analysis.formation_energy.models.collection import (
     FormationEnergyCollection,
     # Backward compatibility
     DefectEnergies,
 )
-from pydefect.analysis.formation_energy.models.formation_energy_summary import (
+from pydefect.analysis.formation_energy.models.summary import (
     FormationEnergySummary,
     # Backward compatibility
     DefectEnergySummary,
 )
-from pydefect.analysis.formation_energy.models.fermi_level_energies import (
+from pydefect.analysis.formation_energy.models.fermi_energies import (
     FermiLevelDependentEnergies,
     ChargeStateEnergies,
     # Backward compatibility

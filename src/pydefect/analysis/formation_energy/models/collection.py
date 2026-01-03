@@ -6,8 +6,8 @@ from typing import Dict, List, Optional
 
 from monty.json import MSONable
 
-from pydefect.analysis.formation_energy.models.defect_formation_energy import (
-    DefectFormationEnergy,
+from pydefect.analysis.formation_energy.models.energy import (
+    FormationEnergy,
 )
 
 
@@ -18,11 +18,11 @@ class FormationEnergyCollection(MSONable):
     Attributes:
         atom_io: Dict of element symbol to count change.
         charges: List of charge states.
-        formation_energies: List of DefectFormationEnergy for each charge state.
+        formation_energies: List of FormationEnergy for each charge state.
     """
     atom_io: Dict[str, int]
     charges: List[int]
-    formation_energies: List[DefectFormationEnergy] = field(default_factory=list)
+    formation_energies: List[FormationEnergy] = field(default_factory=list)
 
     def __post_init__(self):
         """Handle backward compatibility for old attribute name."""
@@ -34,7 +34,7 @@ class FormationEnergyCollection(MSONable):
 
     # Backward compatibility property
     @property
-    def defect_energies(self) -> List[DefectFormationEnergy]:
+    def defect_energies(self) -> List[FormationEnergy]:
         """Deprecated: Use formation_energies instead."""
         return self.formation_energies
 

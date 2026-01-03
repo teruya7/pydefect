@@ -8,7 +8,7 @@ from typing import Dict, List
 from pydefect.analysis.band_edge.models import BandEdgeStates, PerfectBandEdgeState
 from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.formation_energy.models import (
-    DefectFormationEnergy,
+    FormationEnergy,
     FormationEnergyInfo,
     FormationEnergyCollection,
     FormationEnergySummary,
@@ -59,7 +59,7 @@ def calculate_formation_energy_info(
         formation_energy -= standard_energies[element] * count
 
     is_shallow = band_edge_states.is_shallow if band_edge_states else None
-    defect_formation_energy = DefectFormationEnergy(
+    defect_formation_energy = FormationEnergy(
         formation_energy=formation_energy,
         energy_corrections=correction.correction_dict,
         is_shallow=is_shallow)

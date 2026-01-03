@@ -2,17 +2,17 @@
 #  Copyright (c) 2020 Kumagai group.
 
 from pydefect.analysis.formation_energy.models import (
-    FormationEnergyInfo, DefectFormationEnergy,
+    FormationEnergyInfo, FormationEnergy,
     FormationEnergySummary, FormationEnergyCollection,
 )
-from pydefect.analysis.formation_energy.defect_formation_energy import \
+from pydefect.analysis.formation_energy.calculation import \
     calculate_formation_energy_summary
 from pydefect.analysis.chemical_potential.models import TargetVertices, TargetVertex
 
 
 def test_make_defect_energy_summary(mocker):
-    energy1 = DefectFormationEnergy(0.0, {"PC correction": 2.0}, False)
-    energy2 = DefectFormationEnergy(1.0, {"PC correction": 3.0}, True)
+    energy1 = FormationEnergy(0.0, {"PC correction": 2.0}, False)
+    energy2 = FormationEnergy(1.0, {"PC correction": 3.0}, True)
     defect_infos = [FormationEnergyInfo("Va_Mg1", 0, {"Mg": -1}, energy1),
                     FormationEnergyInfo("Va_Mg1", 1, {"Mg": -1}, energy2)]
     target_vertices = TargetVertices(

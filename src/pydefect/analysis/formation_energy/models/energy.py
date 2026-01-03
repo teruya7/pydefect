@@ -8,7 +8,7 @@ from monty.json import MSONable
 
 
 @dataclass
-class DefectFormationEnergy(MSONable):
+class FormationEnergy(MSONable):
     """Formation energy for a single defect charge state.
 
     Stores the formation energy and energy corrections for a specific
@@ -24,7 +24,7 @@ class DefectFormationEnergy(MSONable):
             True indicates the defect level is resonant with the band.
 
     Example:
-        >>> energy = DefectFormationEnergy(
+        >>> energy = FormationEnergy(
         ...     formation_energy=1.5,
         ...     energy_corrections={"efnv": 0.1, "alignment": -0.05}
         ... )
@@ -68,4 +68,4 @@ class DefectFormationEnergy(MSONable):
 
 
 # Backward compatibility alias
-DefectEnergy = DefectFormationEnergy
+DefectEnergy = FormationEnergy

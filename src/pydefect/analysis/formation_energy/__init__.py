@@ -5,7 +5,7 @@
 This module provides classes and functions for analyzing defect formation energies:
 
 Data Models:
-- DefectFormationEnergy: Formation energy for a single charge state
+- FormationEnergy: Formation energy for a single charge state
 - FormationEnergyInfo: Complete info for a defect's energy
 - FormationEnergyCollection: Collection of energies at multiple charges
 - FormationEnergySummary: Summary of all defect energies
@@ -24,7 +24,7 @@ Plotting:
 """
 from pydefect.analysis.formation_energy.models import (
     # New names
-    DefectFormationEnergy,
+    FormationEnergy,
     FormationEnergyInfo,
     FormationEnergyCollection,
     FormationEnergySummary,
@@ -40,7 +40,7 @@ from pydefect.analysis.formation_energy.models import (
     SingleChargeEnergies,
 )
 
-from pydefect.analysis.formation_energy.defect_formation_energy import (
+from pydefect.analysis.formation_energy.calculation import (
     calculate_formation_energy_info,
     calculate_formation_energy_summary,
     calculate_composition_change,

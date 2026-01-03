@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 from pydefect.analysis.formation_energy.models import (
-    FormationEnergyCollection, DefectFormationEnergy, FormationEnergySummary,
+    FormationEnergyCollection, FormationEnergy, FormationEnergySummary,
     # Backward compatibility aliases
     DefectEnergies, DefectEnergy, DefectEnergySummary,
 )

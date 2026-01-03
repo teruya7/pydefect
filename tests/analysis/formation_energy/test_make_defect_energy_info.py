@@ -2,9 +2,9 @@
 #  Copyright (c) 2020 Kumagai group.
 from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.formation_energy.models import (
-    DefectFormationEnergy, FormationEnergyInfo,
+    FormationEnergy, FormationEnergyInfo,
 )
-from pydefect.analysis.formation_energy.defect_formation_energy import (
+from pydefect.analysis.formation_energy.calculation import (
     calculate_formation_energy_info, calculate_composition_change,
 )
 from pydefect.analysis.chemical_potential.models import StandardEnergies
@@ -38,7 +38,7 @@ def test_make_defect_energy_info(mocker):
 
     actual = calculate_formation_energy_info(defect_entry, calc_results, correction,
                                              p_calc_results, standard_energies, unitcell)
-    energy = DefectFormationEnergy(formation_energy=10.0 - 1.0 + 10 - 100.0,
+    energy = FormationEnergy(formation_energy=10.0 - 1.0 + 10 - 100.0,
                                    energy_corrections={"a": 10.0},
                                    is_shallow=None)
     expected = FormationEnergyInfo(name="Va_Mg1", charge=-1,

@@ -8,8 +8,8 @@ from monty.json import MSONable
 from monty.serialization import loadfn
 from vise.util.mix_in import ToYamlFileMixIn
 
-from pydefect.analysis.formation_energy.models.defect_formation_energy import (
-    DefectFormationEnergy,
+from pydefect.analysis.formation_energy.models.energy import (
+    FormationEnergy,
 )
 
 
@@ -27,14 +27,14 @@ class FormationEnergyInfo(MSONable, ToYamlFileMixIn):
         charge: Charge state of the defect (positive for donors).
         atom_io: Dict of element symbol to count change.
             Positive values indicate atoms added, negative indicate removed.
-        formation_energy: DefectFormationEnergy object with energy and corrections.
+        formation_energy: FormationEnergy object with energy and corrections.
 
     Example:
         >>> info = FormationEnergyInfo(
         ...     name="Va_O1",
         ...     charge=2,
         ...     atom_io={"O": -1},
-        ...     formation_energy=DefectFormationEnergy(formation_energy=5.2)
+        ...     formation_energy=FormationEnergy(formation_energy=5.2)
         ... )
         >>> print(info.name, info.charge)
         Va_O1 2
@@ -42,7 +42,7 @@ class FormationEnergyInfo(MSONable, ToYamlFileMixIn):
     name: str
     charge: int
     atom_io: Dict[str, int]
-    formation_energy: DefectFormationEnergy
+    formation_energy: FormationEnergy
 
     def to_yaml(self) -> str:
         """Serialize to YAML string."""
@@ -70,11 +70,11 @@ class FormationEnergyInfo(MSONable, ToYamlFileMixIn):
         if d["energy_corrections"] is None:
             d["energy_corrections"] = {}
         return cls(d.pop("name"), d.pop("charge"), d.pop("atom_io"),
-                   DefectFormationEnergy(**d))
+                   FormationEnergy(**d))
 
     # Properties for backward compatibility
     @property
-    def defect_energy(self) -> DefectFormationEnergy:
+    def defect_energy(self) -> FormationEnergy:
         """Deprecated: Use formation_energy instead."""
         return self.formation_energy
 

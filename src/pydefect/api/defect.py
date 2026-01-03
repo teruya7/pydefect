@@ -16,7 +16,7 @@ from pydefect.analysis.corrections.models import Correction
 from pydefect.analysis.corrections.models import NoCorrection
 from pydefect.analysis.formation_energy.models import FormationEnergyInfo
 from pydefect.analysis.formation_energy.plotter import FormationEnergyMplPlotter
-from pydefect.analysis.formation_energy.defect_formation_energy import (
+from pydefect.analysis.formation_energy.calculation import (
     calculate_formation_energy_info as _make_defect_energy_info,
     calculate_formation_energy_summary as _make_defect_energy_summary,
 )
