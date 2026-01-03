@@ -1,91 +1,49 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
-from collections import OrderedDict
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from typing import List
+"""Create Unitcell from VASP output files."""
 
-import numpy as np
-from monty.json import MSONable
-from monty.serialization import loadfn
-from ruamel.yaml import add_constructor, resolver, YAML
-from vise.util.mix_in import ToYamlFileMixIn
-
-# courtesy of https://qiita.com/konomochi/items/f5f53ba8efa07ec5089b
-add_constructor(resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-                lambda loader, node: OrderedDict(loader.construct_pairs(node)))
-
-yaml = YAML()
-yaml.default_flow_style = False
+from pydefect.analysis.unitcell.models import Unitcell
+from pymatgen.io.vasp import Vasprun, Outcar
+from vise.analyzer.vasp.band_edge_properties import VaspBandEdgeProperties
 
 
-@dataclass
-class Unitcell(MSONable, ToYamlFileMixIn):
-    """Unit cell properties for defect calculations.
+def create_unitcell_from_vasp(vasprun_band: Vasprun,
+                               outcar_band: Outcar,
+                               outcar_dielectric_clamped: Outcar,
+                               outcar_dielectric_ionic: Outcar,
+                               system_name: str = None) -> Unitcell:
+    """Create Unitcell from VASP output files.
 
-    Stores band edge energies and dielectric properties needed
-    for defect formation energy and correction calculations.
+    Args:
+        vasprun_band: vasprun.xml from band calculation.
+        outcar_band: OUTCAR from band calculation.
+        outcar_dielectric_clamped: OUTCAR from clamped dielectric calculation.
+        outcar_dielectric_ionic: OUTCAR from ionic dielectric calculation.
+        system_name: Optional system name override.
 
-    Attributes:
-        system: System name or formula.
-        vbm: Valence band maximum energy in eV.
-        cbm: Conduction band minimum energy in eV.
-        ele_dielectric_const: Electronic (clamped-ion) dielectric tensor.
-        ion_dielectric_const: Ionic contribution to dielectric tensor.
-        electron_mass: Electron effective mass tensor.
-        hole_mass: Hole effective mass tensor.
+    Returns:
+        Unitcell with band edges and dielectric constants.
 
     Example:
-        >>> unitcell = Unitcell.from_yaml("unitcell.yaml")
-        >>> print(unitcell.vbm, unitcell.cbm)
-        0.0 3.2
-        >>> print(unitcell.ave_diele)
-        10.5
+        >>> unitcell = create_unitcell_from_vasp(
+        ...     vasprun_band, outcar_band,
+        ...     outcar_diele_clamped, outcar_diele_ionic
+        ... )
+        >>> unitcell.to_yaml_file()
     """
-    system: str = None
-    vbm: float = None
-    cbm: float = None
-    ele_dielectric_const: List[List[float]] = None
-    ion_dielectric_const: List[List[float]] = None
-    electron_mass: List[List[float]] = None
-    hole_mass: List[List[float]] = None
+    name = (system_name or
+            vasprun_band.final_structure.composition.reduced_formula)
+    outcar_dielectric_clamped.read_lepsilon()
+    outcar_dielectric_ionic.read_lepsilon_ionic()
+    band_edge_properties = VaspBandEdgeProperties(vasprun_band, outcar_band)
+    vbm, cbm = band_edge_properties.vbm_cbm
 
-    @property
-    def effective_ionic_diele_const(self):
-        e_inf = np.array(self.ele_dielectric_const)
-        e_sum = np.array(self.dielectric_constant)
-        return np.nan_to_num((e_sum * e_inf) / (e_sum - e_inf)).tolist()
+    return Unitcell(
+        system=name,
+        vbm=float(vbm), cbm=float(cbm),
+        ele_dielectric_const=outcar_dielectric_clamped.dielectric_tensor,
+        ion_dielectric_const=outcar_dielectric_ionic.dielectric_ionic_tensor)
 
-    @property
-    def ave_ele_diele(self):
-        matrix = np.array(self.ele_dielectric_const)
-        return np.average(matrix.diagonal())
 
-    @property
-    def ave_diele(self):
-        matrix = np.array(self.dielectric_constant)
-        return np.average(matrix.diagonal())
-
-    @property
-    def ave_ele_mass(self):
-        matrix = np.array(self.electron_mass)
-        return np.average(matrix.diagonal())
-
-    @property
-    def ave_hole_mass(self):
-        matrix = np.array(self.hole_mass)
-        return np.average(matrix.diagonal())
-
-    @property
-    def dielectric_constant(self):
-        total = (np.array(self.ele_dielectric_const)
-                 + np.array(self.ion_dielectric_const))
-        return total.tolist()
-
-    def to_yaml_file(self, filename: str = "unitcell.yaml"):
-        with open(Path(filename), 'w', encoding='utf-8') as f:
-            yaml.dump(asdict(self), f)
-
-    @classmethod
-    def from_yaml(cls, filename: str = "unitcell.yaml"):
-        return cls(**loadfn(filename))
+# Backward compatibility alias
+make_unitcell_from_vasp = create_unitcell_from_vasp

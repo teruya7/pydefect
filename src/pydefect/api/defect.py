@@ -27,7 +27,7 @@ from pydefect.analysis.chemical_potential.models import (
     StandardEnergies,
     TargetVertices,
 )
-from pydefect.analysis.unitcell.unitcell import Unitcell
+from pydefect.analysis.unitcell.models import Unitcell
 from pydefect.defaults import defaults
 from pydefect.makers.defect.defect_entry import DefectEntry
 from pydefect.makers.defect.defect_entries_maker import DefectEntriesMaker

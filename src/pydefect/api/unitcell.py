@@ -6,8 +6,8 @@ from typing import Optional
 
 from pymatgen.io.vasp import Vasprun, Outcar
 
-from pydefect.analysis.unitcell.unitcell import Unitcell
-from pydefect.analysis.unitcell.make_unitcell import make_unitcell_from_vasp as _make_unitcell
+from pydefect.analysis.unitcell.models import Unitcell
+from pydefect.analysis.unitcell.unitcell import make_unitcell_from_vasp as _make_unitcell
 
 
 def make_unitcell_from_vasp(

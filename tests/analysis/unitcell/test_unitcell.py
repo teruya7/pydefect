@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from pydefect.analysis.unitcell.unitcell import Unitcell
+from pydefect.analysis.unitcell.models import Unitcell
 from tests.helpers.assertion import assert_yaml_roundtrip
 
 

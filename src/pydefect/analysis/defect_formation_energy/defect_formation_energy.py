@@ -13,7 +13,7 @@ from pydefect.analysis.defect_formation_energy.models import (
     FormationEnergyCollection,
     FormationEnergySummary,
 )
-from pydefect.analysis.unitcell.unitcell import Unitcell
+from pydefect.analysis.unitcell.models import Unitcell
 from pydefect.analysis.chemical_potential.models import StandardEnergies, TargetVertices
 from pydefect.analysis.corrections.models import Correction
 from pydefect.makers.defect.defect_entry import DefectEntry
