@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2023 Kumagai group.
 import pytest
-from pydefect.preparation.complex_defect.complex_defect_entries_make import \
+from pydefect.preparation.defect.complex_entry_generator import \
     ComplexDefectEntryGenerator
-from pydefect.preparation.complex_defect.complex_defect_set import ComplexDefectSet, \
+from pydefect.preparation.defect.models.complex import ComplexDefectSet, \
     ComplexDefect
 from pydefect.preparation.defect.models.entry import DefectEntry
 from pydefect.preparation.supercell.supercell_info import Interstitial, SupercellInfo

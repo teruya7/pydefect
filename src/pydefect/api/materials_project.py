@@ -2,12 +2,13 @@
 #  Copyright (c) 2020 Kumagai group.
 """API for Materials Project integration."""
 
-from itertools import combinations
+from itertools import combinations, groupby
 from pathlib import Path
 from shutil import copyfile
-from typing import List, Union
+from typing import List, Union, Optional, Dict
 
 import yaml
+from monty.serialization import loadfn
 from mp_api.client import MPRester
 
 from pydefect.data.molecules.molecules import MOLECULE_DATA
@@ -131,3 +132,69 @@ def _make_molecular_directory(path: Path, reduced_formula: str, mol_dir: Path):
                  dirname / "POSCAR")
         copyfile(mol_dir / reduced_formula / "prior_info.yaml",
                  dirname / "prior_info.yaml")
+
+
+# --- Composition Energy Functions ---
+
+def make_composition_energies_from_mp(elements: List[str],
+                                      atom_energy_yaml: Optional[str] = None,
+                                      ) -> "CompositionEnergies":
+    """Obtain composition energies from Materials Project.
+
+    When the atom_energy_yaml is provided, the total energies are aligned
+    via atom energies.
+
+    Args:
+        elements: List of element symbols.
+        atom_energy_yaml: Optional path to atom energy YAML file.
+
+    Returns:
+        CompositionEnergies object with energies.
+
+    Example:
+        >>> comp_energies = make_composition_energies_from_mp(["Mg", "O"])
+        >>> comp_energies.to_yaml_file()
+    """
+    from pydefect.analysis.chemical_potential.models import (
+        CompositionEnergy, CompositionEnergies
+    )
+    from vise.atom_energies.atom_energy import mp_energies
+
+    entries = MpQuery(elements).materials
+    comp_es = {}
+    if atom_energy_yaml:
+        energies = loadfn(atom_energy_yaml)
+        diff = {e: energies[e] - mp_energies[e] for e in elements}
+    else:
+        diff = {e: 0.0 for e in elements}
+
+    for e in entries:
+        key = e.composition
+        energy = e.energy
+        for k, v in key.as_dict().items():
+            energy += diff[k] * v
+        comp_es[key] = CompositionEnergy(energy, e.entry_id)
+    comp_es = _remove_higher_energy_comp(comp_es)
+    return CompositionEnergies(comp_es)
+
+
+def _remove_higher_energy_comp(
+        comp_energies: Dict[Composition, "CompositionEnergy"]):
+    """Remove duplicate compositions, keeping lowest energy.
+
+    Args:
+        comp_energies: Dict mapping Composition to CompositionEnergy.
+
+    Returns:
+        Dict with only lowest energy per reduced formula.
+    """
+    comp_energy_pairs = [[k, v] for k, v in comp_energies.items()]
+    result = {}
+    key = lambda x: Composition(x[0]).reduced_formula
+    sorted_comp_energy_pairs = sorted(comp_energy_pairs, key=key)
+    for _, grouped_k_v in groupby(sorted_comp_energy_pairs, key=key):
+        formula, comp_e = min(list(grouped_k_v),
+                              key=lambda y: (y[1].energy
+                                             / Composition(y[0]).num_atoms))
+        result[formula] = comp_e
+    return result

@@ -3,7 +3,7 @@
 from pathlib import Path
 
 import pytest
-from pydefect.preparation.complex_defect.complex_defect_set import ComplexDefectSet, \
+from pydefect.preparation.defect.models.complex import ComplexDefectSet, \
     ComplexDefect
 
 
