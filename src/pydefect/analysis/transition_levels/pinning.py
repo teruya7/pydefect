@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2022 Kumagai group.
+"""Calculate pinning levels from charge energies."""
+
 from pydefect.analysis.defect_formation_energy.models import FermiLevelDependentEnergies
 from tabulate import tabulate
 
 
-def pinning_levels_from_charge_energies(charge_energies: FermiLevelDependentEnergies) -> str:
+def calculate_pinning_levels(charge_energies: FermiLevelDependentEnergies) -> str:
     """Generate formatted table of pinning levels for all defects.
 
     Args:
-        charge_energies: ChargeEnergies containing defect energy data.
+        charge_energies: FermiLevelDependentEnergies containing defect energy data.
 
     Returns:
         Formatted table string of hole and electron pinning levels.
 
     Example:
-        >>> table = pinning_levels_from_charge_energies(charge_energies)
+        >>> table = calculate_pinning_levels(charge_energies)
         >>> print(table)
     """
     result = []
@@ -29,3 +31,7 @@ def pinning_levels_from_charge_energies(charge_energies: FermiLevelDependentEner
 
     headers = ["defect", "hole pinning", "electron pinning"]
     return tabulate(result, headers=headers)
+
+
+# Backward compatibility alias
+pinning_levels_from_charge_energies = calculate_pinning_levels

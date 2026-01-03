@@ -4,10 +4,10 @@
 
 import pytest
 from unittest.mock import MagicMock, patch
-from pydefect.analysis.transition_levels.transition_levels_plotter import (
+from pydefect.analysis.transition_levels.plotter import (
     MplTLData, make_mpl_tl_data, TransitionLevelsMplPlotter
 )
-from pydefect.analysis.transition_levels.transition_levels import TransitionLevel, TransitionLevels
+from pydefect.analysis.transition_levels.models import TransitionLevel, TransitionLevels
 
 
 class TestMplTLData:
@@ -69,25 +69,25 @@ class TestTransitionLevelsMplPlotter:
 
     def test_init_default(self):
         """Test TransitionLevelsMplPlotter initialization with defaults."""
-        with patch('pydefect.analysis.transition_levels.transition_levels_plotter.plt') as mock_plt:
+        with patch('pydefect.analysis.transition_levels.plotter.plt') as mock_plt:
             plotter = TransitionLevelsMplPlotter()
             assert plotter.plt is not None
 
     def test_init_with_y_unit(self):
         """Test TransitionLevelsMplPlotter initialization with y_unit."""
-        with patch('pydefect.analysis.transition_levels.transition_levels_plotter.plt') as mock_plt:
+        with patch('pydefect.analysis.transition_levels.plotter.plt') as mock_plt:
             plotter = TransitionLevelsMplPlotter(y_unit="meV")
             assert plotter.plt is not None
 
     def test_init_calls_bar(self):
         """Test that __init__ calls plt.bar for plotting."""
-        with patch('pydefect.analysis.transition_levels.transition_levels_plotter.plt') as mock_plt:
+        with patch('pydefect.analysis.transition_levels.plotter.plt') as mock_plt:
             plotter = TransitionLevelsMplPlotter()
             # plt.bar should be called at least once
             assert mock_plt.bar.called
 
     def test_plotter_has_plt_attribute(self):
         """Test that plotter exposes plt attribute."""
-        with patch('pydefect.analysis.transition_levels.transition_levels_plotter.plt') as mock_plt:
+        with patch('pydefect.analysis.transition_levels.plotter.plt') as mock_plt:
             plotter = TransitionLevelsMplPlotter()
             assert hasattr(plotter, 'plt')
