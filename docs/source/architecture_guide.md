@@ -7,15 +7,23 @@ This guide describes the architecture and design patterns used in pydefect.
 ```
 pydefect/
 ├── src/pydefect/
-│   ├── analyzer/           # Analysis and post-processing
+│   ├── analysis/           # Analysis and post-processing
+│   │   ├── chemical_potential/  # Chemical potential diagrams
 │   │   ├── corrections/    # Electrostatic corrections (EFNV, GKFO)
-│   │   ├── chem_pot_diag/  # Chemical potential diagrams
-│   │   └── concentration/  # Defect concentration calculations
+│   │   ├── concentration/  # Defect concentration calculations
+│   │   ├── defect_energy/  # Formation energy calculations
+│   │   ├── structure/      # Structure analysis
+│   │   └── unitcell/       # Unit cell properties
+│   ├── preparation/        # Input file generation
+│   │   ├── defect_set/     # Define defects to calculate
+│   │   ├── interstitial/   # Interstitial site handling
+│   │   └── supercell/      # Supercell generation
+│   ├── api/                # Public programmatic API
 │   ├── cli/                # Command-line interface (Typer)
-│   ├── database/           # Reference data (electronegativities, etc.)
-│   ├── input_maker/        # Input file generation
-│   ├── util/               # Utility functions and tools
-│   ├── api.py              # Public programmatic API
+│   │   ├── commands/       # Command implementations
+│   │   └── vasp/           # VASP-specific entry points
+│   ├── data/               # Reference data (electronegativities, etc.)
+│   ├── utils/              # Utility functions and tools
 │   ├── defaults.py         # Global configuration
 │   └── error.py            # Base exception class
 ├── tests/                  # Test suite (mirrors src structure)
@@ -26,302 +34,144 @@ pydefect/
 
 ## Module Responsibilities
 
-### `analyzer/` - Post-processing and Analysis
+### `analysis/` - Post-processing and Analysis
+
+| Directory | Responsibility |
+|-----------|---------------|
+| `chemical_potential/` | CPD construction, standard/relative energies |
+| `corrections/` | EFNV, GKFO corrections |
+| `concentration/` | Carrier and defect concentrations |
+| `defect_energy/` | Formation energy calculations |
+| `structure/` | Defect structure info, comparisons |
+| `unitcell/` | Unit cell properties (dielectric, band edges) |
+| `band_edge/` | Band edge orbital analysis |
+
+### `preparation/` - Input Generation
+
+| Directory | Responsibility |
+|-----------|---------------|
+| `supercell/` | Generate isotropic supercells |
+| `defect_set/` | Define defects to calculate |
+| `interstitial/` | Interstitial site handling |
+
+### `api/` - Programmatic Interface
 
 | Module | Responsibility |
 |--------|---------------|
-| `calc_results.py` | Store DFT calculation results |
-| `defect_energy.py` | Formation energy data structures |
-| `defect_structure_info.py` | Defect structure analysis |
-| `defect_structure_comparator.py` | Compare defect/perfect structures |
-| `band_edge_states.py` | Band edge orbital analysis |
-| `unitcell.py` | Unit cell properties (dielectric, band edges) |
-
-### `analyzer/corrections/` - Electrostatic Corrections
-
-| Module | Responsibility |
-|--------|---------------|
-| `efnv_correction.py` | Extended FNV correction data |
-| `make_efnv_correction.py` | Create EFNV corrections |
-| `gkfo_correction.py` | GKFO optical correction |
-| `ewald.py` | Anisotropic Ewald summation |
-
-### `input_maker/` - Input Generation
-
-| Module | Responsibility |
-|--------|---------------|
-| `supercell_maker.py` | Generate isotropic supercells |
-| `supercell_info.py` | Store supercell metadata |
-| `defect_set.py` | Define defects to calculate |
-| `defect_entry.py` | Individual defect structures |
-| `defect_entries_maker.py` | Generate defect entries |
+| `supercell.py` | `make_supercell()` |
+| `chemical_potential.py` | `make_chem_pot_diag()` |
+| `defect_preparation.py` | `make_defect_set()`, `make_defect_entries()` |
+| `defect_analysis.py` | `make_defect_structure_info()`, `plot_defect_energy()` |
+| `corrections.py` | `make_efnv_correction()`, `make_gkfo_correction()` |
+| `band_edge.py` | `make_band_edge_states()` |
 
 ### `cli/` - Command-Line Interface
 
-| Module | Responsibility |
-|--------|---------------|
-| `typer_app.py` | Main CLI application |
-| `vasp.py` | VASP-specific commands |
-| `structure.py` | Structure manipulation commands |
-| `energies.py` | Energy calculation commands |
-| `corrections.py` | Correction commands |
+5 entry points using Typer:
+
+| Entry Point | Module |
+|------------|--------|
+| `pydefect` | `cli/main.py` |
+| `pydefect_vasp` | `cli/vasp/main_vasp.py` |
+| `pydefect_util` | `cli/main_util.py` |
+| `pydefect_vasp_util` | `cli/vasp/main_vasp_util.py` |
+| `pydefect_print` | `cli/main_print_json.py` |
+
+Commands are organized in `cli/commands/` by functionality.
 
 ---
 
 ## Design Patterns
 
-### 1. Data Classes for Immutable Data
+### 1. API-First Design
 
-Use `@dataclass` for data containers without complex logic:
+All functionality is exposed through `pydefect.api`:
 
 ```python
+from pydefect import api
+
+# Same functionality as CLI
+supercell_info, supercell = api.make_supercell(unitcell)
+```
+
+CLI commands are thin wrappers around API functions.
+
+### 2. Data Classes with MSONable
+
+Use `@dataclass` with `MSONable` for serialization:
+
+```python
+from dataclasses import dataclass
+from monty.json import MSONable
+from vise.util.mix_in import ToJsonFileMixIn
+
 @dataclass
 class CalcResults(MSONable, ToJsonFileMixIn):
     """Results from a DFT calculation."""
     structure: IStructure
     energy: float
     magnetization: float
-    potentials: List[float]
-    electronic_conv: Optional[bool] = None
-    ionic_conv: Optional[bool] = None
+    site_potentials: List[float]
 ```
 
-**When to use:**
-- Data is primarily stored, not heavily processed
-- Serialization to JSON/YAML is needed
-- Immutability is desired (`frozen=True`)
-
-### 2. Maker Pattern for Complex Object Creation
-
-Use `*Maker` classes when object creation has complex logic:
+### 3. Maker Pattern for Complex Creation
 
 ```python
 class SupercellMaker:
-    """Create supercell and supercell info from primitive structure."""
+    """Create supercell with symmetry analysis."""
     
     def __init__(self, primitive_structure, **kwargs):
-        # Complex logic: symmetry analysis, optimization
         self.supercell = self._create_optimal_supercell()
         self.supercell_info = self._analyze_sites()
 ```
 
-**When to use:**
-- Multiple steps or decisions in object creation
-- Need to store intermediate results
-- Factory method would be too complex
-
-### 3. Plotter Pattern for Visualization
-
-Separate data preparation from matplotlib specifics:
+### 4. Plotter Pattern for Visualization
 
 ```python
 class DefectEnergyPlotter:
-    """Base class: Prepares data for plotting."""
-    def __init__(self, defect_energy_summary, ...):
-        self.charge_energies = ...  # Data preparation
+    """Base: Prepares data for plotting."""
 
 class DefectEnergyMplPlotter(DefectEnergyPlotter):
     """Matplotlib implementation."""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.plt = plt
-    
     def construct_plot(self):
-        self._add_energies()
-        self._set_labels()
         ...
-```
-
-**Benefits:**
-- Easy to add other backends (plotly, etc.)
-- Data preparation is testable without matplotlib
-- Consistent plotting API
-
-### 4. Mix-in Classes for Serialization
-
-Use mix-ins from `vise.util.mix_in`:
-
-```python
-from vise.util.mix_in import ToJsonFileMixIn, ToYamlFileMixIn
-
-@dataclass
-class CalcResults(MSONable, ToJsonFileMixIn):
-    """Adds .to_json_file() and .from_json_file() methods."""
-    ...
-
-class CompositionEnergies(ToYamlFileMixIn, dict):
-    """Adds .to_yaml() and .from_yaml() methods."""
-    ...
 ```
 
 ---
 
 ## Data Flow
 
-### Typical Workflow
-
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  VASP Output    │────▶│  CalcResults    │────▶│  DefectEnergy   │
-│  (vasprun.xml)  │     │  (JSON file)    │     │  Summary        │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                                │
-                                ▼
-                        ┌─────────────────┐
-                        │  Correction     │
-                        │  (EFNV/GKFO)    │
-                        └─────────────────┘
-```
-
-### Input Preparation
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  POSCAR         │────▶│  SupercellMaker │────▶│  SupercellInfo  │
-│  (primitive)    │     │                 │     │  (JSON file)    │
+│  POSCAR         │────▶│  SupercellMaker │────▶│  supercell_info │
+│  (primitive)    │     │                 │     │  .json          │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
                                                         │
                                                         ▼
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  DefectSet      │────▶│  DefectEntries  │────▶│  DefectEntry    │
-│  (YAML file)    │     │  Maker          │     │  directories    │
+│  defect_in.yaml │────▶│  DefectEntries  │────▶│  defect dirs    │
+│                 │     │  Maker          │     │  (POSCAR, etc.) │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
-```
-
----
-
-## Serialization Strategy
-
-### JSON for Complex Objects
-
-```python
-# Objects with nested structures, numpy arrays
-calc_results.to_json_file("calc_results.json")
-correction.to_json_file("correction.json")
-```
-
-### YAML for Human-Editable Files
-
-```python
-# Configuration-like data, simple key-value
-defect_set.to_yaml("defect_in.yaml")
-composition_energies.to_yaml("composition_energies.yaml")
-```
-
-### MSONable for Pymatgen Compatibility
-
-All data classes inherit from `MSONable` for JSON serialization:
-
-```python
-from monty.json import MSONable
-
-@dataclass
-class DefectEnergy(MSONable):
-    # Automatically gets as_dict() and from_dict() methods
-    ...
 ```
 
 ---
 
 ## Configuration
 
-### Global Defaults
+### pydefect.yaml
+
+User overrides in working directory:
+
+```yaml
+symmetry_length_tolerance: 0.05
+ewald_accuracy: 20.0
+```
+
+### Defaults Class
 
 ```python
 from pydefect.defaults import defaults
 
-# Access defaults
 tolerance = defaults.dist_tol
 accuracy = defaults.ewald_accuracy
-
-# Override via pydefect.yaml in working directory
-# symmetry_length_tolerance: 0.05
-# ewald_accuracy: 20.0
 ```
-
-### Defaults Class (Singleton)
-
-```python
-@singleton
-class Defaults(DefaultsBase):
-    """Global default settings."""
-    
-    def __init__(self):
-        self._dist_tol = 1.0
-        self._ewald_accuracy = 15.0
-        # Load user overrides
-        self.set_user_settings(yaml_filename="pydefect.yaml")
-```
-
----
-
-## Dependencies
-
-### Core Dependencies
-
-| Package | Usage |
-|---------|-------|
-| `pymatgen` | Crystal structures, symmetry |
-| `monty` | Serialization (MSONable), utilities |
-| `numpy` | Numerical computations |
-| `scipy` | Ewald summation, optimization |
-| `vise` | Logging, symmetry, mix-ins |
-
-### Visualization
-
-| Package | Usage |
-|---------|-------|
-| `matplotlib` | All plotting |
-| `tabulate` | Text table formatting |
-
-### CLI
-
-| Package | Usage |
-|---------|-------|
-| `typer` | Command-line interface |
-
----
-
-## Extension Points
-
-### Adding a New Correction Method
-
-1. Create `analyzer/corrections/new_correction.py`:
-   ```python
-   @dataclass
-   class NewCorrection(Correction):
-       # Data fields
-       ...
-   ```
-
-2. Create `analyzer/corrections/make_new_correction.py`:
-   ```python
-   def make_new_correction(...) -> NewCorrection:
-       ...
-   ```
-
-3. Add CLI command in `cli/corrections.py`
-
-### Adding a New Plotter
-
-1. Create base data class if needed
-2. Create `PlotterBase` class for data preparation
-3. Create `MplPlotter` subclass for matplotlib
-4. Follow existing patterns (e.g., `DefectEnergyMplPlotter`)
-
----
-
-## Testing Strategy
-
-### Unit Tests
-- Test individual functions and classes
-- Mock external dependencies (VASP files, MP API)
-- Located in `tests/` mirroring `src/` structure
-
-### Integration Tests
-- Test workflows end-to-end
-- Use fixture data in `tests/*/data/`
-
-### Fixtures
-- Common test fixtures in `conftest.py`
-- Shared structures, defect entries, etc.

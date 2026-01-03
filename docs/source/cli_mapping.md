@@ -1,134 +1,131 @@
-# CLI Command Mapping: Original pydefect → New pydefect
+# CLI コマンドリファレンス
 
-オリジナルの pydefect CLI コマンドと、リファクタリング後の新しいコマンドの対応表です。
-**全てのオリジナルコマンドが実装済みです。**
-
----
-
-## pydefect (メインCLI)
-
-| 旧 (alias) | 旧 (full name) | 新 pydefect | 状態 |
-|-----------|----------------|-------------|------|
-| `s` | `supercell` | `supercell` | ✅ |
-| `ds` | `defect_set` | `defect_set` | ✅ |
-| `ai` | `append_interstitial` | `append_interstitial` | ✅ |
-| `pi` | `pop` | `pop_interstitial` | ✅ |
-| `sre` | `standard_and_relative_energies` | `standard_and_relative_energies` | ✅ |
-| `cv` | `cpd_and_vertices` | `cpd_and_vertices` | ✅ |
-| `pc` | `plot_cpd` | `plot_cpd` | ✅ |
-| `dsi` | `defect_structure_info` | `defect_structure_info` | ✅ |
-| `efnv` | `efnv` | `efnv` | ✅ |
-| `bes` | `band_edge_states` | `band_edge_states` | ✅ |
-| `dei` | `defect_energy_infos` | `defect_energy_infos` | ✅ |
-| `des` | `defect_energy_summary` | `defect_energy_summary` | ✅ |
-| `cs` | `calc_summary` | `calc_summary` | ✅ |
-| `pe` | `plot_defect_formation_energy` | `plot_defect_energy` | ✅ |
+pydefect は5つのコマンドラインエントリーポイントを提供します。
 
 ---
 
-## pydefect_vasp → pydefect
+## エントリーポイント一覧
 
-| 旧 (alias) | 旧 (full name) | 新 pydefect | 状態 |
-|-----------|----------------|-------------|------|
-| `u` | `unitcell` | `unitcell` | ✅ |
-| `mp` | `make_poscars` | `mp` | ✅ |
-| `mce` | `make_composition_energies` | `mce` | ✅ |
-| `le` | `local_extrema` | `local_extrema` | ✅ |
-| `de` | `defect_entries` | `defect_entries` | ✅ |
-| `cr` | `calc_results` | `calc_results` | ✅ |
-| `pbes` | `perfect_band_edge_state` | `perfect_band_edge_state` | ✅ |
-| `beoi` | `band_edge_orbital_infos` | `band_edge_orbital_infos` | ✅ |
+| コマンド | 説明 |
+|---------|------|
+| `pydefect` | メインコマンド（DFTコード非依存） |
+| `pydefect_vasp` | VASP専用コマンド |
+| `pydefect_util` | ユーティリティコマンド |
+| `pydefect_vasp_util` | VASP専用ユーティリティ |
+| `pydefect_print` | JSONファイルの表示 |
 
 ---
 
-## pydefect_util → pydefect util
+## pydefect コマンド
 
-| 旧 (alias) | 旧 (full name) | 新 pydefect | 状態 |
-|-----------|----------------|-------------|------|
-| `cefm` | `composition_energies_from_mp` | `mce` | ✅ |
-| `u` | `show_u_values` | `util u_values` | ✅ |
-| `pl` | `show_pinning_levels` | `util pinning_levels` | ✅ |
-| `ai` | `add_interstitials_from_local_extrema` | `util add_interstitials` | ✅ |
-| `dvf` | `defect_vesta_file` | `util defect_vesta` | ✅ |
-| `gkfo` | `gkfo` | `gkfo` | ✅ |
-| `md` | `make_degeneracies` | `util degeneracies` | ✅ |
-| `ccc` | `calc_carrier_concentrations` | `util carrier_concentrations` | ✅ |
-| `cdc` | `calc_defect_concentrations` | `util defect_concentrations` | ✅ |
-| `pcc` | `plot_carrier_concentrations` | `util plot_carrier` | ✅ |
-| `pdc` | `plot_defect_concentrations` | `util plot_defect` | ✅ |
-| `cccdc` | `calc_ccd_correction` | (`gkfo`で対応) | ✅ |
+DFTコードに依存しない汎用コマンド。
 
----
-
-## pydefect_vasp_util → pydefect util
-
-| 旧 (alias) | 旧 (full name) | 新 pydefect | 状態 |
-|-----------|----------------|-------------|------|
-| `ccs` | `calc_charge_state` | `util charge_state` | ✅ |
-| `de` | `make_defect_entry` | `defect_entries` | ✅ |
-| `pd` | `parchg_dir` | `util parchg_dir` | ✅ |
-| `rdp` | `refine_defect_poscar` | `util refine_poscar` | ✅ |
-| `cg` | `calc_grids` | `util grids` | ✅ |
-| `cdc` | `calc_defect_charge_info` | `util defect_charge_info` | ✅ |
-| `mtd` | `make_total_dos` | `util total_dos` | ✅ |
+| コマンド | 説明 |
+|---------|------|
+| `s` | スーパーセル作成 |
+| `ds` | 欠陥セット作成 |
+| `ai` | 侵入サイト追加 |
+| `pi` | 侵入サイト削除 |
+| `sre` | 標準/相対エネルギー計算 |
+| `cv` | 化学ポテンシャル図作成 |
+| `pc` | 化学ポテンシャル図プロット |
+| `dsi` | 欠陥構造情報作成 |
+| `dei` | 欠陥エネルギー情報作成 |
+| `des` | 欠陥エネルギーサマリー作成 |
+| `cs` | 計算サマリー作成 |
+| `pe` | 欠陥形成エネルギープロット |
+| `efnv` | EFNV補正計算 |
+| `bes` | バンドエッジ状態作成 |
 
 ---
 
-## pydefect_print → pydefect util
+## pydefect_vasp コマンド
 
-| 旧コマンド | 新 pydefect | 状態 |
-|-----------|-------------|------|
-| `pydefect_print <file>` | `pydefect util print` | ✅ |
+VASP専用のコマンド。
 
----
-
-## Entry Points 対応
-
-| 旧 Entry Point | 新 Entry Point | 状態 |
-|---------------|---------------|------|
-| `pydefect` | `pydefect` | ✅ |
-| `pydefect_vasp` | `pydefect` | ✅ 統合 |
-| `pydefect_util` | `pydefect util` | ✅ 全て実装 |
-| `pydefect_vasp_util` | `pydefect util` | ✅ 全て実装 |
-| `pydefect_print` | `pydefect util print` | ✅ |
+| コマンド | 説明 |
+|---------|------|
+| `u` | unitcell.yaml 作成 |
+| `cr` | calc_results.json 作成 |
+| `mce` | 組成エネルギー作成 |
+| `mp` | MP競合相取得 |
+| `le` | 局所極値検出 |
+| `de` | 欠陥エントリ作成 |
+| `pbes` | パーフェクトバンドエッジ状態 |
+| `beoi` | バンドエッジ軌道情報 |
 
 ---
 
-## 現在の pydefect コマンド一覧 (26メイン + 16 util = 42コマンド)
+## pydefect_util コマンド
 
+ユーティリティコマンド。
+
+| コマンド | 説明 |
+|---------|------|
+| `print` | JSONファイル表示 |
+| `dvf` | VESTA用ファイル作成 |
+| `u` | U値表示 |
+| `pl` | ピニングレベル表示 |
+| `ai` | 局所極値から侵入サイト追加 |
+| `gkfo` | GKFO補正計算 |
+| `ccc` | キャリア濃度計算 |
+| `cdc` | 欠陥濃度計算 |
+| `pcc` | キャリア濃度プロット |
+| `pdc` | 欠陥濃度プロット |
+| `cccdc` | キャリア・欠陥濃度両方計算 |
+| `md` | 縮退度計算 |
+
+---
+
+## pydefect_vasp_util コマンド
+
+VASP専用ユーティリティ。
+
+| コマンド | 説明 |
+|---------|------|
+| `de` | 欠陥エントリ作成 |
+| `rdp` | POSCAR精緻化 |
+| `pd` | PARCHGディレクトリ作成 |
+| `cg` | グリッド計算 |
+| `mtd` | 全状態密度作成 |
+| `ccs` | 電荷状態計算 |
+| `cdc` | 欠陥電荷情報 |
+
+---
+
+## pydefect_print
+
+JSONファイルを読みやすい形式で表示。
+
+```bash
+pydefect_print supercell_info.json
+pydefect_print calc_results.json
+pydefect_print defect_entry.json
 ```
-$ pydefect --help
 
-Main Commands (26):
-  # Supercell / Structure
-  supercell, append_interstitial, pop_interstitial, local_extrema
-  
-  # Defect Preparation
-  defect_set, defect_entries
-  
-  # Chemical Potential
-  mp, mce, standard_and_relative_energies, cpd_and_vertices, plot_cpd
-  
-  # VASP Parsing
-  unitcell, calc_results, calc_summary
-  
-  # Band Edge
-  perfect_band_edge_state, band_edge_orbital_infos, band_edge_states
-  
-  # Defect Analysis
-  defect_structure_info, defect_energy_infos, defect_energy_summary, plot_defect_energy
-  
-  # Corrections
-  efnv, gkfo
-  
-  # Utility
-  util
+---
 
-$ pydefect util --help
+## 使用例
 
-Utility Subcommands (16):
-  print, defect_vesta, u_values, pinning_levels, add_interstitials,
-  degeneracies, charge_state, refine_poscar, grids, total_dos,
-  carrier_concentrations, defect_concentrations, plot_carrier,
-  plot_defect, parchg_dir, defect_charge_info
+```bash
+# スーパーセル作成
+pydefect s -p CONTCAR
+
+# 欠陥セット作成
+pydefect ds -o Mg 2 Al 3 O -2
+
+# VASP欠陥エントリ作成
+pydefect_vasp de -s supercell_info.json -d defect_in.yaml
+
+# 計算結果パース
+pydefect_vasp cr -d Va_O1_0 Va_O1_1
+
+# EFNV補正
+pydefect efnv -d Va_O1_0 -pcr perfect/calc_results.json -u unitcell.yaml
+
+# 欠陥形成エネルギープロット
+pydefect pe -d defect_energy_summary.json -l A
+
+# JSONファイル表示
+pydefect_print calc_results.json
 ```

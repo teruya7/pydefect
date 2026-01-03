@@ -1,32 +1,64 @@
 API Reference
 =============
 
-Programmatic interface for pydefect.
+pydefect の API リファレンスです。
 
 .. toctree::
    :maxdepth: 2
 
    pydefect_api
-   analyzer
-   input_maker
    cli_reference
+   preparation
+   analysis
 
-Core API
---------
+概要
+----
 
-The recommended entry point for programmatic use:
+pydefect は以下の2つの方法でアクセスできます：
 
-.. code-block:: python
+1. **コマンドラインインターフェース (CLI)**
+   - 5つのメインコマンド: pydefect, pydefect_vasp, pydefect_util, pydefect_vasp_util, pydefect_print
+   - 42以上のサブコマンド
+   - 詳細は :doc:`cli_reference` を参照
 
-    from pydefect import api
+2. **Python API**
+   - ``pydefect.api`` モジュール
+   - 25以上の関数
+   - 詳細は :doc:`pydefect_api` を参照
 
-    # Load data
-    calc_results = api.load_calc_results("calc_results.json")
-    unitcell = api.load_unitcell("unitcell.yaml")
-    
-    # Create correction
-    correction = api.make_efnv_correction(
-        defect_entry, calc_results, perfect_calc_results
-    )
+クイックリファレンス
+--------------------
 
-See :doc:`pydefect_api` for details.
+CLI コマンドと API 関数の対応表：
+
+.. list-table::
+   :widths: 30 30 40
+   :header-rows: 1
+
+   * - 機能
+     - CLI
+     - API
+   * - スーパーセル作成
+     - ``pydefect s``
+     - ``api.make_supercell()``
+   * - 欠陥セット生成
+     - ``pydefect ds``
+     - ``api.make_defect_set()``
+   * - 欠陥エントリ作成
+     - ``pydefect_vasp de``
+     - ``api.make_defect_entries()``
+   * - 標準・相対エネルギー
+     - ``pydefect sre``
+     - ``api.make_standard_and_relative_energies()``
+   * - CPD 作成
+     - ``pydefect cv``
+     - ``api.make_chem_pot_diag()``
+   * - 欠陥構造解析
+     - ``pydefect dsi``
+     - ``api.make_defect_structure_info()``
+   * - EFNV 補正
+     - ``pydefect efnv``
+     - ``api.make_efnv_correction()``
+   * - 欠陥エネルギープロット
+     - ``pydefect pe``
+     - ``api.plot_defect_energy()``
