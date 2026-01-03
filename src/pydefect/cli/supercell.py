@@ -12,7 +12,7 @@ from pydefect.cli.typer_app import app
 from pydefect import api
 
 
-@app.command(name="supercell", help="Make supercell and SPOSCAR file.")
+@app.command(name="s", help="Make supercell and SPOSCAR file.")
 def supercell(
     unitcell: Path = typer.Option(
         ..., "-p", "--unitcell",

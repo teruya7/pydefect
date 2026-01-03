@@ -12,7 +12,7 @@ from pydefect.cli.typer_app import app
 from pydefect import api
 
 
-@app.command(name="unitcell", help="Create Unitcell from VASP outputs.")
+@app.command(name="u", help="Create Unitcell from VASP outputs.")
 def unitcell(
     vasprun_band: Path = typer.Option(
         ..., "-vb", "--vasprun_band",

@@ -21,7 +21,7 @@ from pydefect import api
 logger = get_logger(__name__)
 
 
-@app.command(name="defect_structure_info", help="Analyze defect structure.")
+@app.command(name="dsi", help="Analyze defect structure.")
 def defect_structure_info(
     dirs: List[Path] = typer.Option(
         ..., "-d", "--dirs",
@@ -75,7 +75,7 @@ def defect_structure_info(
     typer.echo("Done.")
 
 
-@app.command(name="defect_energy_infos", help="Calculate defect energy information.")
+@app.command(name="dei", help="Calculate defect energy information.")
 def defect_energy_infos(
     dirs: List[Path] = typer.Option(
         ..., "-d", "--dirs",
@@ -141,7 +141,7 @@ def defect_energy_infos(
     typer.echo("Done.")
 
 
-@app.command(name="defect_energy_summary", help="Create defect energy summary.")
+@app.command(name="des", help="Create defect energy summary.")
 def defect_energy_summary(
     dirs: List[Path] = typer.Option(
         ..., "-d", "--dirs",
@@ -197,7 +197,7 @@ def defect_energy_summary(
     typer.echo("Created defect_energy_summary.json")
 
 
-@app.command(name="plot_defect_energy", help="Plot defect formation energy.")
+@app.command(name="pe", help="Plot defect formation energy.")
 def plot_defect_energy(
     defect_energy_summary_path: Path = typer.Option(
         ..., "-d", "--defect_energy_summary",

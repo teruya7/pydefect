@@ -31,7 +31,7 @@ def parse_oxi_states(values: Optional[List[str]]) -> Optional[dict]:
     return result
 
 
-@app.command(name="defect_set", help="Make defect_in.yaml file.")
+@app.command(name="ds", help="Make defect_in.yaml file.")
 def defect_set(
     oxi_states: Optional[List[str]] = typer.Option(
         None, "-o", "--oxi_states",
@@ -65,7 +65,7 @@ def defect_set(
     typer.echo("Created defect_in.yaml")
 
 
-@app.command(name="defect_entries", help="Create defect entry directories.")
+@app.command(name="de", help="Create defect entry directories.")
 def defect_entries():
     """Create defect entry directories from supercell_info and defect_set."""
     # Load files (CLI responsibility)

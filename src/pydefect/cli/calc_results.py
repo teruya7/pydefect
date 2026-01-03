@@ -16,7 +16,7 @@ from pydefect import api
 logger = get_logger(__name__)
 
 
-@app.command(name="calc_results", help="Create calc_results.json from VASP outputs.")
+@app.command(name="cr", help="Create calc_results.json from VASP outputs.")
 def calc_results(
     dirs: List[Path] = typer.Option(
         ..., "-d", "--dirs",
@@ -53,7 +53,7 @@ def calc_results(
     typer.echo("Done.")
 
 
-@app.command(name="calc_summary", help="Create calculation summary.")
+@app.command(name="cs", help="Create calculation summary.")
 def calc_summary(
     dirs: List[Path] = typer.Option(
         ..., "-d", "--dirs",

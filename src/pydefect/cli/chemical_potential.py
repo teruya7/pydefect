@@ -18,7 +18,7 @@ from pydefect.analysis.chemical_potential.models import (
 logger = get_logger(__name__)
 
 
-@app.command(name="standard_and_relative_energies",
+@app.command(name="sre",
              help="Calculate standard and relative energies.")
 def standard_and_relative_energies(
     composition_energies_yaml: Path = typer.Option(
@@ -39,7 +39,7 @@ def standard_and_relative_energies(
     typer.echo("Created standard_energies.yaml and relative_energies.yaml")
 
 
-@app.command(name="cpd_and_vertices", help="Make chemical potential diagram.")
+@app.command(name="cv", help="Make chemical potential diagram.")
 def cpd_and_vertices(
     rel_energy_yaml: Path = typer.Option(
         "relative_energies.yaml", "-y", "--rel_energy_yaml",
@@ -68,7 +68,7 @@ def cpd_and_vertices(
     typer.echo("Created chem_pot_diag.json and target_vertices.yaml")
 
 
-@app.command(name="plot_cpd", help="Plot chemical potential diagram.")
+@app.command(name="pc", help="Plot chemical potential diagram.")
 def plot_cpd(
     chem_pot_diag_path: Path = typer.Option(
         "chem_pot_diag.json", "-cpd", "--chem_pot_diag",

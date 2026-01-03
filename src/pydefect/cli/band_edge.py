@@ -16,7 +16,7 @@ from pydefect import api
 logger = get_logger(__name__)
 
 
-@app.command(name="perfect_band_edge_state",
+@app.command(name="pbes",
              help="Create PerfectBandEdgeState from perfect supercell.")
 def perfect_band_edge_state(
     dir_path: Path = typer.Option(
@@ -40,7 +40,7 @@ def perfect_band_edge_state(
     typer.echo(f"Created {dir_path}/perfect_band_edge_state.json")
 
 
-@app.command(name="band_edge_orbital_infos",
+@app.command(name="beoi",
              help="Create band edge orbital infos for defects.")
 def band_edge_orbital_infos(
     dirs: List[Path] = typer.Option(
@@ -99,7 +99,7 @@ def band_edge_orbital_infos(
     typer.echo("Done.")
 
 
-@app.command(name="band_edge_states", help="Determine band edge states.")
+@app.command(name="bes", help="Determine band edge states.")
 def band_edge_states(
     dirs: List[Path] = typer.Option(
         ..., "-d", "--dirs",

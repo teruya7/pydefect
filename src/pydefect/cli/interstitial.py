@@ -22,7 +22,7 @@ from pydefect import api
 logger = get_logger(__name__)
 
 
-@app.command(name="append_interstitial", help="Append interstitial to supercell_info.")
+@app.command(name="ai", help="Append interstitial to supercell_info.")
 def append_interstitial(
     supercell_info_path: Path = typer.Option(
         "supercell_info.json", "-s", "--supercell_info",
@@ -59,7 +59,7 @@ def append_interstitial(
     typer.echo("Updated supercell_info.json")
 
 
-@app.command(name="pop_interstitial", help="Remove interstitial from supercell_info.")
+@app.command(name="pi", help="Remove interstitial from supercell_info.")
 def pop_interstitial(
     supercell_info_path: Path = typer.Option(
         "supercell_info.json", "-s", "--supercell_info",
@@ -92,7 +92,7 @@ def pop_interstitial(
     typer.echo("Updated supercell_info.json")
 
 
-@app.command(name="local_extrema", help="Make local_extrema.json from volumetric data.")
+@app.command(name="le", help="Make local_extrema.json from volumetric data.")
 def local_extrema(
     volumetric_data: List[Path] = typer.Option(
         ..., "-v", "--volumetric_data",
