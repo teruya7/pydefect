@@ -8,8 +8,8 @@ This module provides data models for analyzing charge localization:
 - RadialChargeDist: Radial charge density distribution data
 
 For creating these objects from VASP outputs, use:
-- pydefect.makers.charge.calculate_charge_localization
-- pydefect.makers.charge.calculate_charge_state
+- pydefect.preparation.charge.calculate_charge_localization
+- pydefect.preparation.charge.calculate_charge_state
 """
 from pydefect.analysis.localization.models import (
     ChargeLocalizationInfo,

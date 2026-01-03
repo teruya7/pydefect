@@ -6,9 +6,9 @@ from typing import List, Optional, Tuple
 
 from pymatgen.core import Structure
 
-from pydefect.makers.supercell.supercell_info import SupercellInfo
-from pydefect.makers.supercell.supercell_maker import SupercellMaker
-from pydefect.makers.supercell.manual_supercell_maker import (
+from pydefect.preparation.supercell.supercell_info import SupercellInfo
+from pydefect.preparation.supercell.supercell_maker import SupercellMaker
+from pydefect.preparation.supercell.manual_supercell_maker import (
     ManualSupercellMaker,
     make_sites_from_yaml_file,
 )

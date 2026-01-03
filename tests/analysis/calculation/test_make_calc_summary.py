@@ -5,7 +5,7 @@ from pydefect.analysis.calculation.models import SingleCalcSummary, CalcSummary
 from pydefect.analysis.structure.models import DefectStructureInfo
 from pydefect.analysis.calculation.calc_summary import make_calc_summary
 from pydefect.defaults import defaults
-from pydefect.makers.defect.defect_entry import DefectEntry
+from pydefect.preparation.defect.defect_entry import DefectEntry
 from pymatgen.core import IStructure, Lattice
 
 

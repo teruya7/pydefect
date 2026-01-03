@@ -9,7 +9,7 @@ from pydefect.analysis.formation_energy.calculation import (
 )
 from pydefect.analysis.chemical_potential.models import StandardEnergies
 from pydefect.analysis.corrections.models import Correction
-from pydefect.makers.defect.defect_entry import DefectEntry
+from pydefect.preparation.defect.defect_entry import DefectEntry
 from pymatgen.core import IStructure, Lattice
 
 

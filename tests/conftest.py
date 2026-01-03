@@ -16,8 +16,8 @@ from pydefect.analysis.structure.models import Displacement, \
     DefectStructureInfo
 from pydefect.analysis.corrections.models import PotentialSite, \
     ExtendedFnvCorrection
-from pydefect.makers.interstitial.local_extrema import VolumetricDataAnalyzeParams
-from pydefect.makers.supercell.supercell_info import Site, SupercellInfo, \
+from pydefect.preparation.interstitial.local_extrema import VolumetricDataAnalyzeParams
+from pydefect.preparation.supercell.supercell_info import Site, SupercellInfo, \
     Interstitial
 from pymatgen.core import Lattice, IStructure, Structure
 

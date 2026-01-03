@@ -29,21 +29,21 @@ from pydefect.analysis.chemical_potential.models import (
 )
 from pydefect.analysis.unitcell.models import Unitcell
 from pydefect.defaults import defaults
-from pydefect.makers.defect.defect_entry import DefectEntry
-from pydefect.makers.defect.defect_entries_maker import DefectEntriesMaker
-from pydefect.makers.defect.defect_set import DefectSet
-from pydefect.makers.defect.defect_set_maker import DefectSetMaker
-from pydefect.makers.interstitial.append_interstitial import (
+from pydefect.preparation.defect.defect_entry import DefectEntry
+from pydefect.preparation.defect.defect_entries_maker import DefectEntriesMaker
+from pydefect.preparation.defect.defect_set import DefectSet
+from pydefect.preparation.defect.defect_set_maker import DefectSetMaker
+from pydefect.preparation.interstitial.append_interstitial import (
     append_interstitial as _append_interstitial,
 )
-from pydefect.makers.interstitial.local_extrema import (
+from pydefect.preparation.interstitial.local_extrema import (
     VolumetricDataAnalyzeParams,
     VolumetricDataLocalExtrema,
 )
-from pydefect.makers.interstitial.make_local_extrema import (
+from pydefect.preparation.interstitial.make_local_extrema import (
     make_local_extrema_from_volumetric_data,
 )
-from pydefect.makers.supercell.supercell_info import SupercellInfo
+from pydefect.preparation.supercell.supercell_info import SupercellInfo
 
 
 # --- Defect Set and Entry Creation ---
