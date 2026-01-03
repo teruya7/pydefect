@@ -57,6 +57,7 @@ def typer_main():
     from pydefect.cli import band_edge  # noqa: F401
     from pydefect.cli import calc_results  # noqa: F401
     from pydefect.cli import corrections  # noqa: F401
+    from pydefect.cli import materials_project  # noqa: F401
     from pydefect.cli import util  # noqa: F401
     app()
 

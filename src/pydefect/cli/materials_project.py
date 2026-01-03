@@ -5,7 +5,7 @@
 Commands for querying Materials Project and creating competing phases.
 
 Example:
-    $ pydefect_vasp mp -e Mg Al O --e_above_hull 0.0005
+    $ pydefect mp -e Mg Al O --e_above_hull 0.0005
 """
 
 from pathlib import Path
@@ -14,13 +14,13 @@ from typing import List, Optional
 import typer
 from vise.util.logger import get_logger
 
-from pydefect.cli.vasp_app import vasp_app
+from pydefect.cli.typer_app import app
 from pydefect.defaults import defaults
 
 logger = get_logger(__name__)
 
 
-@vasp_app.command(name="mp", help="Get competing phases from Materials Project.")
+@app.command(name="mp", help="Get competing phases from Materials Project.")
 def mp(
     elements: List[str] = typer.Option(
         ..., "-e", "--elements",
@@ -39,7 +39,7 @@ def mp(
     typer.echo(f"Created directories for {len(query.materials)} materials.")
 
 
-@vasp_app.command(name="mce", help="Make composition energies from MP.")
+@app.command(name="mce", help="Make composition energies from MP.")
 def mce(
     elements: List[str] = typer.Option(
         ..., "-e", "--elements",
