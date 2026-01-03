@@ -91,3 +91,54 @@ def efnv(
             logger.warning(f"  {_dir}: {e}")
 
     typer.echo("Done.")
+
+
+@app.command(name="gkfo", help="Generate GKFO correction files.")
+def gkfo(
+    initial_efnv_correction: Path = typer.Option(
+        ..., "-ie", "--initial_efnv_correction",
+        help="Path to initial charge state correction.json."
+    ),
+    final_calc_results: Path = typer.Option(
+        ..., "-fcr", "--final_calc_results",
+        help="Path to final calc_results.json."
+    ),
+    initial_calc_results: Path = typer.Option(
+        ..., "-icr", "--initial_calc_results",
+        help="Path to initial calc_results.json."
+    ),
+    unitcell: Path = typer.Option(
+        ..., "-u", "--unitcell",
+        help="Path to unitcell.yaml."
+    ),
+    charge_diff: int = typer.Option(
+        ..., "-c", "--charge_diff",
+        help="Charge difference (final - initial)."
+    ),
+):
+    """Generate GKFO correction for charge state transitions."""
+    unitcell_obj = Unitcell.from_yaml(str(unitcell))
+    efnv_corr = loadfn(str(initial_efnv_correction))
+    fcr = loadfn(str(final_calc_results))
+    icr = loadfn(str(initial_calc_results))
+
+    gkfo_corr = api.make_gkfo_correction(
+        efnv_correction=efnv_corr,
+        additional_charge=charge_diff,
+        final_calc_results=fcr,
+        initial_calc_results=icr,
+        diele_tensor=unitcell_obj.dielectric_constant,
+        ion_clamped_diele_tensor=unitcell_obj.ele_dielectric_const,
+    )
+
+    print(gkfo_corr)
+    gkfo_corr.to_json_file("gkfo_correction.json")
+
+    plotter = SitePotentialMplPlotter.from_gkfo_corr(
+        title="GKFO correction", gkfo_correction=gkfo_corr
+    )
+    plotter.construct_plot()
+    plotter.plt.savefig(fname="gkfo_correction.pdf")
+    plotter.plt.clf()
+
+    typer.echo("Created gkfo_correction.json and gkfo_correction.pdf")

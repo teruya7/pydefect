@@ -90,3 +90,58 @@ def pop_interstitial(
     # Write output (CLI responsibility)
     result.to_json_file()
     typer.echo("Updated supercell_info.json")
+
+
+@app.command(name="local_extrema", help="Make local_extrema.json from volumetric data.")
+def local_extrema(
+    volumetric_data: List[Path] = typer.Option(
+        ..., "-v", "--volumetric_data",
+        help="Volumetric data files (e.g., AECCAR0 AECCAR2)."
+    ),
+    info: Optional[str] = typer.Option(
+        None, "-i", "--info",
+        help="Info string for saving."
+    ),
+    find_max: bool = typer.Option(
+        False, "--find_max",
+        help="Find maxima instead of minima."
+    ),
+    threshold_frac: Optional[float] = typer.Option(
+        None, "--threshold_frac",
+        help="Fractional threshold."
+    ),
+    threshold_abs: Optional[float] = typer.Option(
+        None, "--threshold_abs",
+        help="Absolute threshold."
+    ),
+    min_dist: float = typer.Option(
+        0.5, "--min_dist",
+        help="Minimum distance between extrema."
+    ),
+    tol: float = typer.Option(
+        0.5, "--tol",
+        help="Tolerance for grouping sites."
+    ),
+    radius: float = typer.Option(
+        0.4, "--radius",
+        help="Radius for local extrema search."
+    ),
+):
+    """Find local extrema in volumetric data for interstitial sites."""
+    from pymatgen.io.vasp import Chgcar
+
+    # Load and sum volumetric data
+    chgcars = [Chgcar.from_file(str(vd)) for vd in volumetric_data]
+
+    extrema = api.make_local_extrema(
+        volumetric_data=chgcars,
+        threshold_frac=threshold_frac,
+        threshold_abs=threshold_abs,
+        min_dist=min_dist,
+        tol=tol,
+        radius=radius,
+        find_max=find_max,
+    )
+    extrema.to_json_file()
+    typer.echo(f"Created volumetric_data_local_extrema.json ({info})")
+
