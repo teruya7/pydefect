@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-"""API for defect-related operations.
+"""API for defect analysis operations.
 
-This module provides functions for defect set creation, defect entries,
-defect structure analysis, defect energy calculations, and interstitial management.
+This module provides functions for defect structure analysis,
+defect energy calculations, and visualization.
 """
 
-from typing import Dict, List, Optional, Union
+from typing import List, Optional
 
 from pymatgen.core import Structure
-from pymatgen.io.vasp import Chgcar
 
 from pydefect.analysis.calculation.models import CalcResults
-from pydefect.analysis.corrections.models import Correction
-from pydefect.analysis.corrections.models import NoCorrection
+from pydefect.analysis.corrections.models import Correction, NoCorrection
 from pydefect.analysis.formation_energy.models import FormationEnergyInfo
 from pydefect.analysis.formation_energy.plotter import FormationEnergyMplPlotter
 from pydefect.analysis.formation_energy.calculation import (
@@ -30,191 +28,11 @@ from pydefect.analysis.chemical_potential.models import (
 from pydefect.analysis.unitcell.models import Unitcell
 from pydefect.defaults import defaults
 from pydefect.preparation.defect.models.entry import DefectEntry
-from pydefect.preparation.defect.entry_generator import DefectEntryGenerator
-from pydefect.preparation.defect.models.set import DefectSet
-from pydefect.preparation.defect.set_generator import DefectSetGenerator
-from pydefect.preparation.supercell.interstitial_utils import (
-    append_interstitial as _append_interstitial,
-)
-from pydefect.preparation.supercell.models.local_extrema import (
-    VolumetricDataAnalyzeParams,
-    VolumetricDataLocalExtrema,
-)
-from pydefect.preparation.supercell.interstitial_finder import (
-    make_local_extrema_from_volumetric_data,
-)
-from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
 
 
-# --- Defect Set and Entry Creation ---
+# Backward compatibility alias
+DefectEnergyMplPlotter = FormationEnergyMplPlotter
 
-def make_defect_set(
-    supercell_info: SupercellInfo,
-    oxi_states: Optional[Dict[str, int]] = None,
-    dopants: Optional[List[str]] = None,
-    keywords: Optional[List[str]] = None,
-) -> DefectSet:
-    """Create a set of defect configurations.
-
-    Args:
-        supercell_info: SupercellInfo object containing supercell information.
-        oxi_states: Dictionary mapping element symbols to oxidation states.
-            Example: {"Mg": 2, "O": -2}
-        dopants: List of dopant element symbols to include.
-        keywords: List of keywords to filter defects.
-
-    Returns:
-        DefectSet containing all defect configurations.
-
-    Example:
-        >>> from pydefect import api
-        >>> supercell_info = SupercellInfo.from_json("supercell_info.json")
-        >>> defect_set = api.make_defect_set(supercell_info, dopants=["Al"])
-        >>> defect_set.to_yaml()
-    """
-    maker = DefectSetGenerator(
-        supercell_info,
-        oxi_states,
-        dopants,
-        keywords=keywords,
-    )
-    return maker.defect_set
-
-
-def make_defect_entries(
-    supercell_info: SupercellInfo,
-    defect_set: DefectSet,
-):
-    """Create defect entries from supercell info and defect set.
-
-    Args:
-        supercell_info: SupercellInfo object.
-        defect_set: DefectSet object.
-
-    Returns:
-        List of DefectEntry objects.
-
-    Example:
-        >>> from pydefect import api
-        >>> entries = api.make_defect_entries(supercell_info, defect_set)
-        >>> for entry in entries:
-        ...     entry.to_json_file(f"{entry.full_name}/defect_entry.json")
-    """
-    maker = DefectEntryGenerator(supercell_info, defect_set)
-    return maker.defect_entries
-
-
-# --- Interstitial Site Management ---
-
-def append_interstitial(
-    supercell_info: SupercellInfo,
-    base_structure: Structure,
-    frac_coords: List[float],
-    info: Optional[str] = None,
-) -> SupercellInfo:
-    """Append an interstitial site to SupercellInfo.
-
-    Args:
-        supercell_info: Existing SupercellInfo object.
-        base_structure: Base structure to reference for interstitial.
-        frac_coords: Fractional coordinates [x, y, z] of the interstitial.
-        info: Optional description of the interstitial site.
-
-    Returns:
-        Updated SupercellInfo with new interstitial site.
-
-    Example:
-        >>> from pydefect import api
-        >>> supercell_info = api.append_interstitial(
-        ...     supercell_info, structure, [0.5, 0.5, 0.5], info="octahedral"
-        ... )
-    """
-    return _append_interstitial(
-        supercell_info,
-        base_structure,
-        [frac_coords],
-        [info] if info else [None],
-    )
-
-
-def pop_interstitial(
-    supercell_info: SupercellInfo,
-    index: Optional[int] = None,
-    pop_all: bool = False,
-) -> SupercellInfo:
-    """Remove interstitial site(s) from SupercellInfo.
-
-    Args:
-        supercell_info: SupercellInfo object to modify.
-        index: 1-based index of interstitial to remove.
-            Required if pop_all is False.
-        pop_all: If True, remove all interstitials.
-
-    Returns:
-        Modified SupercellInfo object.
-    """
-    if pop_all:
-        while supercell_info.interstitials:
-            supercell_info.interstitials.pop()
-    else:
-        if index is None or index < 1:
-            raise ValueError("index must be >= 1 when pop_all is False")
-        supercell_info.interstitials.pop(index - 1)
-
-    return supercell_info
-
-
-def make_local_extrema(
-    volumetric_data: Union[Chgcar, List[Chgcar]],
-    threshold_frac: Optional[float] = None,
-    threshold_abs: Optional[float] = None,
-    min_dist: float = 0.5,
-    tol: float = 0.5,
-    radius: float = 0.4,
-    find_max: bool = False,
-    supercell_info: Optional[SupercellInfo] = None,
-) -> VolumetricDataLocalExtrema:
-    """Find local extrema in volumetric data for interstitial sites.
-
-    Args:
-        volumetric_data: Chgcar or list of Chgcar to analyze.
-        threshold_frac: Fractional threshold for extrema detection.
-        threshold_abs: Absolute threshold for extrema detection.
-        min_dist: Minimum distance between extrema.
-        tol: Tolerance for grouping equivalent sites.
-        radius: Radius for local extrema search.
-        find_max: If True, find maxima instead of minima.
-        supercell_info: Optional SupercellInfo for structure reference.
-
-    Returns:
-        LocalExtrema object containing found sites.
-
-    Example:
-        >>> from pydefect import api
-        >>> from pymatgen.io.vasp import Chgcar
-        >>> extrema = api.make_local_extrema(Chgcar.from_file("CHGCAR"))
-        >>> extrema.to_json_file()
-    """
-    if isinstance(volumetric_data, list):
-        vd = volumetric_data[0]
-        for v in volumetric_data[1:]:
-            vd += v
-    else:
-        vd = volumetric_data
-
-    params = VolumetricDataAnalyzeParams(
-        threshold_frac, threshold_abs, min_dist, tol, radius
-    )
-
-    return make_local_extrema_from_volumetric_data(
-        volumetric_data=vd,
-        params=params,
-        info=supercell_info,
-        find_min=not find_max,
-    )
-
-
-# --- Defect Structure Analysis ---
 
 def make_defect_structure_info(
     perfect_structure: Structure,
@@ -287,8 +105,6 @@ def make_defect_vesta_file(
         title=title,
     )
 
-
-# --- Defect Energy Calculations ---
 
 def make_defect_energy_info(
     defect_entry: DefectEntry,

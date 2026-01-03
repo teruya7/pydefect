@@ -17,12 +17,16 @@ from pydefect.api.chemical_potential import (
     make_standard_and_relative_energies,
     make_chem_pot_diag,
 )
-from pydefect.api.defect import (
+from pydefect.api.defect_preparation import (
     make_defect_set,
     make_defect_entries,
+)
+from pydefect.api.interstitial import (
     append_interstitial,
     pop_interstitial,
     make_local_extrema,
+)
+from pydefect.api.defect_analysis import (
     make_defect_structure_info,
     make_defect_vesta_file,
     make_defect_energy_info,
@@ -34,7 +38,7 @@ from pydefect.api.band_edge import (
     make_band_edge_orbital_infos,
     make_band_edge_states,
 )
-from pydefect.api.calculation import (
+from pydefect.api.calc_results import (
     make_calc_results_from_vasp,
     make_calc_summary,
 )
