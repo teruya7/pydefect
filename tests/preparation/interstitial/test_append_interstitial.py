@@ -3,7 +3,7 @@
 from copy import deepcopy
 
 import pytest
-from pydefect.preparation.supercell.append_interstitial import append_interstitial
+from pydefect.preparation.supercell.interstitial_utils import append_interstitial
 from pydefect.preparation.supercell.models.supercell_info import Interstitial
 from pydefect.error import NotPrimitiveError
 from pymatgen.core import Structure, Lattice

@@ -2,7 +2,7 @@
 #  Copyright (c) 2020 Kumagai group.
 
 import pytest
-from pydefect.preparation.supercell.models.interstitial import VolumetricDataLocalExtrema, \
+from pydefect.preparation.supercell.models.local_extrema import VolumetricDataLocalExtrema, \
     CoordInfo
 from pydefect.preparation.supercell.models.supercell_info import Interstitial, SupercellInfo
 from pydefect.utils.structure_tools import Coordination

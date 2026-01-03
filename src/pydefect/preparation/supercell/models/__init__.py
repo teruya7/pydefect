@@ -10,7 +10,7 @@ from pydefect.preparation.supercell.models.supercell_info import (
 from pydefect.preparation.supercell.models.supercell import (
     Supercell,
 )
-from pydefect.preparation.supercell.models.interstitial import (
+from pydefect.preparation.supercell.models.local_extrema import (
     CoordInfo,
     VolumetricDataAnalyzeParams,
     VolumetricDataLocalExtrema,
