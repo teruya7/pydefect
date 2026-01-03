@@ -77,7 +77,7 @@ class SimpleDefect(Defect):
         return cls(**_d)
 
 
-def screen_simple_defect(defect: SimpleDefect, keywords: List[str]
+def filter_defect(defect: SimpleDefect, keywords: List[str]
                          ) -> Optional[SimpleDefect]:
     charges = []
     for charge in defect.charges:
@@ -88,3 +88,7 @@ def screen_simple_defect(defect: SimpleDefect, keywords: List[str]
         return SimpleDefect(defect.in_atom, defect.out_atom, tuple(charges))
     else:
         return
+
+
+# Backward compatibility alias
+screen_simple_defect = filter_defect

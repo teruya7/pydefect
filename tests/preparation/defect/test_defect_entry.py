@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-from pydefect.preparation.defect.defect_entry import DefectEntry, make_defect_entry, \
+from pydefect.preparation.defect.models.entry import DefectEntry, create_defect_entry, \
     PerturbedSite
 from pymatgen.core import Lattice, IStructure
 
@@ -97,7 +97,7 @@ elem dist   initial_coords             perturbed_coords         displacement
     assert actual == expected
 
 
-def test_make_defect_entry(defect_entry):
+def test_create_defect_entry(defect_entry):
     relaxed_coords = \
         [[0.25, 0.0, 0.0], [0.5, 0.5, 0.0], [0.5, 0.0, 0.5], [0.0, 0.5, 0.5],
          [0.0, 0.0, 0.51], [0.0, 0.51, 0.0], [0.5, 0.0, 0.0], [0.5, 0.5, 0.5]]
@@ -111,7 +111,7 @@ def test_make_defect_entry(defect_entry):
     unrelaxed_defect = IStructure(
         Lattice.cubic(10.0), ["Li"] + ["H"] * 3 + ["He"] * 4, unrelaxed_coords)
 
-    actual = make_defect_entry(name="Va_O1",
+    actual = create_defect_entry(name="Va_O1",
                                charge=1,
                                perfect_structure=perfect,
                                defect_structure=relaxed_defect)

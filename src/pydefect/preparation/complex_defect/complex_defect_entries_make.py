@@ -2,14 +2,14 @@
 #  Copyright (c) 2023 Kumagai group.
 from pydefect.preparation.complex_defect.complex_defect_set import ComplexDefectSet, \
     ComplexDefect
-from pydefect.preparation.defect.defect_entries_maker import copy_to_structure, \
+from pydefect.preparation.defect.entry_generator import copy_to_structure, \
     to_istructure
-from pydefect.preparation.defect.defect_entry import DefectEntry
+from pydefect.preparation.defect.models.entry import DefectEntry
 from pydefect.preparation.supercell.supercell_info import SupercellInfo
 from pymatgen.core import Element
 
 
-class ComplexDefectEntriesMaker:
+class ComplexDefectEntryGenerator:
     """Create DefectEntry objects for complex defects.
 
     Handles multi-site defects (e.g., defect pairs).
@@ -18,14 +18,14 @@ class ComplexDefectEntriesMaker:
         defect_entries: List of generated DefectEntry objects.
 
     Example:
-        >>> maker = ComplexDefectEntriesMaker(supercell_info, complex_defect_set)
+        >>> maker = ComplexDefectEntryGenerator(supercell_info, complex_defect_set)
         >>> for entry in maker.defect_entries:
         ...     entry.to_json_file(entry.full_name)
     """
     def __init__(self,
                  supercell_info: SupercellInfo,
                  complex_defect_set: ComplexDefectSet):
-        """Initialize ComplexDefectEntriesMaker.
+        """Initialize ComplexDefectEntryGenerator.
 
         Args:
             supercell_info: SupercellInfo containing structure data.

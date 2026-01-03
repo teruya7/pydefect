@@ -162,7 +162,7 @@ elem dist   initial_coords             perturbed_coords         displacement
         return result
 
 
-def make_defect_entry(name: str,
+def create_defect_entry(name: str,
                       charge: int,
                       perfect_structure: IStructure,
                       defect_structure: IStructure):
@@ -188,3 +188,7 @@ def make_defect_entry(name: str,
                        structure=initial_structure,
                        site_symmetry=symmetrizer.point_group,
                        defect_center=tuple(analyzer.defect_center_coord))
+
+
+# Backward compatibility alias
+make_defect_entry = create_defect_entry

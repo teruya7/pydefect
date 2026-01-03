@@ -2,10 +2,10 @@
 #  Copyright (c) 2023 Kumagai group.
 import pytest
 from pydefect.preparation.complex_defect.complex_defect_entries_make import \
-    ComplexDefectEntriesMaker
+    ComplexDefectEntryGenerator
 from pydefect.preparation.complex_defect.complex_defect_set import ComplexDefectSet, \
     ComplexDefect
-from pydefect.preparation.defect.defect_entry import DefectEntry
+from pydefect.preparation.defect.models.entry import DefectEntry
 from pydefect.preparation.supercell.supercell_info import Interstitial, SupercellInfo
 from pymatgen.core import Lattice, IStructure
 from vise.util.structure_symmetrizer import Site
@@ -31,7 +31,7 @@ def test_defect_entries_maker_from_sites(supercell_info):
     coords = [[0.25, 0.25, 0.25]]
     structure = IStructure(lattice=lattice, species=["Li"], coords=coords)
 
-    maker = ComplexDefectEntriesMaker(supercell_info,
+    maker = ComplexDefectEntryGenerator(supercell_info,
                                       ComplexDefectSet([ComplexDefect("test", {0: None, 1: "Li"}, [0])]))
     assert maker.defect_entries == [DefectEntry(name="test",
                                                 charge=0,

@@ -29,10 +29,10 @@ from pydefect.analysis.chemical_potential.models import (
 )
 from pydefect.analysis.unitcell.models import Unitcell
 from pydefect.defaults import defaults
-from pydefect.preparation.defect.defect_entry import DefectEntry
-from pydefect.preparation.defect.defect_entries_maker import DefectEntriesMaker
-from pydefect.preparation.defect.defect_set import DefectSet
-from pydefect.preparation.defect.defect_set_maker import DefectSetMaker
+from pydefect.preparation.defect.models.entry import DefectEntry
+from pydefect.preparation.defect.entry_generator import DefectEntryGenerator
+from pydefect.preparation.defect.models.defect_set import DefectSet
+from pydefect.preparation.defect.set_generator import DefectSetGenerator
 from pydefect.preparation.interstitial.append_interstitial import (
     append_interstitial as _append_interstitial,
 )
@@ -72,7 +72,7 @@ def make_defect_set(
         >>> defect_set = api.make_defect_set(supercell_info, dopants=["Al"])
         >>> defect_set.to_yaml()
     """
-    maker = DefectSetMaker(
+    maker = DefectSetGenerator(
         supercell_info,
         oxi_states,
         dopants,
@@ -100,7 +100,7 @@ def make_defect_entries(
         >>> for entry in entries:
         ...     entry.to_json_file(f"{entry.full_name}/defect_entry.json")
     """
-    maker = DefectEntriesMaker(supercell_info, defect_set)
+    maker = DefectEntryGenerator(supercell_info, defect_set)
     return maker.defect_entries
 
 

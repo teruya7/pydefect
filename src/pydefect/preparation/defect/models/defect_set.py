@@ -7,7 +7,7 @@ from typing import Iterator, List, Set as typeSet
 import yaml
 from monty.json import MSONable
 from monty.serialization import loadfn
-from pydefect.preparation.defect.defect import screen_simple_defect, SimpleDefect
+from pydefect.preparation.defect.models.defect import filter_defect, SimpleDefect
 
 
 class DefectSet(MSONable, Set):
@@ -55,10 +55,14 @@ class DefectSet(MSONable, Set):
         return cls(names)
 
 
-def screen_defect_set(defect_set: DefectSet, keywords: List[str]):
+def filter_defect_set(defect_set: DefectSet, keywords: List[str]):
     result = set()
     for defect in defect_set:
-        screened = screen_simple_defect(defect, keywords)
+        screened = filter_defect(defect, keywords)
         if screened:
             result.add(screened)
     return DefectSet(result)
+
+
+# Backward compatibility alias
+screen_defect_set = filter_defect_set

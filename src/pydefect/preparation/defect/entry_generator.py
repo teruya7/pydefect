@@ -4,9 +4,9 @@ from typing import List, Tuple, Optional
 
 import numpy as np
 from pydefect.defaults import defaults
-from pydefect.preparation.defect.defect import SimpleDefect
-from pydefect.preparation.defect.defect_entry import DefectEntry, PerturbedSite
-from pydefect.preparation.defect.defect_set import DefectSet
+from pydefect.preparation.defect.models.defect import SimpleDefect
+from pydefect.preparation.defect.models.entry import DefectEntry, PerturbedSite
+from pydefect.preparation.defect.models.defect_set import DefectSet
 from pydefect.preparation.supercell.supercell_info import SupercellInfo
 from pymatgen.core import Structure, IStructure
 from pymatgen.core.structure import PeriodicNeighbor
@@ -14,7 +14,7 @@ from vise.util.structure_symmetrizer import StructureSymmetrizer
 from vise.util.typing import Coords
 
 
-class DefectEntriesMaker:
+class DefectEntryGenerator:
     """Create DefectEntry objects from SupercellInfo and DefectSet.
 
     Generates defect structures with optional perturbation for breaking
@@ -26,15 +26,15 @@ class DefectEntriesMaker:
 
     Example:
         >>> from pydefect.preparation.supercell.supercell_info import SupercellInfo
-        >>> from pydefect.preparation.defect.defect_set import DefectSet
+        >>> from pydefect.preparation.defect.models.defect_set import DefectSet
         >>> info = SupercellInfo.from_json_file("supercell_info.json")
         >>> defects = DefectSet.from_yaml("defect_in.yaml")
-        >>> maker = DefectEntriesMaker(info, defects)
+        >>> maker = DefectEntryGenerator(info, defects)
         >>> for entry in maker.defect_entries:
         ...     entry.to_json_file(f"{entry.name}_{entry.charge}/defect_entry.json")
     """
     def __init__(self, supercell_info: SupercellInfo, defect_set: DefectSet):
-        """Initialize DefectEntriesMaker.
+        """Initialize DefectEntryGenerator.
 
         Args:
             supercell_info: SupercellInfo with structure and site data.
@@ -168,3 +168,7 @@ def random_3d_vector(max_distance: float) -> Tuple[np.ndarray, float]:
     z = np.cos(theta)
     distance = np.random.uniform(high=max_distance)
     return np.array([x, y, z]) * distance, distance
+
+
+# Backward compatibility alias
+DefectEntriesMaker = DefectEntryGenerator

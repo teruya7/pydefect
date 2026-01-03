@@ -16,7 +16,7 @@ from pydefect.analysis.formation_energy.models import (
 from pydefect.analysis.unitcell.models import Unitcell
 from pydefect.analysis.chemical_potential.models import StandardEnergies, TargetVertices
 from pydefect.analysis.corrections.models import Correction
-from pydefect.preparation.defect.defect_entry import DefectEntry
+from pydefect.preparation.defect.models.entry import DefectEntry
 from pymatgen.core import IStructure
 
 

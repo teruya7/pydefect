@@ -5,12 +5,12 @@ from typing import Dict, List
 
 from pydefect.data.elements.element_data import oxidation_state, electronegativity
 from pydefect.defaults import defaults
-from pydefect.preparation.defect.defect import SimpleDefect
-from pydefect.preparation.defect.defect_set import DefectSet, screen_defect_set
+from pydefect.preparation.defect.models.defect import SimpleDefect
+from pydefect.preparation.defect.models.defect_set import DefectSet, filter_defect_set
 from pydefect.preparation.supercell.supercell_info import SupercellInfo
 
 
-class DefectSetMaker:
+class DefectSetGenerator:
     """Generate DefectSet based on oxidation states and dopants.
 
     Creates vacancies, substitutionals, and interstitials automatically.
@@ -21,7 +21,7 @@ class DefectSetMaker:
     Example:
         >>> from pydefect.preparation.supercell.supercell_info import SupercellInfo
         >>> supercell_info = SupercellInfo.from_json_file()
-        >>> maker = DefectSetMaker(supercell_info, dopants=["Al"])
+        >>> maker = DefectSetGenerator(supercell_info, dopants=["Al"])
         >>> maker.defect_set.to_yaml()
     """
     def __init__(self,
@@ -30,7 +30,7 @@ class DefectSetMaker:
                  dopants: List[str] = None,
                  ele_neg_diff: float = defaults.ele_neg_diff,
                  keywords: List[str] = None):
-        """Initialize DefectSetMaker.
+        """Initialize DefectSetGenerator.
 
         Args:
             supercell_info: SupercellInfo for the host structure.
@@ -48,7 +48,7 @@ class DefectSetMaker:
 
         defect_set = self._create_defect_set()
         if keywords:
-            self.defect_set = screen_defect_set(defect_set, keywords)
+            self.defect_set = filter_defect_set(defect_set, keywords)
         else:
             self.defect_set = defect_set
 
@@ -133,3 +133,7 @@ def charge_set(oxidation_state: int) -> List[int]:
             charges.append(1)
 
     return charges
+
+
+# Backward compatibility alias
+DefectSetMaker = DefectSetGenerator

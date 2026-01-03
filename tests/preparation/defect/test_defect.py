@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 
-from pydefect.preparation.defect.defect import (
-    Defect, SimpleDefect, screen_simple_defect)
+from pydefect.preparation.defect.models.defect import (
+    Defect, SimpleDefect, filter_defect)
 from tests.helpers.assertion import assert_msonable
 
 
@@ -41,9 +41,9 @@ def test_simple_defect():
 
 def test_screen_defect():
     defect = SimpleDefect(None, "O1", [1, 2])
-    assert screen_simple_defect(defect, ["Va_O1"]) == \
+    assert filter_defect(defect, ["Va_O1"]) == \
            SimpleDefect(None, "O1", [1, 2])
-    assert screen_simple_defect(defect, ["Va_O1_1"]) == \
+    assert filter_defect(defect, ["Va_O1_1"]) == \
            SimpleDefect(None, "O1", [1])
-    assert screen_simple_defect(defect, ["Va_N1"]) is None
+    assert filter_defect(defect, ["Va_N1"]) is None
 

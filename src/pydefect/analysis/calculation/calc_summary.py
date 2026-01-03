@@ -4,7 +4,7 @@ from pydefect.analysis.calculation.models import CalcResults, CalcSummary, Singl
 from pydefect.analysis.structure.models import DefectStructureInfo
 from pydefect.analysis.formation_energy.calculation import calculate_composition_change
 from pydefect.defaults import defaults
-from pydefect.preparation.defect.defect_entry import DefectEntry
+from pydefect.preparation.defect.models.entry import DefectEntry
 
 
 def make_calc_summary(

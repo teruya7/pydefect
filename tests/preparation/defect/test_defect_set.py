@@ -4,9 +4,9 @@
 import pytest
 from tests.helpers.assertion import assert_msonable
 
-from pydefect.preparation.defect.defect_set import DefectSet, screen_defect_set
-from pydefect.preparation.defect.defect_set_maker import charge_set
-from pydefect.preparation.defect.defect import SimpleDefect, Defect
+from pydefect.preparation.defect.models.defect_set import DefectSet, filter_defect_set
+from pydefect.preparation.defect.set_generator import charge_set
+from pydefect.preparation.defect.models.defect import SimpleDefect, Defect
 
 
 simple_defects = {SimpleDefect(None, "O1", [1]), SimpleDefect("N", "O1", [0, 1])}
@@ -55,8 +55,8 @@ def test_charge_set():
     assert charge_set(-2) == [-2, -1, 0]
 
 
-def test_screen_defect_set(defect_set):
-    actual = screen_defect_set(defect_set, ["N_O1_1"])
+def test_filter_defect_set(defect_set):
+    actual = filter_defect_set(defect_set, ["N_O1_1"])
     expected = {SimpleDefect("N", "O1", [1])}
     assert actual == DefectSet(expected)
 
