@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-"""Defect-related CLI commands.
+"""CLI commands for defect analysis.
 
-Commands for defect set creation, structure analysis, and energy calculations.
+Commands for defect structure analysis and energy calculations.
 
 Example:
-    $ pydefect defect_set -d Al
     $ pydefect defect_structure_info -d Va_O1_0
 """
 
@@ -14,139 +13,12 @@ from typing import List, Optional
 
 import typer
 from monty.serialization import loadfn
-from pymatgen.core import Structure
 from vise.util.logger import get_logger
 
 from pydefect.cli.typer_app import app
 from pydefect import api
 
 logger = get_logger(__name__)
-
-
-# Callback for --oxi_states to parse "Mg 2 O -2" format
-def parse_oxi_states(values: Optional[List[str]]) -> Optional[dict]:
-    if not values:
-        return None
-    result = {}
-    for i in range(0, len(values), 2):
-        result[values[i]] = int(values[i + 1])
-    return result
-
-
-@app.command(name="defect_set", help="Make defect_in.yaml file.")
-def defect_set(
-    oxi_states: Optional[List[str]] = typer.Option(
-        None, "-o", "--oxi_states",
-        help="Oxidation states, e.g., Mg 2 O -2."
-    ),
-    dopants: Optional[List[str]] = typer.Option(
-        None, "-d", "--dopants",
-        help="Dopant element names, e.g., Al Ga."
-    ),
-    keywords: Optional[List[str]] = typer.Option(
-        None, "-k", "--keywords",
-        help="Keywords to filter defects (regex supported)."
-    ),
-):
-    """Create defect set configuration file."""
-    oxi_dict = parse_oxi_states(oxi_states)
-
-    # Load file (CLI responsibility)
-    supercell_info = loadfn("supercell_info.json")
-
-    # Call API (pure logic)
-    defect_set_obj = api.make_defect_set(
-        supercell_info=supercell_info,
-        oxi_states=oxi_dict,
-        dopants=dopants,
-        keywords=keywords,
-    )
-
-    # Write output (CLI responsibility)
-    defect_set_obj.to_yaml()
-    typer.echo("Created defect_in.yaml")
-
-
-@app.command(name="defect_entries", help="Create defect entry directories.")
-def defect_entries():
-    """Create defect entry directories from supercell_info and defect_set."""
-    # Load files (CLI responsibility)
-    supercell_info = loadfn("supercell_info.json")
-    defect_set_yaml = loadfn("defect_in.yaml")
-
-    # Call API (pure logic)
-    api.make_defect_entries(supercell_info, defect_set_yaml)
-    typer.echo("Created defect entry directories")
-
-
-@app.command(name="append_interstitial", help="Append interstitial to supercell_info.")
-def append_interstitial(
-    supercell_info_path: Path = typer.Option(
-        "supercell_info.json", "-s", "--supercell_info",
-        help="Path to supercell_info.json."
-    ),
-    base_structure: Path = typer.Option(
-        ..., "-p", "--base_structure",
-        help="Structure file for fractional coordinates."
-    ),
-    frac_coords: List[float] = typer.Option(
-        ..., "-c", "--frac_coords",
-        help="Fractional coordinates (3 values)."
-    ),
-    info: str = typer.Option(
-        "None", "-i", "--info",
-        help="Description of interstitial site."
-    ),
-):
-    """Append interstitial site to supercell_info."""
-    # Load files (CLI responsibility)
-    supercell_info = loadfn(str(supercell_info_path))
-    structure = Structure.from_file(str(base_structure))
-
-    # Call API (pure logic)
-    result = api.append_interstitial(
-        supercell_info=supercell_info,
-        base_structure=structure,
-        frac_coords=list(frac_coords),
-        info=info if info != "None" else None,
-    )
-
-    # Write output (CLI responsibility)
-    result.to_json_file()
-    typer.echo("Updated supercell_info.json")
-
-
-@app.command(name="pop_interstitial", help="Remove interstitial from supercell_info.")
-def pop_interstitial(
-    supercell_info_path: Path = typer.Option(
-        "supercell_info.json", "-s", "--supercell_info",
-        help="Path to supercell_info.json."
-    ),
-    index: Optional[int] = typer.Option(
-        None, "-i", "--index",
-        help="Interstitial index to remove (1-based)."
-    ),
-    pop_all: bool = typer.Option(
-        False, "--pop_all",
-        help="Remove all interstitials."
-    ),
-):
-    """Remove interstitial site(s) from supercell_info."""
-    logger.info("Be careful that the interstitials indices are changed.")
-
-    # Load file (CLI responsibility)
-    supercell_info = loadfn(str(supercell_info_path))
-
-    # Call API (pure logic)
-    result = api.pop_interstitial(
-        supercell_info=supercell_info,
-        index=index,
-        pop_all=pop_all,
-    )
-
-    # Write output (CLI responsibility)
-    result.to_json_file()
-    typer.echo("Updated supercell_info.json")
 
 
 @app.command(name="defect_structure_info", help="Analyze defect structure.")

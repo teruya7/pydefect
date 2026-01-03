@@ -50,10 +50,12 @@ def typer_main():
     # Domain-based CLI modules
     from pydefect.cli import supercell  # noqa: F401
     from pydefect.cli import unitcell  # noqa: F401
-    from pydefect.cli import defect  # noqa: F401
+    from pydefect.cli import defect_preparation  # noqa: F401
+    from pydefect.cli import defect_analysis  # noqa: F401
+    from pydefect.cli import interstitial  # noqa: F401
     from pydefect.cli import chemical_potential  # noqa: F401
     from pydefect.cli import band_edge  # noqa: F401
-    from pydefect.cli import calculation  # noqa: F401
+    from pydefect.cli import calc_results  # noqa: F401
     from pydefect.cli import corrections  # noqa: F401
     from pydefect.cli import util  # noqa: F401
     app()
