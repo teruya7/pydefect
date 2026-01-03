@@ -1,130 +1,22 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
+"""Defect structure analysis result."""
+
 from dataclasses import dataclass
-from typing import Optional, List, Tuple
+from typing import List, Tuple
 
 from monty.json import MSONable
-from pydefect.analysis.defect_structure.defect_structure_comparator import \
-    SiteDiff, SiteInfo
-from pydefect.defaults import defaults
-from pydefect.utils.formatting import pretty_coords
 from pymatgen.core import Structure
-from pymatgen.symmetry.groups import SpaceGroup
 from tabulate import tabulate
-from vise.util.enum import ExtendedEnum
-from vise.util.logger import get_logger
 from vise.util.mix_in import ToJsonFileMixIn
 
-logger = get_logger(__name__)
-
-
-class DefectType(MSONable, ExtendedEnum):
-    """Enumeration of defect types.
-
-    Attributes:
-        vacancy: Single atom removed.
-        interstitial: Single atom added.
-        substituted: One atom replaced by another.
-        vacancy_split: Multiple vacancies of same element.
-        interstitial_split: Multiple interstitials of same element.
-        unknown: Complex or unrecognized defect.
-    """
-    vacancy = "vacancy"
-    interstitial = "interstitial"
-    substituted = "substituted"
-    vacancy_split = "vacancy_split"
-    interstitial_split = "interstitial_split"
-    unknown = "unknown"
-
-
-def judge_defect_type(site_diff: SiteDiff):
-    """Determine defect type from site difference analysis.
-
-    Args:
-        site_diff: SiteDiff object from structure comparison.
-
-    Returns:
-        DefectType enum value.
-
-    Example:
-        >>> from pydefect.analysis.defect_structure.defect_structure_comparator import SiteDiff
-        >>> diff = SiteDiff(removed=[(0, "O", (0.5, 0.5, 0.5))], ...)
-        >>> judge_defect_type(diff)
-        DefectType.vacancy
-    """
-    if site_diff.is_vacancy:
-        return DefectType.vacancy
-    elif site_diff.is_interstitial:
-        return DefectType.interstitial
-    elif site_diff.is_substituted:
-        return DefectType.substituted
-
-    elements_involved = set()
-    for _, elem, _ in site_diff.removed + site_diff.inserted:
-        elements_involved.add(elem)
-
-    if len(elements_involved) == 1 and not site_diff.removed_by_sub:
-        if len(site_diff.removed) - len(site_diff.inserted) == 1:
-            return DefectType.vacancy_split
-        elif len(site_diff.removed) - len(site_diff.inserted) == -1:
-            return DefectType.interstitial_split
-
-    return DefectType.unknown
-
-
-def remove_dot(point_group_symbol):
-    """Remove dots from point group symbol."""
-    return "".join([char for char in point_group_symbol if char != "."])
-
-
-def unique_point_group(pg):
-    result = remove_dot(pg)
-    if result == "2mm" or result == "m2m":
-        return "mm2"
-    if result == "-4m2":
-        return "-42m"
-    if result == "m3":
-        return "m-3"
-    return result
-
-
-class SymmRelation(MSONable, ExtendedEnum):
-    same = "same"
-    subgroup = "subgroup"
-    supergroup = "supergroup"
-    another = "another"
-
-
-@dataclass
-class Displacement(MSONable):
-    specie: str
-    original_pos: Tuple[float, float, float]
-    final_pos: Tuple[float, float, float]
-    distance_from_defect: float
-    disp_vector: Tuple[float, float, float]
-    displace_distance: float
-    angle: Optional[float]
-
-
-def symmetry_relation(initial_point_group, final_point_group):
-    """ Check the point group symmetry relation using the space group relation
-    implemented in pymatgen.
-    """
-    if initial_point_group in ["3m", "-3m"]:
-        initial_point_group += "1"
-    if final_point_group in ["3m", "-3m"]:
-        final_point_group += "1"
-
-    initial = SpaceGroup(f"P{initial_point_group}")
-    final = SpaceGroup(f"P{final_point_group}")
-    if initial == final:
-        return SymmRelation.same
-    elif final.is_subgroup(initial):
-        return SymmRelation.subgroup
-    elif final.is_supergroup(initial):
-        return SymmRelation.supergroup
-    else:
-        return SymmRelation.another
+from pydefect.analysis.defect_structure.models.site_diff import SiteDiff, SiteInfo
+from pydefect.analysis.defect_structure.models.displacement import Displacement
+from pydefect.analysis.defect_structure.models.defect_type import (
+    determine_defect_type, symmetry_relation,
+)
+from pydefect.defaults import defaults
+from pydefect.utils.formatting import pretty_coords
 
 
 @dataclass
@@ -175,7 +67,7 @@ class DefectStructureInfo(MSONable, ToJsonFileMixIn):
 
     @property
     def defect_type(self):
-        return judge_defect_type(self.site_diff)
+        return determine_defect_type(self.site_diff)
 
     def __str__(self):
         sym_transition = f"{self.initial_site_sym} " \
@@ -232,5 +124,3 @@ class DefectStructureInfo(MSONable, ToJsonFileMixIn):
         lines.append(tabulate(table, tablefmt="plain"))
 
         return "\n".join(lines)
-
-

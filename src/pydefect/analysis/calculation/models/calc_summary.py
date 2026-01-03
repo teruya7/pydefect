@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Optional, Dict
 
 from monty.json import MSONable
-from pydefect.analysis.defect_structure.defect_structure_info import SymmRelation, DefectType
+from pydefect.analysis.defect_structure.models import SymmRelation, DefectType
 from tabulate import tabulate
 from vise.util.mix_in import ToJsonFileMixIn
 

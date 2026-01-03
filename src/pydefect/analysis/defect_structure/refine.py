@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
+"""Refine defect structure to higher symmetry."""
 
 import numpy as np
 from numpy.linalg import inv
-from pydefect.analysis.defect_structure.defect_structure_info import logger
 from pydefect.defaults import defaults
 from pymatgen.core import Structure
+from vise.util.logger import get_logger
 from vise.util.structure_symmetrizer import StructureSymmetrizer
+
+
+logger = get_logger(__name__)
 
 
 def refine_defect_structure(structure: Structure,

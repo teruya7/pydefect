@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
 import numpy as np
-from pydefect.analysis.defect_structure.refine_defect_structure import refine_defect_structure
+from pydefect.analysis.defect_structure.refine import refine_defect_structure
 from pymatgen.core import Structure
 
 

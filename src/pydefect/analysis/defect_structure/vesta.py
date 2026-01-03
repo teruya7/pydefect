@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
+"""VESTA file generator for visualizing defect structures."""
+
+from pydefect.analysis.defect_structure.models import DefectStructureInfo
 from vise.analyzer.vesta.vesta_file import VestaFile
 from pydefect.defaults import defaults
 from pymatgen.core import Structure, DummySpecies, Element
 from vise.util.typing import GenCoords
 
 
-class MakeDefectVestaFile:
+class VestaFileGenerator:
     """Create VESTA visualization files for defect structures.
 
     Generates initial and final structure files with displacement vectors.
@@ -17,9 +19,9 @@ class MakeDefectVestaFile:
         final_vesta: VestaFile for final structure with arrows.
 
     Example:
-        >>> maker = MakeDefectVestaFile(defect_structure_info)
-        >>> maker.initial_vesta.write_file("initial.vesta")
-        >>> maker.final_vesta.write_file("final.vesta")
+        >>> generator = VestaFileGenerator(defect_structure_info)
+        >>> generator.initial_vesta.write_file("initial.vesta")
+        >>> generator.final_vesta.write_file("final.vesta")
     """
     def __init__(self,
                  defect_structure_info: DefectStructureInfo,
@@ -27,7 +29,7 @@ class MakeDefectVestaFile:
                  min_displace_w_arrows: float = 0.1,
                  arrow_factor: float = 3.0,
                  title: str = None):
-        """Initialize VESTA file maker.
+        """Initialize VESTA file generator.
 
         Args:
             defect_structure_info: DefectStructureInfo with analyzed defect.
@@ -125,6 +127,11 @@ class MakeDefectVestaFile:
 
 
 def fold_coords_in_structure(structure: Structure, center: GenCoords) -> None:
+    """Fold all site coordinates in structure to be near center."""
     for site in structure:
         _, image = site.distance_and_image_from_frac_coords(center)
         site.frac_coords -= image
+
+
+# Backward compatibility alias
+MakeDefectVestaFile = VestaFileGenerator

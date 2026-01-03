@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
+"""Defect structure analyzer - analyzes defect structures from relaxation."""
+
 import math
 import warnings
 from typing import List, Tuple
 
 import numpy as np
-from pydefect.analysis.defect_structure.defect_structure_comparator import \
-    DefectStructureComparator
-from pydefect.analysis.defect_structure.defect_structure_info import Displacement, \
-    DefectStructureInfo, unique_point_group
+from pydefect.analysis.defect_structure.comparator import StructureComparator
+from pydefect.analysis.defect_structure.models import (
+    Displacement, DefectStructureInfo, unique_point_group,
+)
 from pydefect.defaults import defaults
 from pymatgen.core import PeriodicSite, Structure
 from vise.util.logger import get_logger
@@ -19,9 +21,7 @@ from vise.util.typing import GenCoords
 logger = get_logger(__name__)
 
 
-def folded_coords(site: PeriodicSite,
-                  center: GenCoords
-                  ) -> GenCoords:
+def folded_coords(site: PeriodicSite, center: GenCoords) -> GenCoords:
     """Fold site coordinates to be near center.
 
     Args:
@@ -35,33 +35,25 @@ def folded_coords(site: PeriodicSite,
     return tuple(site.frac_coords - image)
 
 
-class MakeDefectStructureInfo:
+class DefectStructureAnalyzer:
     """Analyze defect structure changes from relaxation.
 
     Compares perfect, initial, and final structures to determine
-    defect type, symmetry changes, and atomic displacements. The
-    final structure is shifted so the defect center is aligned with
-    the perfect supercell.
+    defect type, symmetry changes, and atomic displacements.
 
     Attributes:
-        defect_structure_info: Resulting DefectStructureInfo object
-            containing all analysis results.
+        defect_structure_info: Resulting DefectStructureInfo object.
         shifted_final: Final structure shifted to align defect center.
         center: Defect center coordinates after drift correction.
         comp_w_perf: Comparator between final and perfect structures.
         comp_w_init: Comparator between final and initial structures.
 
     Example:
-        >>> from pymatgen.core import Structure
         >>> perfect = Structure.from_file("perfect/POSCAR")
         >>> initial = Structure.from_file("defect/POSCAR")
         >>> final = Structure.from_file("defect/CONTCAR")
-        >>> analyzer = MakeDefectStructureInfo(
-        ...     perfect=perfect,
-        ...     initial=initial,
-        ...     final=final,
-        ...     symprec=0.01,
-        ...     dist_tol=0.5
+        >>> analyzer = DefectStructureAnalyzer(
+        ...     perfect, initial, final, symprec=0.01, dist_tol=0.5
         ... )
         >>> print(analyzer.defect_structure_info)
     """
@@ -72,7 +64,7 @@ class MakeDefectStructureInfo:
                  symprec: float,
                  dist_tol: float,
                  neighbor_cutoff_factor: float = None):
-        """Initialize MakeDefectStructureInfo.
+        """Initialize DefectStructureAnalyzer.
 
         Args:
             perfect: Perfect supercell structure.
@@ -81,9 +73,7 @@ class MakeDefectStructureInfo:
             symprec: Symmetry precision for spglib.
             dist_tol: Distance tolerance for site matching (Angstroms).
             neighbor_cutoff_factor: Cutoff factor for neighbor detection.
-                Defaults to pydefect defaults.cutoff_distance_factor.
         """
-
         self.cutoff = neighbor_cutoff_factor or defaults.cutoff_distance_factor
         self.symprec = symprec
         self.perfect, self.initial, self.final = perfect, initial, final
@@ -92,7 +82,7 @@ class MakeDefectStructureInfo:
         assert perfect.lattice == initial.lattice == final.lattice
         self.lattice = perfect.lattice
 
-        self._orig_comp = DefectStructureComparator(final, perfect, dist_tol)
+        self._orig_comp = StructureComparator(final, perfect, dist_tol)
         self._orig_center = self._orig_comp.defect_center_coord
         self._calc_drift()
 
@@ -101,9 +91,9 @@ class MakeDefectStructureInfo:
         for site in self.shifted_final:
             site.frac_coords -= np.array(self._drift_vector)
 
-        self.comp_w_perf = DefectStructureComparator(
+        self.comp_w_perf = StructureComparator(
             self.shifted_final, perfect, dist_tol)
-        self.comp_w_init = DefectStructureComparator(
+        self.comp_w_init = StructureComparator(
             self.shifted_final, initial, dist_tol)
 
         self.defect_structure_info = DefectStructureInfo(
@@ -207,10 +197,12 @@ class MakeDefectStructureInfo:
         inner_prod = sum(initial_pos_vec * disp_vec)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            # ignore "RuntimeWarning: invalid value encountered in double_scalars"
             cos = round(inner_prod / (ini_dist * disp_dist), 10)
         result = float(round(180 * (1 - np.arccos(cos) / np.pi), 1))
         if math.isnan(result):
             result = None
         return result
 
+
+# Backward compatibility alias
+MakeDefectStructureInfo = DefectStructureAnalyzer

@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-from dataclasses import dataclass
-from typing import List, Tuple
+"""Structure comparator for identifying defect sites."""
+
+from typing import List
 
 import numpy as np
-from monty.json import MSONable
 from pydefect.defaults import defaults
 from pydefect.utils.structure_tools import Distances
+from pydefect.analysis.defect_structure.models.site_diff import SiteDiff
 from pymatgen.core import IStructure, Structure
-from vise.util.typing import Coords
 
 
-class DefectStructureComparator:
+class StructureComparator:
     """Compare defect and perfect structures to identify defect sites.
 
     Maps atoms between the defect and perfect structures to find vacancies,
@@ -24,14 +24,12 @@ class DefectStructureComparator:
             indices. Value is None if atom was removed.
         defect_to_perfect_indices: Mapping from defect to perfect structure
             indices. Value is None if atom was inserted.
-        p_to_d: Deprecated alias for perfect_to_defect_indices.
-        d_to_p: Deprecated alias for defect_to_perfect_indices.
 
     Example:
         >>> from pymatgen.core import Structure
         >>> perfect = Structure.from_file("perfect.vasp")
         >>> defect = Structure.from_file("defect.vasp")
-        >>> comparator = DefectStructureComparator(defect, perfect)
+        >>> comparator = StructureComparator(defect, perfect)
         >>> print(comparator.removed_indices)  # Vacancy sites
         [42]
         >>> print(comparator.defect_center_coord)
@@ -41,17 +39,12 @@ class DefectStructureComparator:
                  defect_structure: IStructure,
                  perfect_structure: IStructure,
                  dist_tol: float = defaults.dist_tol):
-        """Initialize DefectStructureComparator.
-
-        Atoms in the final structure are shifted such that the farthest atom
-        from the defect is placed at the same place with that in the perfect
-        supercell.
+        """Initialize StructureComparator.
 
         Args:
             defect_structure: Structure containing the defect.
             perfect_structure: Reference perfect supercell structure.
             dist_tol: Distance tolerance for site matching in Angstroms.
-                Defaults to pydefect defaults.dist_tol.
         """
         self._defect_structure = defect_structure
         self._perfect_structure = perfect_structure
@@ -64,28 +57,13 @@ class DefectStructureComparator:
 
     @property
     def atom_mapping(self):
-        """Get mapping of defect atoms to their perfect structure counterparts.
-
-        Returns:
-            Dict mapping defect structure indices to perfect structure indices,
-            excluding inserted atoms (interstitials).
-        """
+        """Get mapping of defect atoms to their perfect structure counterparts."""
         return {defect_idx: perfect_idx 
                 for defect_idx, perfect_idx in enumerate(self.defect_to_perfect_indices)
                 if defect_idx not in self.inserted_indices}
 
     def _atom_projection(self, structure_from, structure_to, match_species=True):
-        """Project atoms from one structure to closest sites in another.
-
-        Args:
-            structure_from: Source structure to project from.
-            structure_to: Target structure to project onto.
-            match_species: If True, only match atoms of the same species.
-
-        Returns:
-            List of indices in structure_to corresponding to each atom
-            in structure_from. None if no matching atom found.
-        """
+        """Project atoms from one structure to closest sites in another."""
         result = []
         for site in structure_from:
             distances = Distances(structure_to,
@@ -114,13 +92,7 @@ class DefectStructureComparator:
 
     @property
     def removed_indices(self):
-        """Get indices of atoms in perfect structure that are missing in defect.
-
-        These correspond to vacancy sites or atoms removed by substitution.
-
-        Returns:
-            Sorted list of indices in the perfect structure.
-        """
+        """Get indices of atoms in perfect structure that are missing in defect."""
         result = []
         for perfect_idx, defect_idx in enumerate(self.perfect_to_defect_indices):
             try:
@@ -242,68 +214,5 @@ class DefectStructureComparator:
                         inserted_by_sub=inserted_by_substitution)
 
 
-SiteInfo = Tuple[int, str, Coords]
-
-
-@dataclass
-class SiteDiff(MSONable):
-    """Difference in atomic sites between structures.
-
-    Records which atoms were removed, inserted, or substituted.
-
-    Attributes:
-        removed: List of (index, element, coords) for vacancies.
-        inserted: List of (index, element, coords) for interstitials.
-        removed_by_sub: Sites removed due to substitution.
-        inserted_by_sub: Sites inserted due to substitution.
-    """
-    removed: List[SiteInfo]
-    inserted: List[SiteInfo]
-    removed_by_sub: List[SiteInfo]
-    inserted_by_sub: List[SiteInfo]
-
-    @classmethod
-    def from_dict(cls, data):
-        """Create SiteDiff from dictionary representation."""
-        result = super().from_dict(data)
-        removed = []
-        inserted = []
-        removed_by_sub = []
-        inserted_by_sub = []
-
-        for site_info in result.removed:
-            removed.append((site_info[0], site_info[1], tuple(site_info[2])))
-        for site_info in result.inserted:
-            inserted.append((site_info[0], site_info[1], tuple(site_info[2])))
-        for site_info in result.removed_by_sub:
-            removed_by_sub.append((site_info[0], site_info[1], tuple(site_info[2])))
-        for site_info in result.inserted_by_sub:
-            inserted_by_sub.append((site_info[0], site_info[1], tuple(site_info[2])))
-
-        return cls(removed, inserted, removed_by_sub, inserted_by_sub)
-
-    @property
-    def is_complex_defect(self):
-        return (len(self.removed) + len(self.inserted)
-                + len(self.removed_by_sub)) != 1
-
-    @property
-    def is_vacancy(self):
-        return (len(self.removed) == 1 and len(self.inserted) == 0 and
-                len(self.removed_by_sub) == 0 and len(self.inserted_by_sub) == 0)
-
-    @property
-    def is_interstitial(self):
-        return (len(self.removed) == 0 and len(self.inserted) == 1 and
-                len(self.removed_by_sub) == 0 and len(self.inserted_by_sub) == 0)
-
-    @property
-    def is_substituted(self):
-        return (len(self.removed) == 0 and len(self.inserted) == 0 and
-                len(self.removed_by_sub) == 1 and len(self.inserted_by_sub) == 1)
-
-    @property
-    def is_no_diff(self):
-        return not (self.removed or self.inserted
-                    or self.removed_by_sub or self.inserted_by_sub)
-
+# Backward compatibility alias
+DefectStructureComparator = StructureComparator

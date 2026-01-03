@@ -10,7 +10,7 @@ from pydefect.analysis.concentration.models import Degeneracies, Degeneracy
 from pydefect.analysis.concentration.degeneracy import \
     MakeDegeneracy
 from pydefect.analysis.defect_formation_energy.models import DefectEnergyInfo
-from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
+from pydefect.analysis.defect_structure.models import DefectStructureInfo
 
 degeneracies = Degeneracies({"Va_O1": {0: Degeneracy(1, 1, "1", "1")}})
 

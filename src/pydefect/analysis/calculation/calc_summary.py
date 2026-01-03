@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 from pydefect.analysis.calculation.models import CalcResults, CalcSummary, SingleCalcSummary
-from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
+from pydefect.analysis.defect_structure.models import DefectStructureInfo
 from pydefect.analysis.defect_formation_energy.defect_formation_energy import calculate_composition_change
 from pydefect.defaults import defaults
 from pydefect.makers.defect.defect_entry import DefectEntry

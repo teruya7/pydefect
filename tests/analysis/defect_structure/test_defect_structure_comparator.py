@@ -4,7 +4,7 @@
 import numpy as np
 import pytest
 from monty.serialization import loadfn
-from pydefect.analysis.defect_structure.defect_structure_comparator import \
+from pydefect.analysis.defect_structure.comparator import \
     DefectStructureComparator, SiteDiff
 from pymatgen.core import Structure, IStructure, Lattice
 from tests.helpers.assertion import assert_msonable

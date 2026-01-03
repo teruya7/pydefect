@@ -2,8 +2,8 @@
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 from copy import deepcopy
 
-from pydefect.analysis.defect_structure.defect_structure_comparator import SiteDiff
-from pydefect.analysis.defect_structure.defect_structure_info import \
+from pydefect.analysis.defect_structure.comparator import SiteDiff
+from pydefect.analysis.defect_structure.models import \
     symmetry_relation, SymmRelation, \
     DefectType, judge_defect_type, unique_point_group
 from pymatgen.core import Structure, Lattice

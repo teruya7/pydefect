@@ -5,7 +5,7 @@ from typing import Dict
 import numpy as np
 from pydefect.analysis.band_edge.models import OrbitalInfo, \
     BandEdgeOrbitalInfos
-from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo
+from pydefect.analysis.defect_structure.models import DefectStructureInfo
 from pydefect.defaults import defaults
 from pymatgen.core import Structure
 from pymatgen.electronic_structure.core import Spin

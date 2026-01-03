@@ -2,10 +2,10 @@
 #  Copyright (c) 2020 Kumagai group.
 from pathlib import Path
 
-from pydefect.analysis.defect_structure.defect_structure_comparator import SiteDiff
-from pydefect.analysis.defect_structure.defect_structure_info import DefectStructureInfo, \
+from pydefect.analysis.defect_structure.comparator import SiteDiff
+from pydefect.analysis.defect_structure.models import DefectStructureInfo, \
     Displacement
-from pydefect.analysis.defect_structure.make_defect_vesta_file import \
+from pydefect.analysis.defect_structure.vesta import \
     MakeDefectVestaFile
 from pymatgen.core import Structure, Lattice
 
