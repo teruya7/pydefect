@@ -10,9 +10,9 @@ from pymatgen.core import Structure
 from tabulate import tabulate
 from vise.util.mix_in import ToJsonFileMixIn
 
-from pydefect.analysis.defect_structure.models.site_diff import SiteDiff, SiteInfo
-from pydefect.analysis.defect_structure.models.displacement import Displacement
-from pydefect.analysis.defect_structure.models.defect_type import (
+from pydefect.analysis.structure.models.site_diff import SiteDiff, SiteInfo
+from pydefect.analysis.structure.models.displacement import Displacement
+from pydefect.analysis.structure.models.defect_type import (
     determine_defect_type, symmetry_relation,
 )
 from pydefect.defaults import defaults

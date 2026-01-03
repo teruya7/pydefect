@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
-from pydefect.analysis.defect_structure.analyzer import \
+from pydefect.analysis.structure.analyzer import \
     MakeDefectStructureInfo
-from pydefect.analysis.defect_structure.vesta import fold_coords_in_structure
+from pydefect.analysis.structure.vesta import fold_coords_in_structure
 
 from pymatgen.core import Structure, Lattice
 from tests.helpers.assertion import assert_dataclass_almost_equal

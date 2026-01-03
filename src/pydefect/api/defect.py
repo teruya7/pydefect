@@ -20,9 +20,9 @@ from pydefect.analysis.formation_energy.defect_formation_energy import (
     calculate_formation_energy_info as _make_defect_energy_info,
     calculate_formation_energy_summary as _make_defect_energy_summary,
 )
-from pydefect.analysis.defect_structure.models import DefectStructureInfo
-from pydefect.analysis.defect_structure.analyzer import MakeDefectStructureInfo
-from pydefect.analysis.defect_structure.vesta import MakeDefectVestaFile
+from pydefect.analysis.structure.models import DefectStructureInfo
+from pydefect.analysis.structure.analyzer import MakeDefectStructureInfo
+from pydefect.analysis.structure.vesta import MakeDefectVestaFile
 from pydefect.analysis.chemical_potential.models import (
     StandardEnergies,
     TargetVertices,

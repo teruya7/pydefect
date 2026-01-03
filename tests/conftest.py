@@ -11,8 +11,8 @@ from pydefect.analysis.formation_energy.models import (
     # Backward compatibility aliases
     DefectEnergies, DefectEnergy, DefectEnergySummary,
 )
-from pydefect.analysis.defect_structure.comparator import SiteDiff
-from pydefect.analysis.defect_structure.models import Displacement, \
+from pydefect.analysis.structure.comparator import SiteDiff
+from pydefect.analysis.structure.models import Displacement, \
     DefectStructureInfo
 from pydefect.analysis.corrections.models import PotentialSite, \
     ExtendedFnvCorrection

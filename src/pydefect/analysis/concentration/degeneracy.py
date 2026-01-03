@@ -7,7 +7,7 @@ from collections import defaultdict
 from pydefect.analysis.calculation.models import CalcResults
 from pydefect.analysis.concentration.models import Degeneracy, Degeneracies
 from pydefect.analysis.formation_energy.models import FormationEnergyInfo
-from pydefect.analysis.defect_structure.models import DefectStructureInfo
+from pydefect.analysis.structure.models import DefectStructureInfo
 from pymatgen.symmetry.groups import SpaceGroup
 from vise.util.structure_symmetrizer import num_symmetry_operation
 

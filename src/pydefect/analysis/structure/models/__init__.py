@@ -2,14 +2,14 @@
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 """Defect structure models - data classes for defect structure analysis."""
 
-from pydefect.analysis.defect_structure.models.site_diff import (
+from pydefect.analysis.structure.models.site_diff import (
     SiteDiff,
     SiteInfo,
 )
-from pydefect.analysis.defect_structure.models.displacement import (
+from pydefect.analysis.structure.models.displacement import (
     Displacement,
 )
-from pydefect.analysis.defect_structure.models.defect_type import (
+from pydefect.analysis.structure.models.defect_type import (
     DefectType,
     SymmRelation,
     determine_defect_type,
@@ -19,7 +19,7 @@ from pydefect.analysis.defect_structure.models.defect_type import (
     # Backward compatibility alias
     judge_defect_type,
 )
-from pydefect.analysis.defect_structure.models.structure_info import (
+from pydefect.analysis.structure.models.structure_info import (
     DefectStructureInfo,
 )
 

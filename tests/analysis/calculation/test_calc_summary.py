@@ -4,7 +4,7 @@ from copy import copy
 
 import pytest
 from pydefect.analysis.calculation.models import SingleCalcSummary, CalcSummary
-from pydefect.analysis.defect_structure.models import DefectType, SymmRelation
+from pydefect.analysis.structure.models import DefectType, SymmRelation
 from tests.helpers.assertion import assert_msonable
 
 

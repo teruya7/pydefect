@@ -7,7 +7,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
-from pydefect.analysis.defect_structure.models import remove_dot
+from pydefect.analysis.structure.models import remove_dot
 from pydefect.makers.interstitial.local_extrema import VolumetricDataLocalExtrema, \
     CoordInfo, VolumetricDataAnalyzeParams
 from pydefect.utils.structure_tools import Distances

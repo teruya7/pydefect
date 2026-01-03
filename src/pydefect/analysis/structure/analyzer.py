@@ -7,8 +7,8 @@ import warnings
 from typing import List, Tuple
 
 import numpy as np
-from pydefect.analysis.defect_structure.comparator import StructureComparator
-from pydefect.analysis.defect_structure.models import (
+from pydefect.analysis.structure.comparator import StructureComparator
+from pydefect.analysis.structure.models import (
     Displacement, DefectStructureInfo, unique_point_group,
 )
 from pydefect.defaults import defaults

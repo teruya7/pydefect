@@ -2,7 +2,7 @@
 #  Copyright (c) 2020 Kumagai group.
 """VESTA file generator for visualizing defect structures."""
 
-from pydefect.analysis.defect_structure.models import DefectStructureInfo
+from pydefect.analysis.structure.models import DefectStructureInfo
 from vise.analyzer.vesta.vesta_file import VestaFile
 from pydefect.defaults import defaults
 from pymatgen.core import Structure, DummySpecies, Element

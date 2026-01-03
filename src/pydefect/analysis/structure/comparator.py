@@ -7,7 +7,7 @@ from typing import List
 import numpy as np
 from pydefect.defaults import defaults
 from pydefect.utils.structure_tools import Distances
-from pydefect.analysis.defect_structure.models.site_diff import SiteDiff
+from pydefect.analysis.structure.models.site_diff import SiteDiff
 from pymatgen.core import IStructure, Structure
 
 

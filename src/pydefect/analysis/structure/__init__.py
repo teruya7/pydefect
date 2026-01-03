@@ -9,7 +9,7 @@ Public API:
 """
 
 # Data models
-from pydefect.analysis.defect_structure.models import (
+from pydefect.analysis.structure.models import (
     SiteDiff,
     SiteInfo,
     Displacement,
@@ -24,14 +24,14 @@ from pydefect.analysis.defect_structure.models import (
 )
 
 # Comparator
-from pydefect.analysis.defect_structure.comparator import (
+from pydefect.analysis.structure.comparator import (
     StructureComparator,
     # Backward compatibility
     DefectStructureComparator,
 )
 
 # Analyzer
-from pydefect.analysis.defect_structure.analyzer import (
+from pydefect.analysis.structure.analyzer import (
     DefectStructureAnalyzer,
     folded_coords,
     # Backward compatibility
@@ -39,7 +39,7 @@ from pydefect.analysis.defect_structure.analyzer import (
 )
 
 # VESTA file generator
-from pydefect.analysis.defect_structure.vesta import (
+from pydefect.analysis.structure.vesta import (
     VestaFileGenerator,
     fold_coords_in_structure,
     # Backward compatibility
@@ -47,7 +47,7 @@ from pydefect.analysis.defect_structure.vesta import (
 )
 
 # Refinement
-from pydefect.analysis.defect_structure.refine import (
+from pydefect.analysis.structure.refine import (
     refine_defect_structure,
 )
 
