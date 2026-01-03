@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from ruamel.yaml.scalarint import ScalarInt
 
-from pydefect.analysis.calculation.models import CalcResults
+from pydefect.analysis.calc_results.models import CalcResults
 from pydefect.analysis.concentration.models import Degeneracies, Degeneracy
 from pydefect.analysis.concentration.degeneracy import \
     MakeDegeneracy

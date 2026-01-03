@@ -6,11 +6,11 @@ from typing import List
 
 from pymatgen.io.vasp import Vasprun, Outcar
 
-from pydefect.analysis.calculation.models import CalcResults
-from pydefect.analysis.calculation.calc_results import (
+from pydefect.analysis.calc_results.models import CalcResults
+from pydefect.analysis.calc_results.calc_results import (
     make_calc_results_from_vasp as _make_calc_results,
 )
-from pydefect.analysis.calculation.calc_summary import (
+from pydefect.analysis.calc_results.calc_summary import (
     make_calc_summary as _make_calc_summary,
 )
 

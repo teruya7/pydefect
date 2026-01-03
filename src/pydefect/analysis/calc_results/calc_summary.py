@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from pydefect.analysis.calculation.models import CalcResults, CalcSummary, SingleCalcSummary
+from pydefect.analysis.calc_results.models import CalcResults, CalcSummary, SingleCalcSummary
 from pydefect.analysis.structure.models import DefectStructureInfo
 from pydefect.analysis.formation_energy.calculation import calculate_composition_change
 from pydefect.defaults import defaults

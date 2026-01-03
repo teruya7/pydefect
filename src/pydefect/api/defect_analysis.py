@@ -10,7 +10,7 @@ from typing import List, Optional
 
 from pymatgen.core import Structure
 
-from pydefect.analysis.calculation.models import CalcResults
+from pydefect.analysis.calc_results.models import CalcResults
 from pydefect.analysis.corrections.models import Correction, NoCorrection
 from pydefect.analysis.formation_energy.models import FormationEnergyInfo
 from pydefect.analysis.formation_energy.plotter import FormationEnergyMplPlotter

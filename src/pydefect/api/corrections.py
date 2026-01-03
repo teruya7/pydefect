@@ -8,7 +8,7 @@ including extended FNV (eFNV) and GKFO corrections.
 
 from typing import List, Optional
 
-from pydefect.analysis.calculation.models import CalcResults
+from pydefect.analysis.calc_results.models import CalcResults
 from pydefect.analysis.unitcell.models import Unitcell
 from pydefect.analysis.corrections.efnv import (
     calculate_efnv_correction as _calculate_efnv_correction,

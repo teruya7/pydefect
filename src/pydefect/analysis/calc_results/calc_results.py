@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
-from pydefect.analysis.calculation.models import CalcResults
+from pydefect.analysis.calc_results.models import CalcResults
 from pymatgen.io.vasp import Vasprun, Outcar
 
 

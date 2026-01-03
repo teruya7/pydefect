@@ -8,7 +8,7 @@ import numpy as np
 from numpy import dot, cross
 from numpy.linalg import norm
 
-from pydefect.analysis.calculation.models import CalcResults
+from pydefect.analysis.calc_results.models import CalcResults
 from pydefect.analysis.structure.comparator import (
     DefectStructureComparator,
 )
