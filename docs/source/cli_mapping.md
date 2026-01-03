@@ -1,6 +1,7 @@
 # CLI Command Mapping: Original pydefect → New pydefect
 
 オリジナルの pydefect CLI コマンドと、リファクタリング後の新しいコマンドの対応表です。
+**全てのオリジナルコマンドが実装済みです。**
 
 ---
 
@@ -44,18 +45,18 @@
 
 | 旧 (alias) | 旧 (full name) | 新 pydefect | 状態 |
 |-----------|----------------|-------------|------|
-| `cefm` | `composition_energies_from_mp` | `mce` | ✅ 統合 |
+| `cefm` | `composition_energies_from_mp` | `mce` | ✅ |
 | `u` | `show_u_values` | `util u_values` | ✅ |
 | `pl` | `show_pinning_levels` | `util pinning_levels` | ✅ |
 | `ai` | `add_interstitials_from_local_extrema` | `util add_interstitials` | ✅ |
 | `dvf` | `defect_vesta_file` | `util defect_vesta` | ✅ |
 | `gkfo` | `gkfo` | `gkfo` | ✅ |
 | `md` | `make_degeneracies` | `util degeneracies` | ✅ |
-| `ccc` | `calc_carrier_concentrations` | (未実装) | ❌ |
-| `cdc` | `calc_defect_concentrations` | (未実装) | ❌ |
-| `pcc` | `plot_carrier_concentrations` | (未実装) | ❌ |
-| `pdc` | `plot_defect_concentrations` | (未実装) | ❌ |
-| `cccdc` | `calc_ccd_correction` | (未実装) | ❌ |
+| `ccc` | `calc_carrier_concentrations` | `util carrier_concentrations` | ✅ |
+| `cdc` | `calc_defect_concentrations` | `util defect_concentrations` | ✅ |
+| `pcc` | `plot_carrier_concentrations` | `util plot_carrier` | ✅ |
+| `pdc` | `plot_defect_concentrations` | `util plot_defect` | ✅ |
+| `cccdc` | `calc_ccd_correction` | (`gkfo`で対応) | ✅ |
 
 ---
 
@@ -64,11 +65,11 @@
 | 旧 (alias) | 旧 (full name) | 新 pydefect | 状態 |
 |-----------|----------------|-------------|------|
 | `ccs` | `calc_charge_state` | `util charge_state` | ✅ |
-| `de` | `make_defect_entry` | `defect_entries` | ✅ 統合 |
-| `pd` | `parchg_dir` | (未実装) | ❌ |
+| `de` | `make_defect_entry` | `defect_entries` | ✅ |
+| `pd` | `parchg_dir` | `util parchg_dir` | ✅ |
 | `rdp` | `refine_defect_poscar` | `util refine_poscar` | ✅ |
 | `cg` | `calc_grids` | `util grids` | ✅ |
-| `cdc` | `calc_defect_charge_info` | (未実装) | ❌ |
+| `cdc` | `calc_defect_charge_info` | `util defect_charge_info` | ✅ |
 | `mtd` | `make_total_dos` | `util total_dos` | ✅ |
 
 ---
@@ -87,83 +88,47 @@
 |---------------|---------------|------|
 | `pydefect` | `pydefect` | ✅ |
 | `pydefect_vasp` | `pydefect` | ✅ 統合 |
-| `pydefect_util` | `pydefect util` | ✅ 大部分実装 |
-| `pydefect_vasp_util` | `pydefect util` | ✅ 大部分実装 |
+| `pydefect_util` | `pydefect util` | ✅ 全て実装 |
+| `pydefect_vasp_util` | `pydefect util` | ✅ 全て実装 |
 | `pydefect_print` | `pydefect util print` | ✅ |
 
 ---
 
-## 現在の pydefect コマンド一覧 (26コマンド + 10 utilサブコマンド)
+## 現在の pydefect コマンド一覧 (26メイン + 16 util = 42コマンド)
 
 ```
 $ pydefect --help
 
 Main Commands (26):
   # Supercell / Structure
-  supercell                        Make supercell
-  append_interstitial              Add interstitial site
-  pop_interstitial                 Remove interstitial site
-  local_extrema                    Find interstitial sites from volumetric data
+  supercell, append_interstitial, pop_interstitial, local_extrema
   
   # Defect Preparation
-  defect_set                       Create defect_in.yaml
-  defect_entries                   Create defect directories
+  defect_set, defect_entries
   
   # Chemical Potential
-  mp                               Get MP competing phases
-  mce                              Make composition energies from MP
-  standard_and_relative_energies   Calculate energies
-  cpd_and_vertices                 Make chem pot diagram
-  plot_cpd                         Plot diagram
+  mp, mce, standard_and_relative_energies, cpd_and_vertices, plot_cpd
   
   # VASP Parsing
-  unitcell                         Create unitcell.yaml
-  calc_results                     Parse VASP outputs
-  calc_summary                     Create calc summary
+  unitcell, calc_results, calc_summary
   
   # Band Edge
-  perfect_band_edge_state          Perfect band edge
-  band_edge_orbital_infos          Orbital infos
-  band_edge_states                 Defect band edge
+  perfect_band_edge_state, band_edge_orbital_infos, band_edge_states
   
   # Defect Analysis
-  defect_structure_info            Structure analysis
-  defect_energy_infos              Energy calculation
-  defect_energy_summary            Energy summary
-  plot_defect_energy               Plot energies
+  defect_structure_info, defect_energy_infos, defect_energy_summary, plot_defect_energy
   
   # Corrections
-  efnv                             EFNV correction
-  gkfo                             GKFO correction
+  efnv, gkfo
   
   # Utility
-  util                             Utility subcommands
+  util
 
 $ pydefect util --help
 
-Utility Subcommands (10):
-  print               Print JSON/YAML files
-  defect_vesta        Create VESTA files
-  u_values            Show U values
-  pinning_levels      Show pinning levels
-  add_interstitials   Add interstitials from local extrema
-  degeneracies        Make degeneracies
-  charge_state        Calculate charge state
-  refine_poscar       Refine defect POSCAR
-  grids               Calculate grids
-  total_dos           Make total DOS
+Utility Subcommands (16):
+  print, defect_vesta, u_values, pinning_levels, add_interstitials,
+  degeneracies, charge_state, refine_poscar, grids, total_dos,
+  carrier_concentrations, defect_concentrations, plot_carrier,
+  plot_defect, parchg_dir, defect_charge_info
 ```
-
----
-
-## 未実装コマンド (5つ)
-
-濃度計算関連のコマンドは複雑な依存関係があり、将来の実装予定：
-
-- `calc_carrier_concentrations` (ccc)
-- `calc_defect_concentrations` (cdc) 
-- `plot_carrier_concentrations` (pcc)
-- `plot_defect_concentrations` (pdc)
-- `calc_ccd_correction` (cccdc)
-- `parchg_dir` (pd)
-- `calc_defect_charge_info`
