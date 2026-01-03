@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2022 Kumagai group.
 import pytest
-from pydefect.analysis.defect_formation_energy.models import CrossPoints
+from pydefect.analysis.formation_energy.models import CrossPoints
 from pydefect.analysis.transition_levels.transition_levels import make_transition_levels, \
     TransitionLevel, TransitionLevels
 from tests.helpers.assertion import assert_msonable

@@ -8,7 +8,7 @@ from monty.json import MSONable
 from monty.serialization import loadfn
 from vise.util.mix_in import ToYamlFileMixIn
 
-from pydefect.analysis.defect_formation_energy.models.defect_formation_energy import (
+from pydefect.analysis.formation_energy.models.defect_formation_energy import (
     DefectFormationEnergy,
 )
 

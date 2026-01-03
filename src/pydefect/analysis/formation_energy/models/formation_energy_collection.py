@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 
 from monty.json import MSONable
 
-from pydefect.analysis.defect_formation_energy.models.defect_formation_energy import (
+from pydefect.analysis.formation_energy.models.defect_formation_energy import (
     DefectFormationEnergy,
 )
 

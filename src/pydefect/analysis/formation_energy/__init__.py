@@ -22,7 +22,7 @@ Plotting:
 - FormationEnergyMplPlotter: Matplotlib plotter
 - PlotSettings: Plot configuration
 """
-from pydefect.analysis.defect_formation_energy.models import (
+from pydefect.analysis.formation_energy.models import (
     # New names
     DefectFormationEnergy,
     FormationEnergyInfo,
@@ -40,7 +40,7 @@ from pydefect.analysis.defect_formation_energy.models import (
     SingleChargeEnergies,
 )
 
-from pydefect.analysis.defect_formation_energy.defect_formation_energy import (
+from pydefect.analysis.formation_energy.defect_formation_energy import (
     calculate_formation_energy_info,
     calculate_formation_energy_summary,
     calculate_composition_change,
@@ -50,13 +50,13 @@ from pydefect.analysis.defect_formation_energy.defect_formation_energy import (
     num_atom_differences,
 )
 
-from pydefect.analysis.defect_formation_energy.u_value import (
+from pydefect.analysis.formation_energy.u_value import (
     calculate_u_values,
     # Backward compatibility
     u_values_from_defect_energies,
 )
 
-from pydefect.analysis.defect_formation_energy.plotter import (
+from pydefect.analysis.formation_energy.plotter import (
     FormationEnergyMplPlotter,
     FormationEnergyPlotterBase,
     PlotSettings,

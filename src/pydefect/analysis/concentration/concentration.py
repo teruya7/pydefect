@@ -20,7 +20,7 @@ from pydefect.analysis.concentration.distribution_function import (
     boltzmann_dist,
     fermi_dirac,
 )
-from pydefect.analysis.defect_formation_energy.models import (
+from pydefect.analysis.formation_energy.models import (
     FermiLevelDependentEnergies,
     ChargeStateEnergies,
     # Backward compatibility aliases

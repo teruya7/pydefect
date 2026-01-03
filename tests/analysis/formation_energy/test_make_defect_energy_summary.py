@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2020 Kumagai group.
 
-from pydefect.analysis.defect_formation_energy.models import (
+from pydefect.analysis.formation_energy.models import (
     FormationEnergyInfo, DefectFormationEnergy,
     FormationEnergySummary, FormationEnergyCollection,
 )
-from pydefect.analysis.defect_formation_energy.defect_formation_energy import \
+from pydefect.analysis.formation_energy.defect_formation_energy import \
     calculate_formation_energy_summary
 from pydefect.analysis.chemical_potential.models import TargetVertices, TargetVertex
 

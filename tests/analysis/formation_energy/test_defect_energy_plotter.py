@@ -2,9 +2,9 @@
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 
 import pytest
-from pydefect.analysis.defect_formation_energy.models import DefectEnergy, DefectEnergies, \
+from pydefect.analysis.formation_energy.models import DefectEnergy, DefectEnergies, \
     DefectEnergySummary
-from pydefect.analysis.defect_formation_energy.plotter import DefectEnergyMplPlotter, \
+from pydefect.analysis.formation_energy.plotter import DefectEnergyMplPlotter, \
     DefectEnergiesMplSettings
 from pydefect.defaults import defaults
 

@@ -7,7 +7,7 @@ from typing import Dict, List
 
 from pydefect.analysis.band_edge.models import BandEdgeStates, PerfectBandEdgeState
 from pydefect.analysis.calculation.models import CalcResults
-from pydefect.analysis.defect_formation_energy.models import (
+from pydefect.analysis.formation_energy.models import (
     DefectFormationEnergy,
     FormationEnergyInfo,
     FormationEnergyCollection,

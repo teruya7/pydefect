@@ -4,7 +4,7 @@
 from itertools import combinations
 from typing import Dict
 
-from pydefect.analysis.defect_formation_energy.models import FormationEnergyCollection
+from pydefect.analysis.formation_energy.models import FormationEnergyCollection
 
 
 def calculate_u_values(

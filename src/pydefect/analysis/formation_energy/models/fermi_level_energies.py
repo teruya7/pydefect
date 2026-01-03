@@ -8,7 +8,7 @@ import numpy as np
 from monty.json import MSONable
 from scipy.spatial import HalfspaceIntersection
 
-from pydefect.analysis.defect_formation_energy.models.cross_points import CrossPoints
+from pydefect.analysis.formation_energy.models.cross_points import CrossPoints
 
 
 @dataclass

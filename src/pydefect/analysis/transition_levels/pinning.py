@@ -2,7 +2,7 @@
 #  Copyright (c) 2022 Kumagai group.
 """Calculate pinning levels from charge energies."""
 
-from pydefect.analysis.defect_formation_energy.models import FermiLevelDependentEnergies
+from pydefect.analysis.formation_energy.models import FermiLevelDependentEnergies
 from tabulate import tabulate
 
 

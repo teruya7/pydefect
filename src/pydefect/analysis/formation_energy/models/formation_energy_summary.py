@@ -10,10 +10,10 @@ from vise.util.logger import get_logger
 from vise.util.mix_in import ToJsonFileMixIn
 from vise.util.string import latexify, numbers_to_lowercases
 
-from pydefect.analysis.defect_formation_energy.models.formation_energy_collection import (
+from pydefect.analysis.formation_energy.models.formation_energy_collection import (
     FormationEnergyCollection,
 )
-from pydefect.analysis.defect_formation_energy.models.fermi_level_energies import (
+from pydefect.analysis.formation_energy.models.fermi_level_energies import (
     FermiLevelDependentEnergies,
     ChargeStateEnergies,
 )

@@ -3,7 +3,7 @@
 
 import pytest
 
-from pydefect.analysis.defect_formation_energy.models import (
+from pydefect.analysis.formation_energy.models import (
     DefectEnergy, CrossPoints, DefectEnergyInfo, DefectEnergies,
     DefectEnergySummary, SingleChargeEnergies, ChargeEnergies)
 from tests.helpers.assertion import assert_yaml_roundtrip, \

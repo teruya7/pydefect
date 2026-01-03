@@ -7,7 +7,7 @@ from typing import List, Optional, Tuple
 from adjustText import adjust_text
 from labellines import labelLines
 from matplotlib import pyplot as plt
-from pydefect.analysis.defect_formation_energy.models import FormationEnergySummary
+from pydefect.analysis.formation_energy.models import FormationEnergySummary
 from pydefect.analysis.transition_levels.transition_levels import make_transition_levels
 from pydefect.defaults import defaults
 from vise.util.matplotlib import float_to_int_formatter

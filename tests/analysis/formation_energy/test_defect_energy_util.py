@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #  Copyright (c) 2022 Kumagai group.
-from pydefect.analysis.defect_formation_energy.models import DefectEnergies, DefectEnergy
-from pydefect.analysis.defect_formation_energy.u_value import u_values_from_defect_energies
+from pydefect.analysis.formation_energy.models import DefectEnergies, DefectEnergy
+from pydefect.analysis.formation_energy.u_value import u_values_from_defect_energies
 
 
 def test_calc_u_value():

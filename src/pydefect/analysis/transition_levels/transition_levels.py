@@ -4,7 +4,7 @@
 
 from typing import Dict
 
-from pydefect.analysis.defect_formation_energy.models import CrossPoints
+from pydefect.analysis.formation_energy.models import CrossPoints
 from pydefect.analysis.transition_levels.models import (
     TransitionLevel, TransitionLevels,
 )

@@ -6,7 +6,7 @@ from math import sqrt
 from pathlib import Path
 
 import pytest
-from pydefect.analysis.defect_formation_energy.models import (
+from pydefect.analysis.formation_energy.models import (
     FormationEnergyCollection, DefectFormationEnergy, FormationEnergySummary,
     # Backward compatibility aliases
     DefectEnergies, DefectEnergy, DefectEnergySummary,
