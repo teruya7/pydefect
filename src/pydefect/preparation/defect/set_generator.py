@@ -5,8 +5,8 @@ from typing import Dict, List
 
 from pydefect.data.elements.element_data import oxidation_state, electronegativity
 from pydefect.defaults import defaults
-from pydefect.preparation.defect.models.defect import SimpleDefect
-from pydefect.preparation.defect.models.defect_set import DefectSet, filter_defect_set
+from pydefect.preparation.defect.models.simple import SimpleDefect
+from pydefect.preparation.defect.models.set import DefectSet, filter_defect_set
 from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
 
 

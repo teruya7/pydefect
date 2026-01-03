@@ -4,9 +4,9 @@ from typing import List, Tuple, Optional
 
 import numpy as np
 from pydefect.defaults import defaults
-from pydefect.preparation.defect.models.defect import SimpleDefect
+from pydefect.preparation.defect.models.simple import SimpleDefect
 from pydefect.preparation.defect.models.entry import DefectEntry, PerturbedSite
-from pydefect.preparation.defect.models.defect_set import DefectSet
+from pydefect.preparation.defect.models.set import DefectSet
 from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
 from pymatgen.core import Structure, IStructure
 from pymatgen.core.structure import PeriodicNeighbor
@@ -26,7 +26,7 @@ class DefectEntryGenerator:
 
     Example:
         >>> from pydefect.preparation.supercell.models.supercell_info import SupercellInfo
-        >>> from pydefect.preparation.defect.models.defect_set import DefectSet
+        >>> from pydefect.preparation.defect.models.set import DefectSet
         >>> info = SupercellInfo.from_json_file("supercell_info.json")
         >>> defects = DefectSet.from_yaml("defect_in.yaml")
         >>> maker = DefectEntryGenerator(info, defects)

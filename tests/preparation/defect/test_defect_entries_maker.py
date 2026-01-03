@@ -4,12 +4,12 @@ import numpy as np
 import pytest
 
 from pydefect.defaults import defaults
-from pydefect.preparation.defect.models.defect import SimpleDefect
+from pydefect.preparation.defect.models.simple import SimpleDefect
 from pydefect.preparation.defect.entry_generator import (
     DefectEntryGenerator, copy_to_structure, to_istructure, add_atom_to_structure,
     perturb_structure, random_3d_vector)
 from pydefect.preparation.defect.models.entry import DefectEntry, PerturbedSite
-from pydefect.preparation.defect.models.defect_set import DefectSet
+from pydefect.preparation.defect.models.set import DefectSet
 from pydefect.preparation.supercell.models.supercell_info import SupercellInfo, Site, \
     Interstitial
 from tests.helpers.assertion import assert_dataclass_almost_equal

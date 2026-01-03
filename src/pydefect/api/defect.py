@@ -31,7 +31,7 @@ from pydefect.analysis.unitcell.models import Unitcell
 from pydefect.defaults import defaults
 from pydefect.preparation.defect.models.entry import DefectEntry
 from pydefect.preparation.defect.entry_generator import DefectEntryGenerator
-from pydefect.preparation.defect.models.defect_set import DefectSet
+from pydefect.preparation.defect.models.set import DefectSet
 from pydefect.preparation.defect.set_generator import DefectSetGenerator
 from pydefect.preparation.supercell.interstitial_utils import (
     append_interstitial as _append_interstitial,

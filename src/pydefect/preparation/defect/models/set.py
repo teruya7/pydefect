@@ -7,7 +7,7 @@ from typing import Iterator, List, Set as typeSet
 import yaml
 from monty.json import MSONable
 from monty.serialization import loadfn
-from pydefect.preparation.defect.models.defect import filter_defect, SimpleDefect
+from pydefect.preparation.defect.models.simple import filter_defect, SimpleDefect
 
 
 class DefectSet(MSONable, Set):

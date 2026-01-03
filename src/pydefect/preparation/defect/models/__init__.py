@@ -2,7 +2,7 @@
 #  Copyright (c) 2020. Distributed under the terms of the MIT License.
 """Data models for defect preparation."""
 
-from pydefect.preparation.defect.models.defect import (
+from pydefect.preparation.defect.models.simple import (
     Defect,
     SimpleDefect,
     filter_defect,
@@ -16,7 +16,7 @@ from pydefect.preparation.defect.models.entry import (
     # Backward compatibility
     make_defect_entry,
 )
-from pydefect.preparation.defect.models.defect_set import (
+from pydefect.preparation.defect.models.set import (
     DefectSet,
     filter_defect_set,
     # Backward compatibility

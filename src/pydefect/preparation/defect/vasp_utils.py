@@ -44,4 +44,4 @@ def calculate_charge_state(poscar: Poscar, potcar: Potcar, incar: Incar) -> int:
 
 
 # Backward compatibility alias
-get_defect_charge_state = calculate_charge_state
+get_defect.vasp_utils = calculate_charge_state
